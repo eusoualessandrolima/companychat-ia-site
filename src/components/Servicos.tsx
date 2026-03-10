@@ -12,9 +12,9 @@ const servicos = [
       bg: "bg-[#0092ff]/10",
       border: "border-[#0092ff]/15",
       hoverBorder: "hover:border-[#0092ff]/30",
-      hoverShadow: "hover:shadow-md",
       text: "text-[#0092ff]",
       badgeBg: "bg-[#0092ff]/10",
+      gradientBar: "bg-gradient-to-r from-[#0092ff] to-[#00d4ff]",
     },
     itens: [
       "Respostas automáticas inteligentes",
@@ -32,9 +32,9 @@ const servicos = [
       bg: "bg-primary/10",
       border: "border-primary/15",
       hoverBorder: "hover:border-primary/30",
-      hoverShadow: "hover:shadow-md",
       text: "text-primary",
       badgeBg: "bg-primary-light",
+      gradientBar: "bg-gradient-to-r from-primary to-[#00d4a0]",
     },
     itens: [
       "Integração com CRMs e ERPs",
@@ -52,9 +52,9 @@ const servicos = [
       bg: "bg-[#a941f3]/10",
       border: "border-[#a941f3]/15",
       hoverBorder: "hover:border-[#a941f3]/30",
-      hoverShadow: "hover:shadow-md",
       text: "text-[#a941f3]",
       badgeBg: "bg-[#a941f3]/10",
+      gradientBar: "bg-gradient-to-r from-[#a941f3] to-[#d480ff]",
     },
     itens: [
       "IA treinada para seu negócio",
@@ -94,16 +94,21 @@ export default function Servicos() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.15 }}
-              className={`group rounded-2xl border ${s.cor.border} bg-card p-8 shadow-sm transition-all ${s.cor.hoverBorder} ${s.cor.hoverShadow}`}
+              className={`group relative overflow-hidden rounded-2xl border ${s.cor.border} bg-card p-8 shadow-sm transition-all duration-300 ${s.cor.hoverBorder} hover:shadow-lg`}
             >
-              <div className="mb-4 flex items-center justify-between">
+              {/* Gradient top accent bar */}
+              <div
+                className={`absolute top-0 left-0 right-0 h-[2px] ${s.cor.gradientBar} opacity-60 transition-opacity duration-300 group-hover:opacity-100`}
+              />
+
+              <div className="mb-5 flex items-center justify-between">
                 <div
-                  className={`flex h-14 w-14 items-center justify-center rounded-2xl ${s.cor.bg} ${s.cor.text}`}
+                  className={`flex h-14 w-14 items-center justify-center rounded-2xl ${s.cor.bg} ${s.cor.text} transition-transform duration-300 group-hover:scale-110`}
                 >
                   <s.icon className="h-7 w-7" />
                 </div>
                 <span
-                  className={`rounded-full ${s.cor.badgeBg} ${s.cor.text} px-3 py-1 text-xs font-medium`}
+                  className={`rounded-full ${s.cor.badgeBg} ${s.cor.text} px-3 py-1 text-xs font-semibold tracking-wide`}
                 >
                   {s.badge}
                 </span>
