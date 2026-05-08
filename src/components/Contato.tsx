@@ -1,10 +1,36 @@
 "use client";
 
+import { FormEvent, useRef } from "react";
 import { motion } from "framer-motion";
 import { Send, MessageCircle } from "lucide-react";
-import { whatsappLink } from "./WhatsAppButton";
+
+const WHATSAPP_NUMBER = "5564993054630";
 
 export default function Contato() {
+  const nameRef    = useRef<HTMLInputElement>(null);
+  const emailRef   = useRef<HTMLInputElement>(null);
+  const phoneRef   = useRef<HTMLInputElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const name    = nameRef.current?.value    ?? "";
+    const email   = emailRef.current?.value   ?? "";
+    const phone   = phoneRef.current?.value   ?? "";
+    const message = messageRef.current?.value ?? "";
+
+    const text = encodeURIComponent(
+      `Olá! Vim pelo site CompanyChat IA.\n\n` +
+      `*Nome:* ${name}\n` +
+      `*E-mail:* ${email}\n` +
+      (phone ? `*WhatsApp:* ${phone}\n` : "") +
+      (message ? `\n*Mensagem:* ${message}` : "")
+    );
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank", "noopener,noreferrer");
+  }
+
+  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Olá! Gostaria de saber mais sobre os serviços da CompanyChat IA.")}`;
+
   return (
     <section id="contato" className="relative bg-section py-24">
       <div className="mx-auto max-w-6xl px-4">
@@ -33,8 +59,7 @@ export default function Contato() {
         >
           {/* Form */}
           <form
-            action="https://formspree.io/f/placeholder"
-            method="POST"
+            onSubmit={handleSubmit}
             className="space-y-4 rounded-2xl border border-card-border bg-card p-8 shadow-sm"
           >
             <div>
@@ -45,6 +70,7 @@ export default function Contato() {
                 Nome
               </label>
               <input
+                ref={nameRef}
                 type="text"
                 id="name"
                 name="name"
@@ -61,6 +87,7 @@ export default function Contato() {
                 E-mail
               </label>
               <input
+                ref={emailRef}
                 type="email"
                 id="email"
                 name="email"
@@ -77,6 +104,7 @@ export default function Contato() {
                 WhatsApp
               </label>
               <input
+                ref={phoneRef}
                 type="tel"
                 id="phone"
                 name="phone"
@@ -92,6 +120,7 @@ export default function Contato() {
                 Mensagem
               </label>
               <textarea
+                ref={messageRef}
                 id="message"
                 name="message"
                 rows={4}

@@ -99,9 +99,10 @@ export default function Problemas() {
       <div className="absolute bottom-[68px] left-1/2 z-10 -translate-x-1/2">
         <a
           href="#como-funciona"
+          aria-label="Ir para Como Funciona"
           className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/40 transition-transform hover:scale-110"
         >
-          <ChevronDown className="h-5 w-5" />
+          <ChevronDown className="h-5 w-5" aria-hidden="true" />
         </a>
       </div>
     </section>

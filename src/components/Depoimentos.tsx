@@ -59,7 +59,7 @@ export default function Depoimentos() {
   const next = () => setActive((a) => (a + 1) % depoimentos.length);
 
   return (
-    <section className="relative overflow-hidden py-24">
+    <section id="depoimentos" className="relative overflow-hidden py-24">
       {/* Soft background gradient */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_100%,rgba(0,171,122,0.05),transparent)]" />
 

@@ -45,16 +45,23 @@ const faqs = [
 function FAQItem({
   pergunta,
   resposta,
+  idx,
 }: {
   pergunta: string;
   resposta: string;
+  idx: number;
 }) {
   const [open, setOpen] = useState(false);
+  const panelId = `faq-panel-${idx}`;
+  const buttonId = `faq-btn-${idx}`;
 
   return (
     <div className="border-b border-black/5">
       <button
+        id={buttonId}
         onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        aria-controls={panelId}
         className="flex w-full items-center justify-between py-5 text-left"
       >
         <span className="pr-4 font-medium text-foreground">{pergunta}</span>
@@ -62,11 +69,15 @@ function FAQItem({
           className={`h-5 w-5 shrink-0 text-primary transition-transform ${
             open ? "rotate-180" : ""
           }`}
+          aria-hidden="true"
         />
       </button>
       <AnimatePresence>
         {open && (
           <motion.div
+            id={panelId}
+            role="region"
+            aria-labelledby={buttonId}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -85,7 +96,7 @@ function FAQItem({
 
 export default function FAQ() {
   return (
-    <section className="relative py-24">
+    <section id="faq" className="relative py-24">
       <div className="mx-auto max-w-3xl px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -110,7 +121,7 @@ export default function FAQ() {
           className="mt-12"
         >
           {faqs.map((faq, i) => (
-            <FAQItem key={i} {...faq} />
+            <FAQItem key={i} idx={i} {...faq} />
           ))}
         </motion.div>
       </div>

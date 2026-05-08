@@ -68,7 +68,7 @@ export default function Sobre() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mb-20 grid grid-cols-3 gap-4 rounded-2xl border border-card-border bg-card p-8 shadow-sm sm:gap-8"
+          className="mb-20 grid grid-cols-3 gap-2 rounded-2xl border border-card-border bg-card p-4 shadow-sm sm:gap-8 sm:p-8"
         >
           {numeros.map((n, i) => (
             <div key={i} className="text-center">
