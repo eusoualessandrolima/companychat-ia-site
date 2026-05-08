@@ -8,6 +8,7 @@ const stats = [
   { num: "500+", label: "Empresas Atendidas" },
   { num: "70%", label: "Redução de Custo" },
   { num: "24/7", label: "Disponibilidade" },
+  { num: "7 dias", label: "Até o Go-live" },
 ];
 
 export default function Hero() {
@@ -52,22 +53,20 @@ export default function Hero() {
               <span className="animate-dot-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
             </span>
-            Automação inteligente para sua empresa
+            IA que trabalha por você — sem salário, sem pausas
           </div>
 
           <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-[1.1] tracking-tight text-foreground md:text-6xl lg:text-7xl">
-            Não perca vendas por{" "}
+            Seu assistente IA{" "}
             <br className="hidden sm:block" />
-            falta de{" "}
-            <span className="text-gradient-primary">resposta!</span>
+            vende enquanto{" "}
+            <span className="text-gradient-primary">você dorme.</span>
           </h1>
 
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-text-secondary md:text-xl">
-            Aumente seu faturamento automatizando as suas conversas com{" "}
-            <span className="font-semibold text-foreground">
-              Inteligência Artificial
-            </span>{" "}
-            personalizada para o seu negócio.
+            Crie um assistente personalizado para o seu negócio que responde,{" "}
+            <span className="font-semibold text-foreground">qualifica leads</span>{" "}
+            e agenda clientes no WhatsApp — 24 horas por dia, 7 dias por semana.
           </p>
 
           {/* CTAs */}
@@ -99,7 +98,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.45 }}
-            className="mx-auto mt-16 flex max-w-sm items-center justify-between gap-4 rounded-2xl border border-black/5 bg-white/70 px-8 py-5 shadow-sm backdrop-blur-sm sm:max-w-none sm:gap-0"
+            className="mx-auto mt-16 grid max-w-sm grid-cols-2 gap-4 rounded-2xl border border-black/5 bg-white/70 px-8 py-5 shadow-sm backdrop-blur-sm sm:max-w-none sm:grid-cols-4 sm:gap-0"
           >
             {stats.map((stat, i) => (
               <div key={i} className="text-center">

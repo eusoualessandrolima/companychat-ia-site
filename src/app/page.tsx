@@ -1,8 +1,11 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import Integracoes from "@/components/Integracoes";
 import Problemas from "@/components/Problemas";
+import ComoFunciona from "@/components/ComoFunciona";
 import Servicos from "@/components/Servicos";
 import Beneficios from "@/components/Beneficios";
+import Depoimentos from "@/components/Depoimentos";
 import Nichos from "@/components/Nichos";
 import Sobre from "@/components/Sobre";
 import FAQ from "@/components/FAQ";
@@ -16,9 +19,12 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
+        <Integracoes />
         <Problemas />
+        <ComoFunciona />
         <Servicos />
         <Beneficios />
+        <Depoimentos />
         <Nichos />
         <Sobre />
         <FAQ />

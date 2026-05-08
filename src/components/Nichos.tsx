@@ -1,32 +1,65 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Scale, FlaskConical, Dumbbell, GraduationCap } from "lucide-react";
+import {
+  Scale,
+  FlaskConical,
+  Dumbbell,
+  GraduationCap,
+  ShoppingBag,
+  Stethoscope,
+  Building2,
+  Utensils,
+} from "lucide-react";
 
 const nichos = [
   {
     icon: Scale,
-    titulo: "Escritórios de Advocacia",
+    titulo: "Advocacia",
     descricao:
-      "Qualificação automática de leads e agendamento de consultas. Seu escritório atende mais clientes sem aumentar a equipe.",
+      "Qualificação de leads e agendamento de consultas automático. Atenda mais clientes sem aumentar a equipe.",
   },
   {
     icon: FlaskConical,
-    titulo: "Laboratórios Clínicos",
+    titulo: "Laboratórios",
     descricao:
-      "Agendamento de exames e entrega de resultados automatizados. Alto volume gerenciado com eficiência.",
+      "Agendamento de exames, confirmações e entrega de resultados automatizados via WhatsApp.",
   },
   {
     icon: Dumbbell,
     titulo: "Academias",
     descricao:
-      "Gestão de matrículas, renovações e atendimento de dúvidas frequentes, tudo automatizado via WhatsApp.",
+      "Matrículas, renovações e dúvidas frequentes resolvidas automaticamente 24h.",
   },
   {
     icon: GraduationCap,
     titulo: "Educação",
     descricao:
-      "Matrículas, informações sobre cursos e suporte a alunos 24/7. Atendimento ágil que não sobrecarrega sua secretaria.",
+      "Captação de alunos, informações sobre cursos e suporte sem sobrecarregar sua secretaria.",
+  },
+  {
+    icon: ShoppingBag,
+    titulo: "Comércio & E-commerce",
+    descricao:
+      "Status de pedidos, atendimento pós-venda e recuperação de carrinhos abandonados no piloto automático.",
+  },
+  {
+    icon: Stethoscope,
+    titulo: "Clínicas & Saúde",
+    descricao:
+      "Agendamentos, lembretes de consulta e triagem de pacientes — tudo automatizado com segurança.",
+  },
+  {
+    icon: Building2,
+    titulo: "Imobiliárias",
+    descricao:
+      "Qualificação de compradores, agendamento de visitas e envio de portfólios de forma automática.",
+  },
+  {
+    icon: Utensils,
+    titulo: "Restaurantes & Food",
+    descricao:
+      "Pedidos, reservas e cardápios digitais integrados ao WhatsApp. Zero perda de cliente.",
   },
 ];
 
@@ -45,7 +78,7 @@ export default function Nichos() {
             Nichos de <span className="text-primary">Atuação</span>
           </h2>
           <p className="mt-4 text-text-secondary">
-            Soluções sob medida para seu negócio.
+            Adaptamos o assistente para qualquer segmento. Se atende pelo WhatsApp, nós automatizamos.
           </p>
         </motion.div>
 
