@@ -137,6 +137,28 @@ body::before {
   to   { transform: scaleX(1); }
 }
 
+/* Feature badge float — staggered per badge */
+@keyframes badge-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+/* Orbit for integration diagram */
+@keyframes orbit-cw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes orbit-ccw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+/* Pulse ring for orbital center */
+@keyframes pulse-ring {
+  0%        { transform: scale(1);   opacity: 0.4; }
+  70%, 100% { transform: scale(1.6); opacity: 0;   }
+}
+
 /* =====================================================
    ANIMATION UTILITIES
    ===================================================== */
@@ -157,6 +179,18 @@ body::before {
 .animate-typing-1 { animation: typing-bounce 1.4s ease-in-out 0.0s infinite; }
 .animate-typing-2 { animation: typing-bounce 1.4s ease-in-out 0.2s infinite; }
 .animate-typing-3 { animation: typing-bounce 1.4s ease-in-out 0.4s infinite; }
+
+.animate-badge-float-1 { animation: badge-float 3.0s ease-in-out 0.0s infinite; }
+.animate-badge-float-2 { animation: badge-float 3.5s ease-in-out 0.6s infinite; }
+.animate-badge-float-3 { animation: badge-float 2.8s ease-in-out 1.2s infinite; }
+.animate-badge-float-4 { animation: badge-float 3.2s ease-in-out 0.9s infinite; }
+.animate-badge-float-5 { animation: badge-float 3.8s ease-in-out 0.3s infinite; }
+
+.animate-orbit-cw  { animation: orbit-cw  28s linear infinite; }
+.animate-orbit-ccw { animation: orbit-ccw 28s linear infinite; }
+.animate-orbit-cw-fast  { animation: orbit-cw  18s linear infinite; }
+.animate-orbit-ccw-fast { animation: orbit-ccw 18s linear infinite; }
+.animate-pulse-ring { animation: pulse-ring 2.5s cubic-bezier(0,0,0.2,1) infinite; }
 
 /* =====================================================
    VISUAL UTILITIES

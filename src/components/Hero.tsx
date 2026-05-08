@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Bot } from "lucide-react";
+import { ArrowRight, Bot, Zap, Clock, Target, TrendingUp, Shield } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { whatsappLink } from "./WhatsAppButton";
 
@@ -197,6 +197,36 @@ function ChatMockup() {
   );
 }
 
+/* ─── Floating feature badges ────────────────────────── */
+const FLOATING_BADGES = [
+  { icon: Zap,        label: "Resposta em Segundos", anim: "animate-badge-float-1", pos: "-top-5 left-1/4 -translate-x-1/2" },
+  { icon: Clock,      label: "Online 24/7",           anim: "animate-badge-float-2", pos: "top-8 -right-4 translate-x-full" },
+  { icon: Target,     label: "Qualifica Leads",        anim: "animate-badge-float-3", pos: "top-1/2 -left-4 -translate-x-full -translate-y-1/2" },
+  { icon: TrendingUp, label: "+40% Conversões",        anim: "animate-badge-float-4", pos: "bottom-12 -right-4 translate-x-full" },
+  { icon: Shield,     label: "Seguro e Confiável",     anim: "animate-badge-float-5", pos: "-bottom-5 left-1/3 -translate-x-1/2" },
+] as const;
+
+function FloatingBadge({
+  icon: Icon,
+  label,
+  anim,
+  pos,
+}: {
+  icon: React.ElementType;
+  label: string;
+  anim: string;
+  pos: string;
+}) {
+  return (
+    <div
+      className={`pointer-events-none absolute ${anim} ${pos} hidden lg:flex items-center gap-2 rounded-full border border-white/10 bg-dark-elevated/95 backdrop-blur-md px-3 py-1.5 shadow-xl shadow-black/50 z-20 whitespace-nowrap`}
+    >
+      <Icon className="h-3.5 w-3.5 shrink-0 text-primary" />
+      <span className="text-xs font-medium text-dark-text">{label}</span>
+    </div>
+  );
+}
+
 /* ─── Stats ─────────────────────────────────────────── */
 const stats = [
   { num: 500,  suffix: "+", label: "Empresas Atendidas" },
@@ -318,17 +348,22 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* ── Right: Chat Mockup ── */}
+          {/* ── Right: Chat Mockup + Floating Badges ── */}
           <motion.div
             initial={{ opacity: 0, x: 32 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="flex justify-center lg:justify-end"
           >
-            {/* Glow behind mockup */}
-            <div className="relative">
-              <div className="absolute inset-0 -z-10 rounded-3xl bg-primary/10 blur-3xl" />
+            {/* Relative wrapper so badges can overflow freely */}
+            <div className="relative w-full max-w-[340px] lg:max-w-[400px]">
+              {/* Glow behind mockup */}
+              <div className="absolute inset-0 -z-10 scale-110 rounded-3xl bg-primary/10 blur-3xl" />
               <ChatMockup />
+              {/* Floating feature badges */}
+              {FLOATING_BADGES.map((badge, i) => (
+                <FloatingBadge key={i} {...badge} />
+              ))}
             </div>
           </motion.div>
         </div>
