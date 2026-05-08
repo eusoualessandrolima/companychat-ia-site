@@ -2,7 +2,7 @@
 
 import { MessageCircle } from "lucide-react";
 
-const WHATSAPP_NUMBER  = "5562996320162";
+const WHATSAPP_NUMBER  = "5564993054630";
 const WHATSAPP_MESSAGE = encodeURIComponent(
   "Olá! Gostaria de saber mais sobre os serviços da CompanyChat IA."
 );
