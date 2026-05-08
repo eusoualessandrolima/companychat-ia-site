@@ -57,17 +57,6 @@ export default function Header() {
               </a>
             ))}
 
-            {/* Live badge */}
-            <div className={`hidden lg:flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-              scrolled ? "bg-dark-surface text-dark-muted border border-dark-border" : "bg-primary-light text-primary border border-primary/10"
-            }`}>
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-dot-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
-              </span>
-              500+ empresas ativas
-            </div>
-
             <a
               href={whatsappLink}
               target="_blank"
