@@ -42,7 +42,7 @@ export default function Header() {
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
           <a href="#">
-            <Logo dark={scrolled} />
+            <Logo dark />
           </a>
 
           {/* Desktop nav */}
@@ -51,9 +51,7 @@ export default function Header() {
               <a
                 key={link.href}
                 href={link.href}
-                className={`text-sm transition-colors hover:text-primary ${
-                  scrolled ? "text-dark-muted" : "text-text-secondary"
-                }`}
+                className="text-sm text-dark-muted transition-colors hover:text-primary"
               >
                 {link.label}
               </a>
@@ -84,7 +82,7 @@ export default function Header() {
           <button
             onClick={() => setOpen(!open)}
             aria-label="Menu"
-            className={`md:hidden transition-colors ${scrolled ? "text-dark-text" : "text-foreground"}`}
+            className="md:hidden text-dark-text transition-colors"
           >
             {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
