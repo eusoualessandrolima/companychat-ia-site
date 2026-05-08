@@ -282,7 +282,7 @@ export default function Hero() {
                 <span className="animate-dot-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
               </span>
-              IA que trabalha por você — sem salário, sem pausas
+              IA que trabalha por você
             </div>
 
             {/* Headline */}
