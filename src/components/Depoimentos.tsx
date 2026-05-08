@@ -154,19 +154,30 @@ export default function Depoimentos() {
 
           {/* Carousel controls */}
           <div className="mt-6 flex items-center justify-center gap-4">
-            <button onClick={prev} className="flex h-8 w-8 items-center justify-center rounded-full border border-card-border bg-card transition hover:border-primary/30 hover:text-primary">
+            <button
+              onClick={prev}
+              aria-label="Depoimento anterior"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-card-border bg-card transition hover:border-primary/30 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+            >
               <ChevronLeft className="h-4 w-4" />
             </button>
-            <div className="flex gap-1.5">
-              {depoimentos.map((_, i) => (
+            <div className="flex gap-1.5" role="tablist" aria-label="Selecionar depoimento">
+              {depoimentos.map((d, i) => (
                 <button
                   key={i}
+                  role="tab"
+                  aria-selected={i === active}
+                  aria-label={`Depoimento de ${d.nome}`}
                   onClick={() => setActive(i)}
-                  className={`h-1.5 rounded-full transition-all ${i === active ? "w-6 bg-primary" : "w-1.5 bg-black/15"}`}
+                  className={`h-1.5 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${i === active ? "w-6 bg-primary" : "w-1.5 bg-black/15"}`}
                 />
               ))}
             </div>
-            <button onClick={next} className="flex h-8 w-8 items-center justify-center rounded-full border border-card-border bg-card transition hover:border-primary/30 hover:text-primary">
+            <button
+              onClick={next}
+              aria-label="Próximo depoimento"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-card-border bg-card transition hover:border-primary/30 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+            >
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>

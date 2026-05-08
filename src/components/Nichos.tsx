@@ -17,7 +17,7 @@ const nichos = [
     icon: Scale,
     titulo: "Advocacia",
     descricao:
-      "Qualificação de leads e agendamento de consultas automático. Atenda mais clientes sem aumentar a equipe.",
+      "Qualificação de leads e agendamento de consultas automatizados. Atenda mais clientes sem aumentar a equipe.",
   },
   {
     icon: FlaskConical,

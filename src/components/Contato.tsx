@@ -49,7 +49,7 @@ export default function Contato() {
                 id="name"
                 name="name"
                 required
-                className="w-full rounded-xl border border-black/10 bg-section px-4 py-3 text-foreground outline-none transition-colors focus:border-primary/50"
+                className="w-full rounded-xl border border-black/10 bg-section px-4 py-3 text-foreground outline-none transition-colors focus:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary/40"
                 placeholder="Seu nome"
               />
             </div>
@@ -65,7 +65,7 @@ export default function Contato() {
                 id="email"
                 name="email"
                 required
-                className="w-full rounded-xl border border-black/10 bg-section px-4 py-3 text-foreground outline-none transition-colors focus:border-primary/50"
+                className="w-full rounded-xl border border-black/10 bg-section px-4 py-3 text-foreground outline-none transition-colors focus:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary/40"
                 placeholder="seu@email.com"
               />
             </div>
@@ -80,7 +80,7 @@ export default function Contato() {
                 type="tel"
                 id="phone"
                 name="phone"
-                className="w-full rounded-xl border border-black/10 bg-section px-4 py-3 text-foreground outline-none transition-colors focus:border-primary/50"
+                className="w-full rounded-xl border border-black/10 bg-section px-4 py-3 text-foreground outline-none transition-colors focus:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary/40"
                 placeholder="(00) 00000-0000"
               />
             </div>
@@ -95,7 +95,7 @@ export default function Contato() {
                 id="message"
                 name="message"
                 rows={4}
-                className="w-full resize-none rounded-xl border border-black/10 bg-section px-4 py-3 text-foreground outline-none transition-colors focus:border-primary/50"
+                className="w-full resize-none rounded-xl border border-black/10 bg-section px-4 py-3 text-foreground outline-none transition-colors focus:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary/40"
                 placeholder="Conte um pouco sobre sua empresa..."
               />
             </div>

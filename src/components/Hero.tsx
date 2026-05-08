@@ -198,12 +198,14 @@ function ChatMockup() {
 }
 
 /* ─── Floating feature badges ────────────────────────── */
+/* Badges posicionados apenas à esquerda/topo/base do mockup
+   para evitar overflow do viewport no lado direito             */
 const FLOATING_BADGES = [
-  { icon: Zap,        label: "Resposta em Segundos", anim: "animate-badge-float-1", pos: "-top-5 left-1/4 -translate-x-1/2" },
-  { icon: Clock,      label: "Online 24/7",           anim: "animate-badge-float-2", pos: "top-8 -right-4 translate-x-full" },
-  { icon: Target,     label: "Qualifica Leads",        anim: "animate-badge-float-3", pos: "top-1/2 -left-4 -translate-x-full -translate-y-1/2" },
-  { icon: TrendingUp, label: "+40% Conversões",        anim: "animate-badge-float-4", pos: "bottom-12 -right-4 translate-x-full" },
-  { icon: Shield,     label: "Seguro e Confiável",     anim: "animate-badge-float-5", pos: "-bottom-5 left-1/3 -translate-x-1/2" },
+  { icon: Zap,        label: "Resposta em Segundos", anim: "animate-badge-float-1", pos: "-top-5 left-8" },
+  { icon: Clock,      label: "Online 24/7",           anim: "animate-badge-float-2", pos: "top-12 -left-44" },
+  { icon: Target,     label: "Qualifica Leads",        anim: "animate-badge-float-3", pos: "top-1/2 -left-48 -translate-y-1/2" },
+  { icon: TrendingUp, label: "+40% Conversões",        anim: "animate-badge-float-4", pos: "bottom-24 -left-44" },
+  { icon: Shield,     label: "Seguro e Confiável",     anim: "animate-badge-float-5", pos: "-bottom-3 left-8" },
 ] as const;
 
 function FloatingBadge({

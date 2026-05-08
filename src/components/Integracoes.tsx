@@ -220,15 +220,18 @@ export default function Integracoes() {
             </div>
           </motion.div>
 
-          {/* Right: orbital diagram (desktop only) */}
+          {/* Right: orbital diagram — visible from lg+ */}
           <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="hidden lg:flex lg:justify-center"
+            className="hidden lg:flex lg:justify-center lg:overflow-hidden"
           >
-            <OrbitalDiagram />
+            {/* Scale down slightly on xl to always fit the column */}
+            <div className="scale-90 xl:scale-100 origin-center">
+              <OrbitalDiagram />
+            </div>
           </motion.div>
 
         </div>

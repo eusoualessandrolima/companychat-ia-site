@@ -193,6 +193,19 @@ body::before {
 .animate-pulse-ring { animation: pulse-ring 2.5s cubic-bezier(0,0,0.2,1) infinite; }
 
 /* =====================================================
+   ACCESSIBILITY — PREFERS-REDUCED-MOTION
+   Honour user preference; collapse all animations to instant
+   ===================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =====================================================
    VISUAL UTILITIES
    ===================================================== */
 
