@@ -78,9 +78,9 @@ type Msg =
 const MESSAGES: Msg[] = [
   { kind: "msg",    side: "ai",   text: "Olá! 👋 Sou a IA da CompanyChat. Como posso ajudar?", showAt: 800  },
   { kind: "typing", showAt: 1700, hideAt: 2400 },
-  { kind: "msg",    side: "user", text: "Qual o preço do plano?",                               showAt: 2400 },
+  { kind: "msg",    side: "user", text: "Como o assistente funciona?",                          showAt: 2400 },
   { kind: "typing", showAt: 3000, hideAt: 3700 },
-  { kind: "msg",    side: "ai",   text: "Nosso plano Starter começa em R$347/mês com IA 24/7 e setup em 7 dias ✅", showAt: 3700 },
+  { kind: "msg",    side: "ai",   text: "Atendo seus clientes 24/7, qualifico leads e agenda reuniões automaticamente via WhatsApp ✅", showAt: 3700 },
   { kind: "typing", showAt: 4400, hideAt: 5000 },
   { kind: "msg",    side: "ai",   text: "Quer que eu chame um especialista agora? 😊",           showAt: 5000 },
 ];
