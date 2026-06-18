@@ -71,22 +71,6 @@ export default function ComoFunciona() {
               <ArrowRight className="h-4 w-4" />
             </a>
 
-            {/* Decorative stat chips */}
-            <div className="mt-10 flex flex-wrap gap-3">
-              {[
-                "Setup em 7 dias",
-                "Sem código",
-                "Suporte incluso",
-                "Resultado em semanas",
-              ].map((chip) => (
-                <span
-                  key={chip}
-                  className="rounded-full border border-card-border bg-card px-4 py-1.5 text-xs font-medium text-text-secondary"
-                >
-                  {chip}
-                </span>
-              ))}
-            </div>
           </motion.div>
 
           {/* ── Right: Numbered steps ── */}
