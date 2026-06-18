@@ -1,6 +1,7 @@
 # SKILLS.md — Catálogo de Skills do Projeto
 
-> Inventário de todas as skills disponíveis neste projeto. Atualizar sempre que uma skill for adicionada ou modificada.
+> Inventário de todas as skills locais deste projeto. Para skills globais e agentes AIOX, consulte `Agentes.md`.
+> Atualizar sempre que uma skill for adicionada ou modificada.
 
 ---
 

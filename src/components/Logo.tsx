@@ -6,13 +6,18 @@ export default function Logo({
   dark?: boolean;
 }) {
   return (
-    <span
-      className={`text-xl font-bold tracking-tight transition-colors ${
-        dark ? "text-dark-text" : "text-foreground"
-      } ${className}`}
-    >
-      Company<span className="text-primary">Chat</span>
-      <span className="ml-1 rounded-sm bg-primary/10 px-1 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-primary">
+    <span className={`inline-flex items-center gap-2 ${className}`}>
+      {/* Wordmark */}
+      <span
+        className={`text-xl font-bold leading-none tracking-tight transition-colors ${
+          dark ? "text-dark-text" : "text-foreground"
+        }`}
+      >
+        Company<span className="text-primary">Chat</span>
+      </span>
+
+      {/* Badge IA */}
+      <span className="inline-flex items-center justify-center rounded-md bg-primary/20 px-2 py-[5px] text-[11px] font-bold uppercase leading-none tracking-widest text-primary ring-1 ring-inset ring-primary/40">
         IA
       </span>
     </span>
