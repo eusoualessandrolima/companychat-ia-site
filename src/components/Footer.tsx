@@ -105,14 +105,15 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-dark-border pt-8 sm:flex-row">
-          <p className="text-xs text-dark-muted">
-            &copy; {new Date().getFullYear()} CompanyChat IA. Todos os direitos reservados.
-          </p>
-          <p className="text-xs text-dark-muted">
-            Powered by{" "}
-            <span className="text-primary">GPT-4o</span>
-            {" "}· Feito no Brasil 🇧🇷
+        <div className="mt-16 flex flex-col items-center justify-center gap-2 border-t border-dark-border pt-8">
+          <p className="text-center text-xs text-dark-muted">
+            <span className="inline-flex items-center gap-1">🇧🇷 Português</span>
+            {" "}/{" "}
+            <span className="inline-flex items-center gap-1">🇺🇸 English</span>
+            <span className="mx-3 opacity-40">|</span>
+            &copy; {new Date().getFullYear()} — Todos os direitos reservados a CompanyChat IA Ltda
+            <span className="mx-3 opacity-40">|</span>
+            CNPJ 36.076.441/0001-14
           </p>
         </div>
       </div>
