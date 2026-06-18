@@ -47,7 +47,7 @@ const nichos = [
     icon: Stethoscope,
     titulo: "Clínicas & Saúde",
     descricao:
-      "Agendamentos, lembretes de consulta e triagem de pacientes — tudo automatizado com segurança.",
+      "Agendamentos, lembretes de consulta e triagem de pacientes. Tudo automatizado com segurança.",
   },
   {
     icon: Building2,

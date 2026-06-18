@@ -7,7 +7,7 @@ import { useState } from "react";
 const depoimentos = [
   {
     nome: "Dra. Camila Ferreira",
-    cargo: "Advogada — Ferreira & Associados",
+    cargo: "Advogada, Ferreira & Associados",
     texto:
       "Antes, perdíamos leads todo fim de semana por falta de atendimento. Hoje o assistente responde no sábado de madrugada com a mesma qualidade que nossa equipe. Em 30 dias recuperamos o investimento.",
     estrelas: 5,
@@ -16,7 +16,7 @@ const depoimentos = [
   },
   {
     nome: "Marcos Oliveira",
-    cargo: "Diretor — Lab Análises Clínicas",
+    cargo: "Diretor, Lab Análises Clínicas",
     texto:
       "O agendamento de exames virou automático. O assistente confirma, lembra o paciente e ainda envia o resultado pelo WhatsApp. Reduziu 60% do volume de ligações na recepção.",
     estrelas: 5,
@@ -25,7 +25,7 @@ const depoimentos = [
   },
   {
     nome: "Rafael Costa",
-    cargo: "Proprietário — Rede de Academias FitLife",
+    cargo: "Proprietário, Rede de Academias FitLife",
     texto:
       "Implantamos em 3 unidades ao mesmo tempo. O assistente qualifica o lead, apresenta os planos e já agenda a visita. Nossas matrículas aumentaram 40% sem contratar ninguém a mais.",
     estrelas: 5,
@@ -34,7 +34,7 @@ const depoimentos = [
   },
   {
     nome: "Ana Paula Mendes",
-    cargo: "Coordenadora — Instituto Educar",
+    cargo: "Coordenadora, Instituto Educar",
     texto:
       "Recebemos centenas de mensagens na época de matrículas. O assistente filtra, responde e encaminha só os alunos prontos para assinar. Transformou nossa captação completamente.",
     estrelas: 5,

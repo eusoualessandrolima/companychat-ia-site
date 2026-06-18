@@ -298,7 +298,7 @@ export default function Hero() {
             <p className="mt-7 max-w-lg text-[17px] leading-relaxed text-dark-muted">
               Crie um assistente personalizado que responde,{" "}
               <span className="font-semibold text-dark-text">qualifica leads</span> e agenda
-              clientes no WhatsApp — 24 horas por dia, 7 dias por semana.
+              clientes no WhatsApp, 24 horas por dia, 7 dias por semana.
             </p>
 
             {/* CTAs */}

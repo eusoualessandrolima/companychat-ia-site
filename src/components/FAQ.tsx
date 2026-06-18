@@ -18,7 +18,7 @@ const faqs = [
   {
     pergunta: "Preciso ter conhecimento técnico?",
     resposta:
-      "Não! Nós cuidamos de toda a parte técnica. Você só precisa nos fornecer informações sobre seu negócio, serviços, preços, horários, dúvidas frequentes e nós fazemos todo o resto.",
+      "Não! Nossa equipe cuida de toda a parte técnica. Você só precisa nos fornecer as informações do seu negócio: serviços, preços, horários e dúvidas frequentes.",
   },
   {
     pergunta: "O que está incluso?",

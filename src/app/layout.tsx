@@ -15,7 +15,7 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  title: "CompanyChat IA — Automação Inteligente para sua Empresa",
+  title: "CompanyChat IA: Automação Inteligente para sua Empresa",
   description:
     "Assistente IA personalizado, automação de atendimento e integração via API. Atendimento 24/7 para escritórios, laboratórios, academias e educação. Plano Premium a partir de R$347/mês.",
   keywords: [
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "CompanyChat IA" }],
   openGraph: {
-    title: "CompanyChat IA — Automação Inteligente para sua Empresa",
+    title: "CompanyChat IA: Automação Inteligente para sua Empresa",
     description:
       "Não perca vendas por falta de resposta rápida! Assistente IA personalizado 24/7 para sua empresa.",
     type: "website",

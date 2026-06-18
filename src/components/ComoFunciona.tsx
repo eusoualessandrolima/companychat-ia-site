@@ -58,9 +58,7 @@ export default function ComoFunciona() {
               em 4 passos simples.
             </h2>
             <p className="mt-5 leading-relaxed text-text-secondary">
-              Sem complexidade técnica. Nossa equipe cuida de todo o processo —
-              da configuração à integração — e você começa a converter clientes
-              ainda na primeira semana.
+              Sem complexidade técnica. Nossa equipe cuida de todo o processo, da configuração à integração, e você começa a converter clientes ainda na primeira semana.
             </p>
 
             <a
