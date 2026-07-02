@@ -15,7 +15,7 @@ const links = {
   recursos: [
     { href: "#faq",           label: "FAQ" },
     { href: "#como-funciona", label: "Como funciona" },
-    { href: "#depoimentos",   label: "Depoimentos" },
+    { href: "/api-oficial",   label: "API Oficial" },
   ],
 };
 
@@ -36,7 +36,7 @@ export default function Footer() {
             <Logo dark className="mb-4" />
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-dark-muted">
               Assistente IA personalizado que responde, qualifica e converte clientes
-              no WhatsApp — 24h por dia, sem pausas.
+              no WhatsApp, 24h por dia, sem pausas.
             </p>
 
             {/* CTA */}
@@ -111,7 +111,7 @@ export default function Footer() {
             {" "}/{" "}
             <span className="inline-flex items-center gap-1">🇺🇸 English</span>
             <span className="mx-3 opacity-40">|</span>
-            &copy; {new Date().getFullYear()} — Todos os direitos reservados a CompanyChat IA Ltda
+            &copy; {new Date().getFullYear()} CompanyChat IA Ltda. Todos os direitos reservados
             <span className="mx-3 opacity-40">|</span>
             CNPJ 36.076.441/0001-14
           </p>

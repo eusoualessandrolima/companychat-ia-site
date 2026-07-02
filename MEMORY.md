@@ -43,6 +43,21 @@
 | Logo | `Logo.tsx` | Componente de logo |
 | WhatsAppButton | `WhatsAppButton.tsx` | Botão flutuante do WhatsApp |
 
+### Página `/api-oficial` (`src/app/api-oficial/page.tsx`)
+
+Seção dedicada explicando a API Oficial do WhatsApp + calculadora de custo. Componentes em `src/components/api-oficial/`:
+
+| Componente | Arquivo | Descrição |
+|------------|---------|-----------|
+| ApiHeader | `ApiHeader.tsx` | Header slim da página (voltar ao site + logo + CTA) |
+| ApiHero | `ApiHero.tsx` | Hero de abertura do guia |
+| Janela24h | `Janela24h.tsx` | Timeline interativa da janela de 24h (recriação nativa da imagem) |
+| Categorias | `Categorias.tsx` | Tabela nativa das 4 categorias de mensagem e custos |
+| Calculadora | `Calculadora.tsx` | Calculadora de custo mensal/anual (presets, sliders, breakdown, ajuste de preço) |
+| ApiFaq | `ApiFaq.tsx` | FAQ específico da API Oficial |
+| ApiCta | `ApiCta.tsx` | CTA final para WhatsApp |
+| pricing.ts | `pricing.ts` | Fonte única de dados: categorias + preços padrão (aproximados Meta BR) + formatador BRL |
+
 ---
 
 ## Skills Ativas
@@ -64,6 +79,18 @@
 - Reestruturação dos arquivos de gestão: CLAUDE.md expandido com regras explícitas de nomenclatura, frontmatter e processo de criação de skills
 - Criado `Agentes.md` para documentar agentes disponíveis no projeto
 - Obrigação de leitura no início de cada sessão ampliada para incluir `Agentes.md`
+
+### 2026-07-02
+- Criada a página `/api-oficial`: guia sobre a API Oficial do WhatsApp + calculadora de custo (rota nova dentro do próprio site; futuro subdomínio `api.companychatia.com` pode apontar pra ela via DNS/rewrite sem mexer no código)
+- **Preços padrão (aproximados Meta BR, editáveis na UI):** Utilidade R$ 0,05 · Autenticação R$ 0,17 · Marketing R$ 0,45 · Serviço grátis. Fonte única em `pricing.ts` — atualizar lá quando a Meta mudar a tabela
+- Imagens didáticas (janela 24h e tabela de custos) foram **recriadas nativas** em React/Tailwind (não PNG), responsivas
+- Moeda: apenas R$ (BRL)
+- Colisão de nome no macOS (case-insensitive): arquivo de dados renomeado de `categorias.ts` → `pricing.ts` para não conflitar com `Categorias.tsx`
+- Link discreto adicionado no Footer principal (coluna "Recursos" → "API Oficial")
+- **QA Gate (@qa Quinn):** CONCERNS → liberado. Matemática da calculadora sem bugs; português impecável; zero travessões. Aplicados os ajustes MÉDIOS: token `accent-amber` na timeline, contraste dos sub-rótulos, `aria-pressed`/`aria-live` na timeline, foco visível + `aria-expanded` no acordeão de preços da calculadora
+- Adicionado `metadataBase: new URL("https://companychatia.com")` no `layout.tsx` (corrige canonical/OG e remove warning de build)
+- Criado `.env.local` (config pública documentada; ignorado pelo git via `.env*`). Vars de produção devem ser cadastradas no painel do Vercel
+- Pendente: `git add`/`commit`/`push` para `main` (via @devops) → dispara deploy automático no Vercel
 
 ---
 
