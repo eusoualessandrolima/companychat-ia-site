@@ -15,7 +15,9 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://companychatia.com"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.companychatia.com.br"
+  ),
   title: "CompanyChat IA: Automação Inteligente para sua Empresa",
   description:
     "Assistente IA personalizado, automação de atendimento e integração via API. Atendimento 24/7 no WhatsApp para clínicas, academias, imobiliárias, advocacia e e-commerce.",
