@@ -362,7 +362,7 @@ export default function Integracoes() {
       ref={sectionRef}
       onMouseMove={handleMouseMove}
       className="relative"
-      style={{ backgroundColor: "#07090d", padding: "96px 0", overflow: "visible" }}
+      style={{ backgroundColor: "#07090d", padding: "96px 0", overflowX: "clip", overflowY: "visible" }}
     >
       {/* ── Background layers ── */}
 
