@@ -3,19 +3,19 @@ import { whatsappLink } from "./WhatsAppButton";
 
 const links = {
   produto: [
-    { href: "#servicos",   label: "Serviços" },
-    { href: "#beneficios", label: "Benefícios" },
-    { href: "#nichos",     label: "Nichos" },
+    { href: "/#servicos",   label: "Serviços" },
+    { href: "/#beneficios", label: "Benefícios" },
+    { href: "/#nichos",     label: "Nichos" },
   ],
   empresa: [
-    { href: "#sobre",   label: "Sobre nós" },
-    { href: "#contato", label: "Contato" },
+    { href: "/#sobre",   label: "Sobre nós" },
+    { href: "/#contato", label: "Contato" },
     { href: whatsappLink, label: "WhatsApp", external: true },
   ],
   recursos: [
-    { href: "#faq",           label: "FAQ" },
-    { href: "#como-funciona", label: "Como funciona" },
-    { href: "/api-oficial",   label: "API Oficial" },
+    { href: "/#faq",           label: "FAQ" },
+    { href: "/#como-funciona", label: "Como funciona" },
+    { href: "/api-oficial",    label: "API Oficial" },
   ],
 };
 
@@ -107,10 +107,6 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-16 flex flex-col items-center justify-center gap-2 border-t border-dark-border pt-8">
           <p className="text-center text-xs text-dark-muted">
-            <span className="inline-flex items-center gap-1">🇧🇷 Português</span>
-            {" "}/{" "}
-            <span className="inline-flex items-center gap-1">🇺🇸 English</span>
-            <span className="mx-3 opacity-40">|</span>
             &copy; {new Date().getFullYear()} CompanyChat IA Ltda. Todos os direitos reservados
             <span className="mx-3 opacity-40">|</span>
             CNPJ 36.076.441/0001-14

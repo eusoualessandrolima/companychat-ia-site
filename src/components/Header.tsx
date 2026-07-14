@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Logo from "./Logo";
@@ -41,9 +42,9 @@ export default function Header() {
         }`}
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-          <a href="#">
+          <Link href="/" aria-label="CompanyChat IA — início">
             <Logo dark />
-          </a>
+          </Link>
 
           {/* Desktop nav */}
           <nav className="hidden items-center gap-8 md:flex">
@@ -70,7 +71,9 @@ export default function Header() {
           {/* Mobile toggle */}
           <button
             onClick={() => setOpen(!open)}
-            aria-label="Menu"
+            aria-label={open ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={open}
+            aria-controls="mobile-nav"
             className="md:hidden text-dark-text transition-colors"
           >
             {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -79,7 +82,7 @@ export default function Header() {
 
         {/* Mobile nav */}
         {open && (
-          <nav className="flex flex-col gap-4 border-t border-dark-border bg-dark-base px-4 py-6 md:hidden">
+          <nav id="mobile-nav" className="flex flex-col gap-4 border-t border-dark-border bg-dark-base px-4 py-6 md:hidden">
             {navLinks.map((link) => (
               <a
                 key={link.href}

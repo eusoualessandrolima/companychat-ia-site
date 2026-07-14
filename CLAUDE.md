@@ -119,7 +119,9 @@ companychat-ia-site/
 │   └── components/
 │       ├── Header.tsx
 │       ├── Hero.tsx
+│       ├── Integracoes.tsx
 │       ├── Problemas.tsx
+│       ├── ComoFunciona.tsx
 │       ├── Servicos.tsx
 │       ├── Beneficios.tsx
 │       ├── Nichos.tsx
@@ -128,7 +130,9 @@ companychat-ia-site/
 │       ├── Contato.tsx
 │       ├── Footer.tsx
 │       ├── Logo.tsx
-│       └── WhatsAppButton.tsx
+│       ├── CountUp.tsx
+│       ├── WhatsAppButton.tsx
+│       └── api-oficial/         # Componentes da página /api-oficial
 ├── public/
 ├── .agents/
 │   └── skills/

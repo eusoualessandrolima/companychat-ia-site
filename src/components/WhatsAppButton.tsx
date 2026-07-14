@@ -1,6 +1,6 @@
-"use client";
+export const WHATSAPP_NUMBER =
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "5564993054630";
 
-const WHATSAPP_NUMBER  = "5564993054630";
 const WHATSAPP_MESSAGE = encodeURIComponent(
   "Olá! Gostaria de saber mais sobre os serviços da CompanyChat IA."
 );

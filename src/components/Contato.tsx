@@ -3,8 +3,7 @@
 import { FormEvent, useRef } from "react";
 import { motion } from "framer-motion";
 import { Send, MessageCircle } from "lucide-react";
-
-const WHATSAPP_NUMBER = "5564993054630";
+import { WHATSAPP_NUMBER } from "./WhatsAppButton";
 
 export default function Contato() {
   const nameRef    = useRef<HTMLInputElement>(null);
@@ -74,6 +73,7 @@ export default function Contato() {
                 type="text"
                 id="name"
                 name="name"
+                autoComplete="name"
                 required
                 className="w-full rounded-xl border border-black/10 bg-section px-4 py-3 text-foreground outline-none transition-colors focus:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary/40"
                 placeholder="Seu nome"
@@ -91,6 +91,7 @@ export default function Contato() {
                 type="email"
                 id="email"
                 name="email"
+                autoComplete="email"
                 required
                 className="w-full rounded-xl border border-black/10 bg-section px-4 py-3 text-foreground outline-none transition-colors focus:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary/40"
                 placeholder="seu@email.com"
@@ -108,6 +109,7 @@ export default function Contato() {
                 type="tel"
                 id="phone"
                 name="phone"
+                autoComplete="tel"
                 className="w-full rounded-xl border border-black/10 bg-section px-4 py-3 text-foreground outline-none transition-colors focus:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary/40"
                 placeholder="(00) 00000-0000"
               />

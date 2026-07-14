@@ -17,7 +17,7 @@
 
 | Tecnologia | Versão | Papel |
 |------------|--------|-------|
-| Next.js | 16.1.6 | Framework principal |
+| Next.js | 16.2.10 | Framework principal |
 | React | 19.2.3 | UI library |
 | TypeScript | ^5 | Tipagem |
 | Tailwind CSS | ^4 | Estilização (sem config file — via CSS) |
@@ -31,8 +31,10 @@
 | Componente | Arquivo | Descrição |
 |------------|---------|-----------|
 | Header | `Header.tsx` | Navegação principal |
-| Hero | `Hero.tsx` | Seção inicial/destaque |
+| Hero | `Hero.tsx` | Seção inicial/destaque com chat mockup |
+| Integracoes | `Integracoes.tsx` | Diagrama orbital de integrações (WhatsApp, GPT, CRMs etc.) |
 | Problemas | `Problemas.tsx` | Problemas que a plataforma resolve |
+| ComoFunciona | `ComoFunciona.tsx` | Passo a passo de como a plataforma funciona |
 | Servicos | `Servicos.tsx` | Serviços oferecidos |
 | Beneficios | `Beneficios.tsx` | Benefícios da plataforma |
 | Nichos | `Nichos.tsx` | Segmentos de mercado atendidos |
@@ -41,7 +43,10 @@
 | Contato | `Contato.tsx` | Formulário/CTA de contato |
 | Footer | `Footer.tsx` | Rodapé |
 | Logo | `Logo.tsx` | Componente de logo |
-| WhatsAppButton | `WhatsAppButton.tsx` | Botão flutuante do WhatsApp |
+| WhatsAppButton | `WhatsAppButton.tsx` | Botão flutuante do WhatsApp (exporta `WHATSAPP_NUMBER` e `whatsappLink` — fonte única) |
+| CountUp | `CountUp.tsx` | Contador animado compartilhado (usado em Hero e Sobre) |
+
+> `Depoimentos.tsx` foi removido em 2026-07-14 (código morto desde a remoção da seção da home; recuperável via git se necessário).
 
 ### Página `/api-oficial` (`src/app/api-oficial/page.tsx`)
 
@@ -90,7 +95,17 @@ Seção dedicada explicando a API Oficial do WhatsApp + calculadora de custo. Co
 - **QA Gate (@qa Quinn):** CONCERNS → liberado. Matemática da calculadora sem bugs; português impecável; zero travessões. Aplicados os ajustes MÉDIOS: token `accent-amber` na timeline, contraste dos sub-rótulos, `aria-pressed`/`aria-live` na timeline, foco visível + `aria-expanded` no acordeão de preços da calculadora
 - Adicionado `metadataBase: new URL("https://companychatia.com")` no `layout.tsx` (corrige canonical/OG e remove warning de build)
 - Criado `.env.local` (config pública documentada; ignorado pelo git via `.env*`). Vars de produção devem ser cadastradas no painel do Vercel
-- Pendente: `git add`/`commit`/`push` para `main` (via @devops) → dispara deploy automático no Vercel
+- ~~Pendente: `git add`/`commit`/`push` para `main`~~ → resolvido (commits na main sincronizados com origin)
+
+### 2026-07-14 — Auditoria completa + correções
+- **Segurança:** Next.js atualizado 16.1.6 → 16.2.10 (corrigia ~19 advisories, incluindo request smuggling e cache poisoning). `npm audit fix` aplicado nas dev deps. Residual aceito: postcss interno do Next (moderate, sem fix não-destrutivo, sem impacto em site estático)
+- **Bug:** links do Footer trocados de `#ancora` para `/#ancora` — na página `/api-oficial` os links não funcionavam
+- **Conteúdo:** "agenda" → "agendo" no chat do Hero; removido preço "R$347/mês" da meta description (site não exibe preços); removido seletor de idiomas fake (🇺🇸 English) do Footer
+- **SEO:** criados `src/app/sitemap.ts`, `src/app/robots.ts` e `src/app/opengraph-image.tsx` (OG 1200×630 nativa via next/og); canonical `/` na home
+- **Refactor:** `CountUp` extraído para componente compartilhado (`CountUp.tsx`, usado em Hero e Sobre); `WHATSAPP_NUMBER` centralizado em `WhatsAppButton.tsx` (lê `NEXT_PUBLIC_WHATSAPP_NUMBER` com fallback); removidos `Depoimentos.tsx` (morto) e SVGs padrão do create-next-app em `public/`
+- **A11y:** menu mobile com `aria-expanded`/`aria-controls` e label dinâmico; logo do Header agora `<Link href="/">`; nós do diagrama de integrações focáveis por teclado (`tabIndex`, `aria-label`, tooltip em foco); `autocomplete` nos inputs do formulário de contato
+- **UI:** tooltip do diagrama de integrações centralizado (fix `x: "-50%"` no Framer Motion); badges flutuantes do Hero com offset grande só aparecem em `xl:` (evita invadir o texto em ~1024px); onda de `Problemas.tsx` usa `var(--color-background)` em vez de hex fixo
+- **Verificação:** `tsc --noEmit` ✓ · `npm run lint` ✓ · `npm run build` ✓ (rotas novas: `/robots.txt`, `/sitemap.xml`, `/opengraph-image`)
 
 ---
 
@@ -106,10 +121,12 @@ Seção dedicada explicando a API Oficial do WhatsApp + calculadora de custo. Co
 
 ## Próximos Passos
 
-- [ ] Revisar o estado visual atual dos componentes e identificar o que precisa de melhoria
-- [ ] Verificar responsividade mobile em todos os componentes
-- [ ] Avaliar necessidade de novas skills (copy, SEO, analytics)
-- [ ] Definir paleta de cores e tokens CSS finais em `globals.css`
+- [ ] Commit + push das correções da auditoria de 2026-07-14 (via @devops) → deploy automático no Vercel
+- [ ] Verificar visualmente a home e a `/api-oficial` no navegador após o deploy (hero em ~1024px, tooltip do diagrama, OG image ao compartilhar link)
+- [ ] Cadastrar `NEXT_PUBLIC_SITE_URL` e `NEXT_PUBLIC_WHATSAPP_NUMBER` no painel do Vercel (o código agora lê essas vars com fallback)
+- [ ] Decidir se cria seção de planos/preços (a meta description antiga citava R$347/mês; foi removido por não existir no site)
+- [ ] Avaliar analytics (GA/Umami) e skills de copy/SEO
+- [ ] Considerar refatorar `Integracoes.tsx` para classes Tailwind (hoje usa muito style inline; funcional, baixa prioridade)
 
 ---
 

@@ -88,6 +88,11 @@ function GlassNode({
         transition={{ boxShadow: { duration: 0.25 } }}
         onHoverStart={() => { scale.set(1.18); setHovered(true);  }}
         onHoverEnd={()   => { scale.set(1.0);  setHovered(false); }}
+        onFocus={() => { scale.set(1.18); setHovered(true);  }}
+        onBlur={()  => { scale.set(1.0);  setHovered(false); }}
+        tabIndex={0}
+        role="img"
+        aria-label={label}
       >
         <span
           style={{
@@ -106,15 +111,14 @@ function GlassNode({
       <AnimatePresence>
         {hovered && (
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 6, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: 6, x: "-50%" }}
             transition={{ duration: 0.15 }}
             style={{
               position: "absolute",
               bottom: half + 10,
               left: 0,
-              transform: "translateX(-50%)",
               background: "rgba(8, 12, 18, 0.96)",
               border: `1px solid ${color}50`,
               borderRadius: 7,

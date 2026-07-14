@@ -90,7 +90,7 @@ export default function Problemas() {
         >
           <path
             d="M0,80 C360,10 1080,10 1440,80 L1440,80 L0,80 Z"
-            fill="#fafafa"
+            fill="var(--color-background)"
           />
         </svg>
       </div>

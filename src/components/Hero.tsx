@@ -2,53 +2,9 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Bot, Zap, Clock, Target, TrendingUp, Shield } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { whatsappLink } from "./WhatsAppButton";
-
-/* ─── Counter animation ─────────────────────────────── */
-function CountUp({
-  to,
-  suffix = "",
-  duration = 1400,
-}: {
-  to: number;
-  suffix?: string;
-  duration?: number;
-}) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const [count, setCount] = useState(0);
-  const started = useRef(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true;
-          const start = performance.now();
-          const tick = (now: number) => {
-            const p = Math.min((now - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - p, 4);
-            setCount(Math.round(eased * to));
-            if (p < 1) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [to, duration]);
-
-  return (
-    <span ref={ref}>
-      {count}
-      {suffix}
-    </span>
-  );
-}
+import CountUp from "./CountUp";
 
 /* ─── Typing indicator dots ─────────────────────────── */
 function TypingDots() {
@@ -80,7 +36,7 @@ const MESSAGES: Msg[] = [
   { kind: "typing", showAt: 1700, hideAt: 2400 },
   { kind: "msg",    side: "user", text: "Como o assistente funciona?",                          showAt: 2400 },
   { kind: "typing", showAt: 3000, hideAt: 3700 },
-  { kind: "msg",    side: "ai",   text: "Atendo seus clientes 24/7, qualifico leads e agenda reuniões automaticamente via WhatsApp ✅", showAt: 3700 },
+  { kind: "msg",    side: "ai",   text: "Atendo seus clientes 24/7, qualifico leads e agendo reuniões automaticamente via WhatsApp ✅", showAt: 3700 },
   { kind: "typing", showAt: 4400, hideAt: 5000 },
   { kind: "msg",    side: "ai",   text: "Quer que eu chame um especialista agora? 😊",           showAt: 5000 },
 ];
@@ -199,13 +155,15 @@ function ChatMockup() {
 
 /* ─── Floating feature badges ────────────────────────── */
 /* Badges posicionados apenas à esquerda/topo/base do mockup
-   para evitar overflow do viewport no lado direito             */
+   para evitar overflow do viewport no lado direito.
+   Badges com offset negativo grande só aparecem em xl:
+   para não invadir a coluna de texto em ~1024px              */
 const FLOATING_BADGES = [
-  { icon: Zap,        label: "Resposta em Segundos", anim: "animate-badge-float-1", pos: "-top-5 left-8" },
-  { icon: Clock,      label: "Online 24/7",           anim: "animate-badge-float-2", pos: "top-12 -left-44" },
-  { icon: Target,     label: "Qualifica Leads",        anim: "animate-badge-float-3", pos: "top-1/2 -left-48 -translate-y-1/2" },
-  { icon: TrendingUp, label: "+40% Conversões",        anim: "animate-badge-float-4", pos: "bottom-24 -left-44" },
-  { icon: Shield,     label: "Seguro e Confiável",     anim: "animate-badge-float-5", pos: "-bottom-3 left-8" },
+  { icon: Zap,        label: "Resposta em Segundos", anim: "animate-badge-float-1", pos: "-top-5 left-8 hidden lg:flex" },
+  { icon: Clock,      label: "Online 24/7",           anim: "animate-badge-float-2", pos: "top-12 -left-44 hidden xl:flex" },
+  { icon: Target,     label: "Qualifica Leads",        anim: "animate-badge-float-3", pos: "top-1/2 -left-48 -translate-y-1/2 hidden xl:flex" },
+  { icon: TrendingUp, label: "+40% Conversões",        anim: "animate-badge-float-4", pos: "bottom-24 -left-44 hidden xl:flex" },
+  { icon: Shield,     label: "Seguro e Confiável",     anim: "animate-badge-float-5", pos: "-bottom-3 left-8 hidden lg:flex" },
 ] as const;
 
 function FloatingBadge({
@@ -221,7 +179,7 @@ function FloatingBadge({
 }) {
   return (
     <div
-      className={`pointer-events-none absolute ${anim} ${pos} hidden lg:flex items-center gap-2 rounded-full border border-white/10 bg-dark-elevated/95 backdrop-blur-md px-3 py-1.5 shadow-xl shadow-black/50 z-20 whitespace-nowrap`}
+      className={`pointer-events-none absolute ${anim} ${pos} items-center gap-2 rounded-full border border-white/10 bg-dark-elevated/95 backdrop-blur-md px-3 py-1.5 shadow-xl shadow-black/50 z-20 whitespace-nowrap`}
     >
       <Icon className="h-3.5 w-3.5 shrink-0 text-primary" />
       <span className="text-xs font-medium text-dark-text">{label}</span>

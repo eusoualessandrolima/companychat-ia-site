@@ -18,7 +18,8 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://companychatia.com"),
   title: "CompanyChat IA: Automação Inteligente para sua Empresa",
   description:
-    "Assistente IA personalizado, automação de atendimento e integração via API. Atendimento 24/7 para escritórios, laboratórios, academias e educação. Plano Premium a partir de R$347/mês.",
+    "Assistente IA personalizado, automação de atendimento e integração via API. Atendimento 24/7 no WhatsApp para clínicas, academias, imobiliárias, advocacia e e-commerce.",
+  alternates: { canonical: "/" },
   keywords: [
     "automação",
     "inteligência artificial",

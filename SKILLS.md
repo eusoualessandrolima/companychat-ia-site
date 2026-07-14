@@ -9,7 +9,7 @@
 
 | Tecnologia | Versão | Uso |
 |------------|--------|-----|
-| Next.js | 16.1.6 | Framework principal |
+| Next.js | 16.2.10 | Framework principal |
 | React | 19.2.3 | UI library |
 | TypeScript | ^5 | Tipagem estática |
 | Tailwind CSS | ^4 | Utilitários de estilo |

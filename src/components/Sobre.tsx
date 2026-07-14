@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Target, Lightbulb, Users } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import CountUp from "./CountUp";
 
 const valores = [
   {
@@ -28,36 +28,6 @@ const numeros = [
   { value: 7,   suffix: " dias", label: "Tempo médio de setup" },
 ];
 
-function CountUp({ to, suffix = "", duration = 1200 }: { to: number; suffix?: string; duration?: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const [count, setCount] = useState(0);
-  const started = useRef(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true;
-          const t0 = performance.now();
-          const tick = (now: number) => {
-            const p = Math.min((now - t0) / duration, 1);
-            setCount(Math.round((1 - Math.pow(1 - p, 4)) * to));
-            if (p < 1) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [to, duration]);
-
-  return <span ref={ref}>{count}{suffix}</span>;
-}
-
 export default function Sobre() {
   return (
     <section id="sobre" className="relative bg-section py-24">
@@ -73,7 +43,7 @@ export default function Sobre() {
           {numeros.map((n, i) => (
             <div key={i} className="text-center">
               <div className="text-3xl font-bold text-foreground md:text-4xl">
-                <CountUp to={n.value} suffix={n.suffix} />
+                <CountUp to={n.value} suffix={n.suffix} duration={1200} />
               </div>
               <div className="mt-1 text-sm text-text-secondary">{n.label}</div>
             </div>
