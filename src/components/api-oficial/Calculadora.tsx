@@ -17,17 +17,17 @@ const presets: { nome: string; desc: string; volumes: Registro }[] = [
   {
     nome: "Pequeno",
     desc: "início / poucos disparos",
-    volumes: { utilidade: 500, autenticacao: 100, marketing: 300, servico: 800 },
+    volumes: { utilidade: 500, autenticacao: 100, marketing: 300 },
   },
   {
     nome: "Médio",
     desc: "operação em crescimento",
-    volumes: { utilidade: 3000, autenticacao: 800, marketing: 1500, servico: 4000 },
+    volumes: { utilidade: 3000, autenticacao: 800, marketing: 1500 },
   },
   {
     nome: "Grande",
     desc: "alto volume",
-    volumes: { utilidade: 15000, autenticacao: 4000, marketing: 8000, servico: 20000 },
+    volumes: { utilidade: 15000, autenticacao: 4000, marketing: 8000 },
   },
 ];
 
@@ -58,8 +58,7 @@ export default function Calculadora() {
     }));
     const totalMes = porCategoria.reduce((s, c) => s + c.subtotal, 0);
     const totalMsgs = porCategoria.reduce((s, c) => s + c.volume, 0);
-    const msgsGratis = porCategoria.filter((c) => c.gratis).reduce((s, c) => s + c.volume, 0);
-    return { porCategoria, totalMes, totalAno: totalMes * 12, totalMsgs, msgsGratis };
+    return { porCategoria, totalMes, totalAno: totalMes * 12, totalMsgs };
   }, [volumes, precos]);
 
   const resetPrecos = () => setPrecos(precoPadrao);
@@ -286,14 +285,6 @@ export default function Calculadora() {
                   <span>Total de mensagens</span>
                   <span className="font-mono text-dark-text">
                     {custos.totalMsgs.toLocaleString("pt-BR")}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-dark-muted">
-                  <span className="flex items-center gap-1.5">
-                    <Gift className="h-3.5 w-3.5 text-accent-amber" /> Gratuitas (serviço)
-                  </span>
-                  <span className="font-mono text-accent-amber">
-                    {custos.msgsGratis.toLocaleString("pt-BR")}
                   </span>
                 </div>
               </div>

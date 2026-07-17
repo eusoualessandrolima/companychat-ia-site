@@ -1,6 +1,6 @@
-import { BadgeCheck, KeyRound, Megaphone, Headset, type LucideIcon } from "lucide-react";
+import { BadgeCheck, KeyRound, Megaphone, type LucideIcon } from "lucide-react";
 
-export type CategoriaId = "utilidade" | "autenticacao" | "marketing" | "servico";
+export type CategoriaId = "utilidade" | "autenticacao" | "marketing";
 
 export type Categoria = {
   id: CategoriaId;
@@ -65,21 +65,6 @@ export const categorias: Categoria[] = [
       bg: "bg-accent-purple/10",
       barra: "bg-accent-purple",
       borda: "border-accent-purple/20",
-    },
-  },
-  {
-    id: "servico",
-    nome: "Serviço",
-    icon: Headset,
-    quandoUsa: "Cliente te chama primeiro e você responde dentro da janela de 24h",
-    faixa: "Grátis",
-    precoPadrao: 0,
-    gratis: true,
-    cor: {
-      text: "text-accent-amber",
-      bg: "bg-accent-amber/10",
-      barra: "bg-accent-amber",
-      borda: "border-accent-amber/20",
     },
   },
 ];
