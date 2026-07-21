@@ -4,7 +4,9 @@ import Integracoes from "@/components/Integracoes";
 import Problemas from "@/components/Problemas";
 import ComoFunciona from "@/components/ComoFunciona";
 import Servicos from "@/components/Servicos";
+import CrmKanban from "@/components/CrmKanban";
 import Beneficios from "@/components/Beneficios";
+import Solucao from "@/components/Solucao";
 import Nichos from "@/components/Nichos";
 import Sobre from "@/components/Sobre";
 import FAQ from "@/components/FAQ";
@@ -22,7 +24,9 @@ export default function Home() {
         <Problemas />
         <ComoFunciona />
         <Servicos />
+        <CrmKanban />
         <Beneficios />
+        <Solucao />
         <Nichos />
         <Sobre />
         <FAQ />

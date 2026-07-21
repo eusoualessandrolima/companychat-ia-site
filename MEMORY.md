@@ -139,6 +139,15 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 - **Novo:** botão "Fazer Login" (pill outline) adicionado ao `Header.tsx` e ao `ApiHeader.tsx` (logo em `/api-oficial` e `/disparos`), desktop e mobile. Aponta para `https://app.companychatia.com.br/app/login`
 - **`loginLink`** centralizado em `WhatsAppButton.tsx` (mesmo padrão do `whatsappLink`), configurável via `NEXT_PUBLIC_LOGIN_URL` com fallback. Cadastrar essa var no Vercel se o domínio do app mudar
 
+### 2026-07-21 — Seções CRM Kanban + Solução na home (ref. BotConversa)
+- Inspiração: `botconversa.com.br` (analisado ao vivo). Adaptadas 2 seções à nossa marca (verde, nossos tokens), **não** copiado o azul deles
+- **`CrmKanban.tsx`** (novo componente, seção dark): "Apresentando o CRM Kanban". Board mock com cards de lead (avatar com iniciais em gradiente, pill de estágio por cor, barra de progresso) + card "Novo card" com borda gradiente animada + 4 pilares + CTA. Layout masonry via `columns-1 sm:columns-2 lg:columns-3`
+- **`Solucao.tsx`** (novo componente, seção light `bg-section`): "A solução que faz a diferença". Comparativo Sem/Com CompanyChat (X cinza vs check verde), card "Com" destacado com borda primary, glow e barra gradiente no topo
+- **Ordem na home:** `Servicos` → `CrmKanban` (dark) → `Beneficios` (dark) → `Solucao` (light) → `Nichos`. Mantém o ritmo de blocos claro/escuro
+- **Novo utilitário CSS `.glow-border`** em `globals.css`: borda gradiente animada nítida (técnica de mask + `::after` com blur) reaproveitando o keyframe `gradient-border`. Serve para qualquer card que precise do efeito de borda viva
+- Avatares dos cards são iniciais em gradiente (sem assets de imagem). Dados dos leads são ilustrativos
+- Efeitos do site deles ainda não trazidos (sugestão pendente): grid 3D em perspectiva no hero; ver "Próximos Passos"
+
 ---
 
 ## Aprendizados e Padrões
@@ -157,6 +166,8 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 - [ ] Verificar visualmente a home, a `/api-oficial` e a nova `/disparos` no navegador após o deploy (hero em ~1024px, mock do painel, responsividade do dashboard recriado)
 - [ ] Trocar os números ilustrativos do painel em `/disparos` por prints/dados reais se quiser (hoje são exemplos)
 - [ ] Avaliar link mais visível para `/disparos` e `/api-oficial` na home (hoje só no Footer)
+- [ ] (Efeitos BotConversa) Avaliar um hero com grid 3D em perspectiva / partículas; efeito de tilt nos cards; contadores animados adicionais
+- [ ] Investigar overflow horizontal de ~14px na seção `Sobre` em mobile estreito (medição via chrome-devtools pode ser artefato de emulação; confirmar em device real)
 - [ ] Cadastrar `NEXT_PUBLIC_SITE_URL` e `NEXT_PUBLIC_WHATSAPP_NUMBER` no painel do Vercel (o código agora lê essas vars com fallback)
 - [ ] Decidir se cria seção de planos/preços (a meta description antiga citava R$347/mês; foi removido por não existir no site)
 - [ ] Avaliar analytics (GA/Umami) e skills de copy/SEO

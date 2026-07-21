@@ -238,6 +238,39 @@ body::before {
   opacity: 0.7;
 }
 
+/* Animated gradient border ring — crisp, always-on (mask technique) */
+.glow-border {
+  position: relative;
+}
+.glow-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(120deg, #00ab7a, #00d4a0, #3b82f6, #8b5cf6, #00ab7a);
+  background-size: 300% 300%;
+  animation: gradient-border 4.5s ease infinite;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+/* Soft matching glow under the ring */
+.glow-border::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, #00ab7a, #3b82f6, #8b5cf6, #00ab7a);
+  background-size: 300% 300%;
+  animation: gradient-border 4.5s ease infinite;
+  opacity: 0.35;
+  filter: blur(11px);
+  z-index: -1;
+  pointer-events: none;
+}
+
 /* Dark section base */
 .section-dark {
   background-color: var(--color-dark-base);
