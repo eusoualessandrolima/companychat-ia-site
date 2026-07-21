@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { Target, Lightbulb, Users } from "lucide-react";
-import CountUp from "./CountUp";
 
 const valores = [
   {
@@ -22,34 +21,10 @@ const valores = [
   },
 ];
 
-const numeros = [
-  { value: 500, suffix: "+", label: "Empresas atendidas" },
-  { value: 98,  suffix: "%", label: "Taxa de satisfação"  },
-  { value: 7,   suffix: " dias", label: "Tempo médio de setup" },
-];
-
 export default function Sobre() {
   return (
     <section id="sobre" className="relative bg-section py-24">
       <div className="mx-auto max-w-6xl px-4">
-        {/* Números animados */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-20 grid grid-cols-3 gap-2 rounded-2xl border border-card-border bg-card p-4 shadow-sm sm:gap-8 sm:p-8"
-        >
-          {numeros.map((n, i) => (
-            <div key={i} className="text-center">
-              <div className="text-3xl font-bold text-foreground md:text-4xl">
-                <CountUp to={n.value} suffix={n.suffix} duration={1200} />
-              </div>
-              <div className="mt-1 text-sm text-text-secondary">{n.label}</div>
-            </div>
-          ))}
-        </motion.div>
-
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}

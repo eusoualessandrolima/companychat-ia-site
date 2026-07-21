@@ -148,6 +148,12 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 - Avatares dos cards são iniciais em gradiente (sem assets de imagem). Dados dos leads são ilustrativos
 - Efeitos do site deles ainda não trazidos (sugestão pendente): grid 3D em perspectiva no hero; ver "Próximos Passos"
 
+### 2026-07-21 — Grid 3D no hero + remoção do card de números do Sobre
+- **Hero:** grid plano substituído por **grid 3D em perspectiva** (chão recuando). Container com `[perspective:320px]` + filho `rotateX(74deg)`, `backgroundImage` de linhas verde/azul, `maskImage` pra fade no horizonte e keyframe `grid-flow` (linhas fluindo em direção ao usuário). Auroras mantidas
+- Novo keyframe `grid-flow` em `globals.css`
+- **Sobre:** removido o card de números animados ("500+ Empresas atendidas · 98% Taxa de satisfação · 7 dias Tempo médio de setup") a pedido do dono. Import `CountUp` e array `numeros` também removidos (ficaram sem uso). Os mesmos números seguem no Hero (stats)
+- **Overflow de 14px no mobile:** investigado a fundo. Scan confiável (fora de `overflow-hidden`) = 0 culpados; sem `100vw`/`w-screen` no código. Conclusão: artefato de contabilização de scrollbar na emulação headless do chrome-devtools (`clientWidth` lê 485 em vez de 390). Sem corte visível. Não é bug real
+
 ---
 
 ## Aprendizados e Padrões

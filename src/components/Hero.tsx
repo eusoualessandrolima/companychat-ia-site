@@ -215,15 +215,24 @@ export default function Hero() {
             animation: "blob-float-slow 18s ease-in-out infinite",
           }}
         />
-        {/* Fine grid */}
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.15) 1px, transparent 1px)",
-            backgroundSize: "48px 48px",
-          }}
-        />
+        {/* 3D perspective grid floor */}
+        <div className="absolute inset-x-0 bottom-0 h-[62%] overflow-hidden [perspective:320px] [perspective-origin:50%_0%]">
+          <div
+            className="absolute bottom-0 left-1/2 h-[220%] w-[320%] origin-bottom -translate-x-1/2"
+            style={{
+              transform: "translateX(-50%) rotateX(74deg)",
+              backgroundImage:
+                "linear-gradient(rgba(0,171,122,.7) 1px, transparent 1px), linear-gradient(90deg, rgba(0,146,255,.55) 1px, transparent 1px)",
+              backgroundSize: "60px 60px",
+              animation: "grid-flow 2.6s linear infinite",
+              maskImage: "linear-gradient(to top, #000 6%, transparent 78%)",
+              WebkitMaskImage: "linear-gradient(to top, #000 6%, transparent 78%)",
+              opacity: 0.35,
+            }}
+          />
+          {/* horizon glow */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-primary/10 to-transparent blur-2xl" />
+        </div>
       </div>
 
       <div className="relative mx-auto w-full max-w-6xl px-4 py-20 lg:py-28">
