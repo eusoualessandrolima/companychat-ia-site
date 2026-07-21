@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Bot, Plug, MessageSquareCode, Check } from "lucide-react";
+import { SolucaoGrid } from "./NossasSolucoes";
 
 const servicos = [
   {
@@ -131,6 +132,26 @@ export default function Servicos() {
               </ul>
             </motion.div>
           ))}
+        </div>
+
+        {/* Produtos com página própria — dá visibilidade e link ao portfólio */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-24 text-center"
+        >
+          <h3 className="text-2xl font-bold text-foreground md:text-3xl">
+            Explore nossas <span className="text-primary">soluções</span>
+          </h3>
+          <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
+            Três ferramentas que trabalham juntas no seu WhatsApp. Conheça cada uma em detalhes.
+          </p>
+        </motion.div>
+
+        <div className="mt-12">
+          <SolucaoGrid variant="light" />
         </div>
       </div>
     </section>

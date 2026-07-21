@@ -5,6 +5,7 @@ import Janela24h from "@/components/api-oficial/Janela24h";
 import Categorias from "@/components/api-oficial/Categorias";
 import Calculadora from "@/components/api-oficial/Calculadora";
 import ApiFaq from "@/components/api-oficial/ApiFaq";
+import NossasSolucoes from "@/components/NossasSolucoes";
 import ApiCta from "@/components/api-oficial/ApiCta";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -43,6 +44,7 @@ export default function ApiOficialPage() {
         <Categorias />
         <Calculadora />
         <ApiFaq />
+        <NossasSolucoes variant="dark" />
         <ApiCta />
       </main>
       <Footer />
