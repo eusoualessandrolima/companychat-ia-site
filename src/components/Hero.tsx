@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { ArrowRight, Bot, Zap, Clock, Target, TrendingUp, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 import { whatsappLink } from "./WhatsAppButton";
-import CountUp from "./CountUp";
 
 /* ─── Typing indicator dots ─────────────────────────── */
 function TypingDots() {
@@ -187,14 +186,6 @@ function FloatingBadge({
   );
 }
 
-/* ─── Stats ─────────────────────────────────────────── */
-const stats = [
-  { num: 500,  suffix: "+", label: "Empresas Atendidas" },
-  { num: 70,   suffix: "%", label: "Redução de Custo"   },
-  { num: 98,   suffix: "%", label: "Satisfação"         },
-  { num: 7,    suffix: " dias", label: "Até o Go-live"  },
-];
-
 /* ─── Hero ──────────────────────────────────────────── */
 export default function Hero() {
   return (
@@ -215,24 +206,6 @@ export default function Hero() {
             animation: "blob-float-slow 18s ease-in-out infinite",
           }}
         />
-        {/* 3D perspective grid floor */}
-        <div className="absolute inset-x-0 bottom-0 h-[62%] overflow-hidden [perspective:320px] [perspective-origin:50%_0%]">
-          <div
-            className="absolute bottom-0 left-1/2 h-[220%] w-[320%] origin-bottom -translate-x-1/2"
-            style={{
-              transform: "translateX(-50%) rotateX(74deg)",
-              backgroundImage:
-                "linear-gradient(rgba(0,171,122,.7) 1px, transparent 1px), linear-gradient(90deg, rgba(0,146,255,.55) 1px, transparent 1px)",
-              backgroundSize: "60px 60px",
-              animation: "grid-flow 2.6s linear infinite",
-              maskImage: "linear-gradient(to top, #000 6%, transparent 78%)",
-              WebkitMaskImage: "linear-gradient(to top, #000 6%, transparent 78%)",
-              opacity: 0.35,
-            }}
-          />
-          {/* horizon glow */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-primary/10 to-transparent blur-2xl" />
-        </div>
       </div>
 
       <div className="relative mx-auto w-full max-w-6xl px-4 py-20 lg:py-28">
@@ -294,26 +267,6 @@ export default function Hero() {
               >
                 Ver Serviços
               </a>
-            </motion.div>
-
-            {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.45 }}
-              className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4"
-            >
-              {stats.map((s, i) => (
-                <div
-                  key={i}
-                  className="rounded-xl border border-dark-border bg-dark-surface px-4 py-3 text-center"
-                >
-                  <div className="text-2xl font-bold text-dark-text">
-                    <CountUp to={s.num} suffix={s.suffix} />
-                  </div>
-                  <div className="mt-0.5 text-xs text-dark-muted">{s.label}</div>
-                </div>
-              ))}
             </motion.div>
           </motion.div>
 
