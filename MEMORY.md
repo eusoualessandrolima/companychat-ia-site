@@ -132,6 +132,13 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 - **Verificação:** `npm run lint` ✓ · `npm run build` ✓ (rota `/disparos` prerenderizada estática)
 - Nomes de brand mantidos genéricos ("Disparo em massa" / "Painel de Campanhas"); dados do painel são ilustrativos (12.480 enviadas etc.), não números reais de cliente
 
+### 2026-07-21 — Botão "Fazer Login" + revisão ortográfica de /disparos
+- Rodada a skill `text-quality` na página `/disparos`: ajustes de concordância ("prontas"), UX ("banimento") e remoção de travessão. Página 100% sem travessões
+- Corrigidos os 2 últimos travessões longos em texto visível do site inteiro: `alt` da OG image e `aria-label` do Header
+- Corrigida a responsividade dos CTAs do hero de `/disparos` (`whitespace-nowrap` + empilhar no lg, lado a lado no xl, full-width no mobile)
+- **Novo:** botão "Fazer Login" (pill outline) adicionado ao `Header.tsx` e ao `ApiHeader.tsx` (logo em `/api-oficial` e `/disparos`), desktop e mobile. Aponta para `https://app.companychatia.com.br/app/login`
+- **`loginLink`** centralizado em `WhatsAppButton.tsx` (mesmo padrão do `whatsappLink`), configurável via `NEXT_PUBLIC_LOGIN_URL` com fallback. Cadastrar essa var no Vercel se o domínio do app mudar
+
 ---
 
 ## Aprendizados e Padrões
