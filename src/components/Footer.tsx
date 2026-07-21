@@ -1,3 +1,4 @@
+import { MapPin } from "lucide-react";
 import Logo from "./Logo";
 import { whatsappLink } from "./WhatsAppButton";
 
@@ -133,6 +134,11 @@ export default function Footer() {
             <MetaLogo className="h-4 w-6 shrink-0" />
             <span className="text-sm font-medium text-dark-text">Meta Business Partner</span>
           </div>
+
+          <p className="flex items-center gap-1.5 text-center text-xs text-dark-muted">
+            <MapPin className="h-3.5 w-3.5 text-primary" />
+            Goiânia, GO · Atendimento 100% online para todo o Brasil
+          </p>
 
           <p className="text-center text-xs text-dark-muted">
             &copy; {new Date().getFullYear()} CompanyChat IA Ltda. Todos os direitos reservados
