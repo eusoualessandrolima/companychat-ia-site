@@ -31,7 +31,7 @@ const recursos: Recurso[] = [
   { nome: "Disparos ao vivo", icon: Radio, desc: "Acompanhe cada envio saindo em tempo real, com status de aceito, entregue e lido.", cor: purple },
   { nome: "Filas", icon: ListChecks, desc: "Envio no ritmo certo, respeitando os limites da API para nunca arriscar bloqueio.", cor: amber },
   { nome: "Contatos e importações", icon: Users, desc: "Importe por planilha ou CRM e mantenha a base organizada com histórico de campanhas.", cor: primary },
-  { nome: "Relatórios", icon: BarChart3, desc: "Taxa de entrega, leitura e falhas por campanha, prontos para você medir resultados.", cor: blue },
+  { nome: "Relatórios", icon: BarChart3, desc: "Taxa de entrega, leitura e falhas por campanha, prontas para você medir resultados.", cor: blue },
   { nome: "Histórico e logs", icon: ScrollText, desc: "Registro completo de cada disparo, com auditoria de tudo que saiu e quando.", cor: purple },
   { nome: "Integração com CRM", icon: Blocks, desc: "Conectada ao nosso CRM e ao agente de IA: um ecossistema único para atender e vender.", cor: amber },
 ];

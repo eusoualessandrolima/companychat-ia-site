@@ -46,7 +46,7 @@ export default function Painel() {
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-dark-muted">
             Cada mensagem enviada, entregue e lida aparece no painel na hora. Nada de
-            planilha no escuro — é controle total da sua operação de disparo.
+            planilha no escuro, é controle total da sua operação de disparo.
           </p>
         </motion.div>
 

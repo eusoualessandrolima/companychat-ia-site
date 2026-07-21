@@ -23,7 +23,7 @@ const faqs = [
   {
     pergunta: "Que relatórios eu tenho depois do disparo?",
     resposta:
-      "Você acompanha enviadas, entregues, lidas, falhas e taxa de entrega por campanha, além dos disparos ao vivo e logs de cada mensagem. Tudo em tempo real, para medir o resultado real de cada campanha.",
+      "Você acompanha enviadas, entregues, lidas, falhas e taxa de entrega por campanha, além dos disparos ao vivo e logs de cada mensagem. Tudo em tempo real, para medir o retorno de cada campanha.",
   },
   {
     pergunta: "A ferramenta de disparo se integra com o CRM e o agente de IA?",

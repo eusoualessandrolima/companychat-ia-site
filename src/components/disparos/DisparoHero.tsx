@@ -77,14 +77,14 @@ export default function DisparoHero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}
-            className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start"
+            className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row lg:flex-col lg:items-start xl:flex-row lg:justify-start"
           >
-            <div className="cta-glow-wrap">
+            <div className="cta-glow-wrap w-full sm:w-auto">
               <a
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-center gap-2.5 rounded-full bg-primary px-9 py-4 font-semibold text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
+                className="group flex w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-primary px-8 py-4 font-semibold text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40 sm:w-auto"
               >
                 <Send className="h-4 w-4" />
                 Quero disparar em massa
@@ -92,7 +92,7 @@ export default function DisparoHero() {
             </div>
             <a
               href="#recursos"
-              className="flex items-center justify-center gap-2 rounded-full border border-dark-border bg-dark-surface px-9 py-4 font-semibold text-dark-text transition-all hover:border-primary/40 hover:text-primary"
+              className="flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-full border border-dark-border bg-dark-surface px-8 py-4 font-semibold text-dark-text transition-all hover:border-primary/40 hover:text-primary sm:w-auto"
             >
               Ver a ferramenta
               <ArrowRight className="h-4 w-4" />
@@ -106,7 +106,7 @@ export default function DisparoHero() {
             className="mt-8 flex items-center justify-center gap-2 text-xs text-dark-muted lg:justify-start"
           >
             <ShieldCheck className="h-4 w-4 text-primary" />
-            100% via API Oficial da Meta · número verificado, sem risco de ban
+            100% via API Oficial da Meta · número verificado, sem risco de banimento
           </motion.div>
         </div>
 
