@@ -34,14 +34,14 @@ export default function Header() {
         style={{ scaleX: progressScaleX }}
       />
 
-      <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
-          scrolled
-            ? "border-b border-dark-border bg-dark-base/90 backdrop-blur-xl"
-            : "border-b border-transparent bg-transparent"
-        }`}
-      >
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+      <header className="fixed inset-x-0 top-0 z-40 px-4">
+        <div
+          className={`mx-auto flex items-center justify-between gap-4 transition-all duration-500 ease-out ${
+            scrolled
+              ? "mt-3 h-14 max-w-4xl rounded-full border border-dark-border bg-dark-base/80 px-6 shadow-xl shadow-black/40 backdrop-blur-xl"
+              : "mt-0 h-16 max-w-6xl rounded-full border border-transparent bg-transparent px-0"
+          }`}
+        >
           <Link href="/" aria-label="CompanyChat IA, início">
             <Logo dark />
           </Link>
@@ -89,7 +89,7 @@ export default function Header() {
 
         {/* Mobile nav */}
         {open && (
-          <nav id="mobile-nav" className="flex flex-col gap-4 border-t border-dark-border bg-dark-base px-4 py-6 md:hidden">
+          <nav id="mobile-nav" className="mx-auto mt-2 flex max-w-4xl flex-col gap-4 rounded-3xl border border-dark-border bg-dark-base/95 px-5 py-6 shadow-xl shadow-black/40 backdrop-blur-xl md:hidden">
             {navLinks.map((link) => (
               <a
                 key={link.href}

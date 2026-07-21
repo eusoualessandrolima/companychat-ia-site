@@ -1,6 +1,27 @@
 import Logo from "./Logo";
 import { whatsappLink } from "./WhatsAppButton";
 
+/* Marca "infinito" da Meta em gradiente azul da marca */
+function MetaLogo({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 16" fill="none" className={className} aria-hidden="true">
+      <path
+        d="M2 8c0-3.1 1.8-5.6 4.4-5.6 2 0 3.5 1.7 4.8 3.9L12 8l1-1.7c1.3-2.2 2.7-3.9 4.7-3.9C20.2 2.4 22 4.9 22 8s-1.8 5.6-4.4 5.6c-2 0-3.5-1.7-4.8-3.9L12 8l-.8 1.4C9.9 11.6 8.4 13.6 6.4 13.6 3.8 13.6 2 11.1 2 8z"
+        stroke="url(#meta-gradient)"
+        strokeWidth="1.9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <defs>
+        <linearGradient id="meta-gradient" x1="0" y1="0" x2="24" y2="0" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#0064E1" />
+          <stop offset="1" stopColor="#0082FB" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
 const links = {
   produto: [
     { href: "/#servicos",   label: "Serviços" },
@@ -106,7 +127,13 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-16 flex flex-col items-center justify-center gap-2 border-t border-dark-border pt-8">
+        <div className="mt-16 flex flex-col items-center justify-center gap-5 border-t border-dark-border pt-8">
+          {/* Selo de parceria oficial Meta */}
+          <div className="inline-flex items-center gap-2.5 rounded-full border border-dark-border bg-dark-surface px-4 py-2">
+            <MetaLogo className="h-4 w-6 shrink-0" />
+            <span className="text-sm font-medium text-dark-text">Meta Business Partner</span>
+          </div>
+
           <p className="text-center text-xs text-dark-muted">
             &copy; {new Date().getFullYear()} CompanyChat IA Ltda. Todos os direitos reservados
             <span className="mx-3 opacity-40">|</span>
