@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Logo from "./Logo";
-import { whatsappLink } from "./WhatsAppButton";
+import { whatsappLink, loginLink } from "./WhatsAppButton";
 
 const navLinks = [
   { href: "#servicos",   label: "Serviços" },
@@ -42,7 +42,7 @@ export default function Header() {
         }`}
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-          <Link href="/" aria-label="CompanyChat IA — início">
+          <Link href="/" aria-label="CompanyChat IA, início">
             <Logo dark />
           </Link>
 
@@ -57,6 +57,13 @@ export default function Header() {
                 {link.label}
               </a>
             ))}
+
+            <a
+              href={loginLink}
+              className="rounded-full border border-dark-border px-5 py-2 text-sm font-semibold text-dark-text transition-all hover:border-primary/40 hover:text-primary"
+            >
+              Fazer Login
+            </a>
 
             <a
               href={whatsappLink}
@@ -94,10 +101,17 @@ export default function Header() {
               </a>
             ))}
             <a
+              href={loginLink}
+              onClick={() => setOpen(false)}
+              className="mt-2 rounded-full border border-dark-border px-5 py-3 text-center font-semibold text-dark-text"
+            >
+              Fazer Login
+            </a>
+            <a
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 rounded-full bg-primary px-5 py-3 text-center font-semibold text-white"
+              className="rounded-full bg-primary px-5 py-3 text-center font-semibold text-white"
             >
               Fale Conosco
             </a>

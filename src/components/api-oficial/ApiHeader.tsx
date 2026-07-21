@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Logo from "../Logo";
-import { whatsappLink } from "../WhatsAppButton";
+import { whatsappLink, loginLink } from "../WhatsAppButton";
 
 export default function ApiHeader() {
   return (
@@ -16,14 +16,22 @@ export default function ApiHeader() {
           <Logo dark />
         </Link>
 
-        <a
-          href={whatsappLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25"
-        >
-          Fale Conosco
-        </a>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <a
+            href={loginLink}
+            className="hidden rounded-full border border-dark-border px-5 py-2 text-sm font-semibold text-dark-text transition-all hover:border-primary/40 hover:text-primary sm:inline-flex"
+          >
+            Fazer Login
+          </a>
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25"
+          >
+            Fale Conosco
+          </a>
+        </div>
       </div>
     </header>
   );

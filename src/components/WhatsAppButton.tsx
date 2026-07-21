@@ -7,6 +7,10 @@ const WHATSAPP_MESSAGE = encodeURIComponent(
 
 export const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`;
 
+/** URL de login do sistema (app). Configurável via NEXT_PUBLIC_LOGIN_URL. */
+export const loginLink =
+  process.env.NEXT_PUBLIC_LOGIN_URL ?? "https://app.companychatia.com.br/app/login";
+
 /** Ícone oficial do WhatsApp (glyph do telefone no balão) */
 export function WhatsAppIcon({ className = "" }: { className?: string }) {
   return (
