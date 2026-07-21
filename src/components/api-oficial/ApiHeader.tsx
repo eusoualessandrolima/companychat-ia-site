@@ -1,12 +1,29 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Logo from "../Logo";
 import { whatsappLink, loginLink } from "../WhatsAppButton";
 
 export default function ApiHeader() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 border-b border-dark-border bg-dark-base/90 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+    <header className="fixed inset-x-0 top-0 z-40 px-4">
+      <div
+        className={`mx-auto flex items-center justify-between gap-4 transition-all duration-500 ease-out ${
+          scrolled
+            ? "mt-3 h-14 max-w-4xl rounded-full border border-dark-border bg-dark-base/80 px-6 shadow-xl shadow-black/40 backdrop-blur-xl"
+            : "mt-0 h-16 max-w-6xl rounded-full border border-transparent bg-transparent px-0"
+        }`}
+      >
         <Link href="/" className="flex items-center gap-2 text-dark-muted transition-colors hover:text-primary">
           <ArrowLeft className="h-4 w-4" />
           <span className="hidden text-sm sm:inline">Voltar ao site</span>
