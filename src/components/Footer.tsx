@@ -16,6 +16,7 @@ const links = {
     { href: "/#faq",           label: "FAQ" },
     { href: "/#como-funciona", label: "Como funciona" },
     { href: "/api-oficial",    label: "API Oficial" },
+    { href: "/disparos",       label: "Disparo em massa" },
   ],
 };
 

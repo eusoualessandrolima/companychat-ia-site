@@ -63,6 +63,20 @@ Seção dedicada explicando a API Oficial do WhatsApp + calculadora de custo. Co
 | ApiCta | `ApiCta.tsx` | CTA final para WhatsApp |
 | pricing.ts | `pricing.ts` | Fonte única de dados: categorias + preços padrão (aproximados Meta BR) + formatador BRL |
 
+### Página `/disparos` (`src/app/disparos/page.tsx`)
+
+Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). Apresenta a ferramenta SaaS de disparo em massa via API Oficial. Reaproveita `ApiHeader`, `Footer` e `WhatsAppButton`. Componentes em `src/components/disparos/`:
+
+| Componente | Arquivo | Descrição |
+|------------|---------|-----------|
+| DisparoHero | `DisparoHero.tsx` | Hero com mini-mock do painel (metrics + gráfico animado) |
+| Fluxo | `Fluxo.tsx` | Stepper interativo de 4 passos (importar → campanha → disparar → acompanhar) |
+| Recursos | `Recursos.tsx` | Grade de 8 recursos da ferramenta |
+| Painel | `Painel.tsx` | Recriação nativa do dashboard real (Enviadas/Fila/Campanhas/Falhas + entrega/leitura + gráfico + resumo) |
+| Ecossistema | `Ecossistema.tsx` | 3 pilares: Agente IA + CRM + Disparo em massa |
+| DisparoFaq | `DisparoFaq.tsx` | FAQ específico de disparo em massa |
+| DisparoCta | `DisparoCta.tsx` | CTA final (WhatsApp + cross-link para `/api-oficial`) |
+
 ---
 
 ## Skills Ativas
@@ -109,6 +123,15 @@ Seção dedicada explicando a API Oficial do WhatsApp + calculadora de custo. Co
 - **Domínio real é `www.companychatia.com.br`** — `companychatia.com` (sem .br) NÃO resolve. Corrigidos `metadataBase`, sitemap e robots para o domínio certo (via `NEXT_PUBLIC_SITE_URL` com fallback correto). Vars `NEXT_PUBLIC_SITE_URL` e `NEXT_PUBLIC_WHATSAPP_NUMBER` cadastradas no Vercel (Production) via CLI; projeto Vercel chama-se `site`. Apex `companychatia.com.br` (sem www) também não responde — considerar redirect no painel
 - **Auditoria de responsividade (Chrome DevTools, build de produção):** testadas as larguras 320/390/768/1024/1440 nas duas páginas, com detecção automática de overflow horizontal. Único bug real: glow decorativo de 700px em `Integracoes.tsx` vazava até 190px à direita em telas <700px (scroll horizontal no celular). Corrigido com `overflowX: "clip"` na section (vertical continua `visible`). Todas as larguras limpas após o fix; badges do Hero confirmadas visualmente sem invadir o texto em 1024px e presentes em 1440px
 
+### 2026-07-21 — Página `/disparos` (ferramenta de disparo em massa)
+- Criada a página `/disparos`: extensão-irmã da `/api-oficial` para apresentar o novo SaaS de disparo em massa via API Oficial (campanhas de marketing, templates aprovados, disparos ao vivo, relatórios, integração com CRM)
+- **Padrão reaproveitado por completo:** mesmos tokens (dark-base/surface, accents, `text-gradient-primary`, `cta-glow-wrap`), aurora no hero, seções alternando dark/light, Framer Motion. Reusa `ApiHeader`, `Footer` e `WhatsAppButton` (sem duplicar header)
+- **Dashboard recriado nativo** em React/Tailwind (não PNG) a partir do print real do painel "Dispara AI" — métricas, entrega/leitura, gráfico de 24h animado e resumo
+- **Tese do ecossistema:** seção `Ecossistema.tsx` posiciona os 3 produtos como um só — Agente IA + CRM + Disparo em massa
+- Registrada no `Footer` (coluna Recursos → "Disparo em massa") e no `sitemap.ts` (priority 0.8). CTA cruza link para `/api-oficial` e vice-versa possível no futuro
+- **Verificação:** `npm run lint` ✓ · `npm run build` ✓ (rota `/disparos` prerenderizada estática)
+- Nomes de brand mantidos genéricos ("Disparo em massa" / "Painel de Campanhas"); dados do painel são ilustrativos (12.480 enviadas etc.), não números reais de cliente
+
 ---
 
 ## Aprendizados e Padrões
@@ -124,7 +147,9 @@ Seção dedicada explicando a API Oficial do WhatsApp + calculadora de custo. Co
 ## Próximos Passos
 
 - [ ] Commit + push das correções da auditoria de 2026-07-14 (via @devops) → deploy automático no Vercel
-- [ ] Verificar visualmente a home e a `/api-oficial` no navegador após o deploy (hero em ~1024px, tooltip do diagrama, OG image ao compartilhar link)
+- [ ] Verificar visualmente a home, a `/api-oficial` e a nova `/disparos` no navegador após o deploy (hero em ~1024px, mock do painel, responsividade do dashboard recriado)
+- [ ] Trocar os números ilustrativos do painel em `/disparos` por prints/dados reais se quiser (hoje são exemplos)
+- [ ] Avaliar link mais visível para `/disparos` e `/api-oficial` na home (hoje só no Footer)
 - [ ] Cadastrar `NEXT_PUBLIC_SITE_URL` e `NEXT_PUBLIC_WHATSAPP_NUMBER` no painel do Vercel (o código agora lê essas vars com fallback)
 - [ ] Decidir se cria seção de planos/preços (a meta description antiga citava R$347/mês; foi removido por não existir no site)
 - [ ] Avaliar analytics (GA/Umami) e skills de copy/SEO
