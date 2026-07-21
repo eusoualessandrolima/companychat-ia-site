@@ -159,6 +159,11 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 - **CrmKanban (`CrmKanban.tsx`) redesenhado** para espelhar o board real do produto: toolbar "Clientes & Oportunidades", colunas com cabeçalho colorido (Novo Lead cinza, Qualificando azul, Proposta Enviada roxo, Negociação âmbar), cards estilo "Conversa #NNN · Nome" com avatar/tempo/valor, colunas slim verticais "Oportunidade Ganha" (verde) e "Oportunidade Perdida" (vermelho), e ghost "+ Adicionar etapa" com `.glow-border`. Board rola horizontalmente (contido no painel). Substituiu o masonry anterior
 - **Hero:** o grid 3D em perspectiva e o bloco de stats (500+/70%/98%/7 dias) foram removidos do hero (decisão do dono, hero mais enxuto). Keyframe `grid-flow` ficou sem uso no `globals.css` (inócuo; remover se quiser). `.glow-border` segue em uso no Kanban
 
+### 2026-07-21 — Seção Integrações removida da home
+- Removido `<Integracoes />` (diagrama orbital "Conecte com as principais plataformas") do `page.tsx` a pedido do dono (não encaixava no visual). Import também removido
+- Arquivo `Integracoes.tsx` **preservado** (não deletado) para reativar fácil se quiser. Não está mais em uso na home
+- Ordem atual da home: Hero → Problemas → ComoFunciona → Servicos → CrmKanban → Beneficios → Solucao → Nichos → Sobre → FAQ → Contato
+
 ---
 
 ## Aprendizados e Padrões
