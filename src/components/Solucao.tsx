@@ -55,7 +55,7 @@ export default function Solucao() {
               {sem.map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-foreground/10 text-text-secondary">
-                    <X className="h-3 w-3" />
+                    <X aria-hidden="true" className="h-3 w-3" />
                   </span>
                   <span className="text-text-secondary">{item}</span>
                 </li>
@@ -91,7 +91,7 @@ export default function Solucao() {
               {com.map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-white">
-                    <Check className="h-3 w-3" />
+                    <Check aria-hidden="true" className="h-3 w-3" />
                   </span>
                   <span className="font-medium text-foreground">{item}</span>
                 </li>

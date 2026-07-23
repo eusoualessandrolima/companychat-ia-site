@@ -109,7 +109,7 @@ export default function Janela24h() {
                           : "border-dark-border bg-dark-surface text-dark-muted group-hover:border-white/20"
                       }`}
                     >
-                      <f.icon className="h-5 w-5" />
+                      <f.icon aria-hidden="true" className="h-5 w-5" />
                     </span>
                     <div className="sm:mt-3">
                       <p
@@ -142,7 +142,7 @@ export default function Janela24h() {
                 className="flex items-start gap-4"
               >
                 <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/5 ${fase.cor}`}>
-                  <fase.icon className="h-5 w-5" />
+                  <fase.icon aria-hidden="true" className="h-5 w-5" />
                 </span>
                 <div>
                   <h3 className="font-semibold text-dark-text">

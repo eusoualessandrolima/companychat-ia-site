@@ -38,9 +38,9 @@ export default function DisparoCta() {
               rel="noopener noreferrer"
               className="group flex items-center justify-center gap-2.5 rounded-full bg-primary px-9 py-4 font-semibold text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
             >
-              <MessageCircle className="h-5 w-5" />
+              <MessageCircle aria-hidden="true" className="h-5 w-5" />
               Falar com um especialista
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </a>
           </div>
           <Link

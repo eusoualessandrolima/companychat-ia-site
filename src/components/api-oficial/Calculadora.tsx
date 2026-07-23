@@ -17,7 +17,7 @@ const presets: { nome: string; desc: string; volumes: Registro }[] = [
   {
     nome: "Pequeno",
     desc: "início / poucos disparos",
-    volumes: { utilidade: 500, autenticacao: 100, marketing: 300 },
+    volumes: { utilidade: 500, autenticacao: 100, marketing: 20 },
   },
   {
     nome: "Médio",
@@ -81,7 +81,7 @@ export default function Calculadora() {
           className="text-center"
         >
           <div className="mx-auto mb-6 flex w-fit items-center gap-2.5 rounded-full border border-dark-border bg-dark-surface px-4 py-2 text-sm font-medium text-dark-muted">
-            <Calculator className="h-4 w-4 text-primary" />
+            <Calculator aria-hidden="true" className="h-4 w-4 text-primary" />
             Calculadora de custo
           </div>
           <h2 className="text-3xl font-bold text-dark-text md:text-4xl">
@@ -122,14 +122,14 @@ export default function Calculadora() {
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${c.cor.bg} ${c.cor.text}`}>
-                        <c.icon className="h-5 w-5" />
+                        <c.icon aria-hidden="true" className="h-5 w-5" />
                       </span>
                       <div>
                         <p className="flex items-center gap-2 font-semibold text-dark-text">
                           {c.nome}
                           {c.gratis && (
                             <span className="inline-flex items-center gap-1 rounded-full bg-accent-amber/15 px-2 py-0.5 text-[11px] font-semibold text-accent-amber">
-                              <Gift className="h-3 w-3" /> grátis
+                              <Gift aria-hidden="true" className="h-3 w-3" /> grátis
                             </span>
                           )}
                         </p>
@@ -181,10 +181,10 @@ export default function Calculadora() {
                 className="flex w-full items-center justify-between px-5 py-4 text-left"
               >
                 <span className="flex items-center gap-2 text-sm font-medium text-dark-muted">
-                  <Sparkles className="h-4 w-4 text-primary" />
+                  <Sparkles aria-hidden="true" className="h-4 w-4 text-primary" />
                   Ajustar preços por mensagem (avançado)
                 </span>
-                <ChevronDown className={`h-4 w-4 text-dark-muted transition-transform ${ajusteAberto ? "rotate-180" : ""}`} />
+                <ChevronDown aria-hidden="true" className={`h-4 w-4 text-dark-muted transition-transform ${ajusteAberto ? "rotate-180" : ""}`} />
               </button>
               <AnimatePresence>
                 {ajusteAberto && (
@@ -227,7 +227,7 @@ export default function Calculadora() {
                         onClick={resetPrecos}
                         className="mt-4 inline-flex items-center gap-1.5 text-xs text-dark-muted transition-colors hover:text-primary"
                       >
-                        <RotateCcw className="h-3 w-3" /> Restaurar valores da Meta
+                        <RotateCcw aria-hidden="true" className="h-3 w-3" /> Restaurar valores da Meta
                       </button>
                     </div>
                   </motion.div>

@@ -59,7 +59,7 @@ export default function Sobre() {
                 className="group flex gap-4 rounded-2xl border border-card-border bg-card p-6 shadow-sm transition-all hover:border-primary/25 hover:shadow-md"
               >
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-light text-primary transition-colors group-hover:bg-primary/20">
-                  <v.icon className="h-6 w-6" />
+                  <v.icon aria-hidden="true" className="h-6 w-6" />
                 </div>
                 <div>
                   <h3 className="font-bold text-foreground">{v.titulo}</h3>

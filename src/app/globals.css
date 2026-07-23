@@ -49,6 +49,19 @@ h1, h2, h3, h4, h5, h6 {
   color: #09090b;
 }
 
+/* Keyboard focus ring — verde da marca, consistente e só no foco por teclado.
+   Regra não-layered: vence utilitários como `outline-none` do Tailwind. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* Grain texture overlay — premium feel */
 body::before {
   content: "";

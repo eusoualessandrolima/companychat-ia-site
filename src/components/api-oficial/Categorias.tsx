@@ -37,7 +37,7 @@ export default function Categorias() {
               <div className={`absolute top-0 left-0 right-0 h-[3px] ${c.cor.barra} opacity-70 transition-opacity group-hover:opacity-100`} />
 
               <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${c.cor.bg} ${c.cor.text} transition-transform duration-300 group-hover:scale-110`}>
-                <c.icon className="h-7 w-7" />
+                <c.icon aria-hidden="true" className="h-7 w-7" />
               </div>
 
               <h3 className="mt-5 text-xl font-bold text-foreground">{c.nome}</h3>
@@ -51,7 +51,7 @@ export default function Categorias() {
                 </p>
                 {c.gratis ? (
                   <p className={`mt-1 flex items-center gap-1.5 text-lg font-bold ${c.cor.text}`}>
-                    <Gift className="h-4 w-4" /> {c.faixa}
+                    <Gift aria-hidden="true" className="h-4 w-4" /> {c.faixa}
                   </p>
                 ) : (
                   <p className="mt-1 text-lg font-bold text-foreground">{c.faixa}</p>

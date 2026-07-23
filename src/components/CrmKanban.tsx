@@ -96,7 +96,7 @@ function LeadCard({ card, accent }: { card: Card; accent: string }) {
       </div>
       <p className="mt-2 text-xs leading-snug text-dark-muted">{card.contexto}</p>
       <div className="mt-3 flex items-center gap-2 text-[11px] text-dark-muted">
-        <Clock className="h-3 w-3" />
+        <Clock aria-hidden="true" className="h-3 w-3" />
         {card.tempo}
         {card.valor && (
           <span className="ml-auto rounded-full bg-primary/15 px-2 py-0.5 font-semibold text-primary">
@@ -152,7 +152,7 @@ export default function CrmKanban() {
               <span className="rounded-lg border border-dark-border px-3 py-1.5 text-xs text-dark-muted">Todos os agentes</span>
               <span className="rounded-lg border border-dark-border px-3 py-1.5 text-xs text-dark-muted">Todas as caixas</span>
               <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-dark-border text-dark-muted">
-                <Settings2 className="h-4 w-4" />
+                <Settings2 aria-hidden="true" className="h-4 w-4" />
               </span>
             </div>
           </div>
@@ -165,8 +165,8 @@ export default function CrmKanban() {
                   <span className="text-sm font-semibold">{col.nome}</span>
                   <span className="rounded-full bg-white/25 px-1.5 text-xs font-semibold">{col.cards.length}</span>
                   <span className="ml-auto flex items-center gap-1.5 opacity-80">
-                    <Settings2 className="h-3.5 w-3.5" />
-                    <Plus className="h-4 w-4" />
+                    <Settings2 aria-hidden="true" className="h-3.5 w-3.5" />
+                    <Plus aria-hidden="true" className="h-4 w-4" />
                   </span>
                 </div>
 
@@ -183,7 +183,7 @@ export default function CrmKanban() {
                     </motion.div>
                   ))}
                   <button className="flex items-center gap-1.5 rounded-lg px-2 py-2 text-xs text-dark-muted transition-colors hover:bg-white/5 hover:text-dark-text">
-                    <Plus className="h-3.5 w-3.5" /> Adicionar tarefa
+                    <Plus aria-hidden="true" className="h-3.5 w-3.5" /> Adicionar tarefa
                   </button>
                 </div>
               </div>
@@ -199,13 +199,13 @@ export default function CrmKanban() {
                 <span className="[writing-mode:vertical-rl] rotate-180 text-xs font-semibold tracking-wide">
                   {s.nome}
                 </span>
-                <Eye className="h-3.5 w-3.5 opacity-80" />
+                <Eye aria-hidden="true" className="h-3.5 w-3.5 opacity-80" />
               </div>
             ))}
 
             {/* ghost add stage with animated glow border */}
             <div className="glow-border flex h-[52px] w-[160px] shrink-0 items-center justify-center gap-2 self-start rounded-lg bg-dark-surface text-sm font-medium text-dark-muted">
-              <Plus className="h-4 w-4" /> Adicionar etapa
+              <Plus aria-hidden="true" className="h-4 w-4" /> Adicionar etapa
             </div>
           </div>
         </motion.div>
@@ -222,7 +222,7 @@ export default function CrmKanban() {
               className="text-center"
             >
               <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                <p.icon className="h-6 w-6" />
+                <p.icon aria-hidden="true" className="h-6 w-6" />
               </span>
               <h3 className="mt-4 font-semibold text-dark-text">{p.titulo}</h3>
               <p className="mx-auto mt-2 max-w-[15rem] text-sm leading-relaxed text-dark-muted">
@@ -241,7 +241,7 @@ export default function CrmKanban() {
               className="group flex items-center justify-center gap-2.5 rounded-full bg-primary px-9 py-4 font-semibold text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
             >
               Quero o CRM Kanban
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </a>
           </div>
         </div>

@@ -75,7 +75,7 @@ export default function Problemas() {
                 transition={{ duration: 0.35, delay: i * 0.055 }}
                 className="flex items-center gap-3"
               >
-                <XCircle className="h-5 w-5 shrink-0 text-red-400" />
+                <XCircle aria-hidden="true" className="h-5 w-5 shrink-0 text-red-400" />
                 <span className="text-sm leading-relaxed text-white/72">{desafio}</span>
               </motion.div>
             ))}

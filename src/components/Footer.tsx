@@ -136,7 +136,7 @@ export default function Footer() {
           </div>
 
           <p className="flex items-center gap-1.5 text-center text-xs text-dark-muted">
-            <MapPin className="h-3.5 w-3.5 text-primary" />
+            <MapPin aria-hidden="true" className="h-3.5 w-3.5 text-primary" />
             Goiânia, GO · Atendimento 100% online para todo o Brasil
           </p>
 

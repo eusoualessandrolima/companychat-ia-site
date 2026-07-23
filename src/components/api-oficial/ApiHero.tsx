@@ -39,7 +39,7 @@ export default function ApiHero() {
           transition={{ duration: 0.6 }}
           className="mx-auto mb-8 flex w-fit items-center gap-2.5 rounded-full border border-dark-border bg-dark-surface px-4 py-2 text-sm font-medium text-dark-muted"
         >
-          <BadgeCheck className="h-4 w-4 text-primary" />
+          <BadgeCheck aria-hidden="true" className="h-4 w-4 text-primary" />
           Guia oficial · WhatsApp Business API
         </motion.div>
 
@@ -76,7 +76,7 @@ export default function ApiHero() {
               href="#calculadora"
               className="group flex items-center justify-center gap-2.5 rounded-full bg-primary px-9 py-4 font-semibold text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
             >
-              <Calculator className="h-4 w-4" />
+              <Calculator aria-hidden="true" className="h-4 w-4" />
               Calcular meu custo
             </a>
           </div>
@@ -85,7 +85,7 @@ export default function ApiHero() {
             className="flex items-center justify-center gap-2 rounded-full border border-dark-border bg-dark-surface px-9 py-4 font-semibold text-dark-text transition-all hover:border-primary/40 hover:text-primary"
           >
             Como funciona
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </a>
         </motion.div>
 
@@ -95,7 +95,7 @@ export default function ApiHero() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-10 flex items-center justify-center gap-2 text-xs text-dark-muted"
         >
-          <ShieldCheck className="h-4 w-4 text-primary" />
+          <ShieldCheck aria-hidden="true" className="h-4 w-4 text-primary" />
           Valores aproximados da Meta · sempre confirme na documentação oficial
         </motion.div>
       </div>

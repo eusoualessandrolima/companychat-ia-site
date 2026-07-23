@@ -48,7 +48,7 @@ export default function DisparoHero() {
             transition={{ duration: 0.6 }}
             className="mx-auto mb-8 flex w-fit items-center gap-2.5 rounded-full border border-dark-border bg-dark-surface px-4 py-2 text-sm font-medium text-dark-muted lg:mx-0"
           >
-            <Rocket className="h-4 w-4 text-primary" />
+            <Rocket aria-hidden="true" className="h-4 w-4 text-primary" />
             Novo · Ferramenta de disparo em massa
           </motion.div>
 
@@ -87,7 +87,7 @@ export default function DisparoHero() {
                 rel="noopener noreferrer"
                 className="group flex w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-primary px-8 py-4 font-semibold text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40 sm:w-auto"
               >
-                <Send className="h-4 w-4" />
+                <Send aria-hidden="true" className="h-4 w-4" />
                 Quero disparar em massa
               </a>
             </div>
@@ -96,7 +96,7 @@ export default function DisparoHero() {
               className="flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-full border border-dark-border bg-dark-surface px-8 py-4 font-semibold text-dark-text transition-all hover:border-primary/40 hover:text-primary sm:w-auto"
             >
               Ver a ferramenta
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </a>
           </motion.div>
 
@@ -106,7 +106,7 @@ export default function DisparoHero() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="mt-8 flex items-center justify-center gap-2 text-xs text-dark-muted lg:justify-start"
           >
-            <ShieldCheck className="h-4 w-4 text-primary" />
+            <ShieldCheck aria-hidden="true" className="h-4 w-4 text-primary" />
             100% via API Oficial da Meta · número verificado, sem risco de banimento
           </motion.div>
         </div>
@@ -123,7 +123,7 @@ export default function DisparoHero() {
             <div className="flex items-center justify-between border-b border-dark-border px-5 py-3.5">
               <div className="flex items-center gap-2.5">
                 <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15 text-primary">
-                  <Send className="h-4 w-4" />
+                  <Send aria-hidden="true" className="h-4 w-4" />
                 </span>
                 <div>
                   <p className="text-sm font-semibold leading-none text-dark-text">Painel de Campanhas</p>

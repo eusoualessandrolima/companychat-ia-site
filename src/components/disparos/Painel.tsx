@@ -80,7 +80,7 @@ export default function Painel() {
                     <p className="mt-2 text-[11px] text-dark-muted">{m.sub}</p>
                   </div>
                   <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${m.bg} ${m.cor}`}>
-                    <m.icon className="h-4 w-4" />
+                    <m.icon aria-hidden="true" className="h-4 w-4" />
                   </span>
                 </div>
               </div>
@@ -96,7 +96,7 @@ export default function Painel() {
               {entrega.map((e) => (
                 <div key={e.label} className="rounded-2xl border border-dark-border bg-dark-base px-5 py-4">
                   <span className={`flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 ${e.cor}`}>
-                    <e.icon className="h-4 w-4" />
+                    <e.icon aria-hidden="true" className="h-4 w-4" />
                   </span>
                   <p className="mt-3 text-2xl font-bold leading-none text-dark-text">{e.valor}</p>
                   <p className="mt-1.5 text-xs text-dark-muted">{e.label}</p>

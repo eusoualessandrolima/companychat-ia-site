@@ -106,7 +106,7 @@ export default function Servicos() {
                 <div
                   className={`flex h-14 w-14 items-center justify-center rounded-2xl ${s.cor.bg} ${s.cor.text} transition-transform duration-300 group-hover:scale-110`}
                 >
-                  <s.icon className="h-7 w-7" />
+                  <s.icon aria-hidden="true" className="h-7 w-7" />
                 </div>
                 <span
                   className={`rounded-full ${s.cor.badgeBg} ${s.cor.text} px-3 py-1 text-xs font-semibold tracking-wide`}
@@ -123,7 +123,7 @@ export default function Servicos() {
                     key={j}
                     className="flex items-start gap-3 text-sm text-text-secondary"
                   >
-                    <Check
+                    <Check aria-hidden="true"
                       className={`mt-0.5 h-4 w-4 shrink-0 ${s.cor.text}`}
                     />
                     {item}

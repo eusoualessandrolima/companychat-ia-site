@@ -64,7 +64,7 @@ export default function Ecossistema() {
                 } p-8 text-center`}
               >
                 <span className={`flex h-16 w-16 items-center justify-center rounded-2xl ${p.bg} ${p.cor}`}>
-                  <p.icon className="h-8 w-8" />
+                  <p.icon aria-hidden="true" className="h-8 w-8" />
                 </span>
                 <h3 className="mt-5 text-xl font-bold text-foreground">{p.nome}</h3>
                 {p.destaque && (
@@ -78,7 +78,7 @@ export default function Ecossistema() {
               {i < pilares.length - 1 && (
                 <span className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 md:flex">
                   <span className="flex h-8 w-8 items-center justify-center rounded-full border border-card-border bg-card text-text-secondary shadow-sm">
-                    <Plus className="h-4 w-4" />
+                    <Plus aria-hidden="true" className="h-4 w-4" />
                   </span>
                 </span>
               )}

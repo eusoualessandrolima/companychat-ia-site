@@ -69,7 +69,7 @@ export default function Recursos() {
               <div className={`absolute top-0 left-0 right-0 h-[3px] ${r.cor.barra} opacity-70 transition-opacity group-hover:opacity-100`} />
 
               <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${r.cor.bg} ${r.cor.text} transition-transform duration-300 group-hover:scale-110`}>
-                <r.icon className="h-7 w-7" />
+                <r.icon aria-hidden="true" className="h-7 w-7" />
               </div>
 
               <h3 className="mt-5 text-lg font-bold text-foreground">{r.nome}</h3>

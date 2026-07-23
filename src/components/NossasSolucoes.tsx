@@ -86,7 +86,7 @@ export function SolucaoGrid({ variant = "light" }: { variant?: Variant }) {
               <span
                 className={`flex h-14 w-14 items-center justify-center rounded-2xl ${s.bg} ${s.text} transition-transform duration-300 group-hover:scale-110`}
               >
-                <s.icon className="h-7 w-7" />
+                <s.icon aria-hidden="true" className="h-7 w-7" />
               </span>
               {s.badge && (
                 <span className={`rounded-full ${s.bg} ${s.text} px-3 py-1 text-xs font-semibold tracking-wide`}>
@@ -100,7 +100,7 @@ export function SolucaoGrid({ variant = "light" }: { variant?: Variant }) {
 
             <span className={`mt-5 inline-flex items-center gap-1.5 text-sm font-semibold ${s.text}`}>
               Saiba mais
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </span>
           </Link>
         </motion.div>

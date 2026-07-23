@@ -85,7 +85,7 @@ function ChatMockup() {
       {/* Top bar */}
       <div className="flex items-center gap-3 border-b border-dark-border bg-dark-elevated px-4 py-3">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/20">
-          <Bot className="h-5 w-5 text-primary" />
+          <Bot aria-hidden="true" className="h-5 w-5 text-primary" />
         </div>
         <div>
           <p className="text-sm font-semibold text-dark-text">IA CompanyChat</p>
@@ -145,7 +145,7 @@ function ChatMockup() {
           Digite uma mensagem…
         </div>
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
-          <ArrowRight className="h-4 w-4 text-white" />
+          <ArrowRight aria-hidden="true" className="h-4 w-4 text-white" />
         </div>
       </div>
     </div>
@@ -180,7 +180,7 @@ function FloatingBadge({
     <div
       className={`pointer-events-none absolute ${anim} ${pos} items-center gap-2 rounded-full border border-white/10 bg-dark-elevated/95 backdrop-blur-md px-3 py-1.5 shadow-xl shadow-black/50 z-20 whitespace-nowrap`}
     >
-      <Icon className="h-3.5 w-3.5 shrink-0 text-primary" />
+      <Icon aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-primary" />
       <span className="text-xs font-medium text-dark-text">{label}</span>
     </div>
   );
@@ -260,7 +260,7 @@ export default function Hero() {
                   className="group relative flex items-center justify-center gap-2.5 rounded-full bg-primary px-9 py-4 font-semibold text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
                 >
                   Fale com um Especialista
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </a>
               </div>
 
