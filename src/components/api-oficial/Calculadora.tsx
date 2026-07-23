@@ -17,7 +17,7 @@ const presets: { nome: string; desc: string; volumes: Registro }[] = [
   {
     nome: "Pequeno",
     desc: "início / poucos disparos",
-    volumes: { utilidade: 500, autenticacao: 100, marketing: 20 },
+    volumes: { utilidade: 500, autenticacao: 100, marketing: 10 },
   },
   {
     nome: "Médio",
@@ -34,10 +34,10 @@ const presets: { nome: string; desc: string; volumes: Registro }[] = [
 const SLIDER_MAX = 20000;
 
 export default function Calculadora() {
-  const [volumes, setVolumes] = useState<Registro>(presets[1].volumes);
+  const [volumes, setVolumes] = useState<Registro>(presets[0].volumes);
   const [precos, setPrecos] = useState<Registro>(precoPadrao);
   const [ajusteAberto, setAjusteAberto] = useState(false);
-  const [presetAtivo, setPresetAtivo] = useState<string | null>("Médio");
+  const [presetAtivo, setPresetAtivo] = useState<string | null>("Pequeno");
 
   const setVolume = (id: CategoriaId, valor: number) => {
     setVolumes((v) => ({ ...v, [id]: Math.max(0, Math.round(valor) || 0) }));
