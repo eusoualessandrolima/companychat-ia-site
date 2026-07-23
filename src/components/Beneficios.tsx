@@ -109,7 +109,10 @@ export default function Beneficios() {
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <h2 className="text-3xl font-bold tracking-tight text-dark-text md:text-4xl">
+          <h2
+            aria-label="Atendimento Humano vs Assistente IA"
+            className="text-3xl font-bold tracking-tight text-dark-text md:text-4xl"
+          >
             Atendimento Humano{" "}
             <span className="text-dark-muted">vs</span>{" "}
             <span className="text-gradient-primary">Assistente IA</span>

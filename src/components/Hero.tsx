@@ -142,7 +142,7 @@ function ChatMockup() {
       {/* Bottom bar (decorative) */}
       <div className="flex items-center gap-2 border-t border-dark-border bg-dark-elevated px-4 py-3">
         <div className="flex-1 rounded-full bg-dark-surface px-4 py-2 text-xs text-dark-muted">
-          Digite uma mensagem...
+          Digite uma mensagem…
         </div>
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
           <ArrowRight className="h-4 w-4 text-white" />
@@ -211,9 +211,11 @@ export default function Hero() {
       <div className="relative mx-auto w-full max-w-6xl px-4 py-20 lg:py-28">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-12">
           {/* ── Left: Copy ── */}
+          {/* LCP: mantém opacity 1 no SSR — anima só o deslize, para o título
+             da dobra pintar de imediato (não gated atrás do JS). */}
           <motion.div
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ y: 32 }}
+            animate={{ y: 0 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
             {/* Badge */}
@@ -227,6 +229,7 @@ export default function Hero() {
 
             {/* Headline */}
             <h1
+              aria-label="Seu assistente IA vende enquanto você dorme."
               className="text-[clamp(48px,6vw,88px)] font-bold leading-[0.95] tracking-[-0.03em] text-dark-text"
             >
               Seu assistente IA{" "}
@@ -243,8 +246,8 @@ export default function Hero() {
 
             {/* CTAs */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ y: 16 }}
+              animate={{ y: 0 }}
               transition={{ duration: 0.6, delay: 0.25 }}
               className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
             >

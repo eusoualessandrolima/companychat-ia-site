@@ -43,8 +43,8 @@ export default function DisparoHero() {
         {/* Copy */}
         <div className="text-center lg:text-left">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ y: 20 }}
+            animate={{ y: 0 }}
             transition={{ duration: 0.6 }}
             className="mx-auto mb-8 flex w-fit items-center gap-2.5 rounded-full border border-dark-border bg-dark-surface px-4 py-2 text-sm font-medium text-dark-muted lg:mx-0"
           >
@@ -53,8 +53,9 @@ export default function DisparoHero() {
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
+            aria-label="Disparos em massa no WhatsApp com a API Oficial"
+            initial={{ y: 28 }}
+            animate={{ y: 0 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="text-[clamp(36px,5vw,60px)] font-bold leading-[1.03] tracking-[-0.03em] text-dark-text"
           >
@@ -63,8 +64,8 @@ export default function DisparoHero() {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ y: 20 }}
+            animate={{ y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mx-auto mt-7 max-w-xl text-[17px] leading-relaxed text-dark-muted lg:mx-0"
           >
@@ -74,8 +75,8 @@ export default function DisparoHero() {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ y: 16 }}
+            animate={{ y: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}
             className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row lg:flex-col lg:items-start xl:flex-row lg:justify-start"
           >

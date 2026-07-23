@@ -52,7 +52,10 @@ export default function ComoFunciona() {
             <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
               Como funciona
             </span>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-[2.6rem]">
+            <h2
+              aria-label="Do primeiro contato ao assistente funcionando, em 4 passos simples."
+              className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-[2.6rem]"
+            >
               Do primeiro contato ao{" "}
               <span className="text-primary">assistente funcionando</span>,
               em 4 passos simples.

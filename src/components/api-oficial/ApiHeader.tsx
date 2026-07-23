@@ -24,8 +24,12 @@ export default function ApiHeader() {
             : "mt-0 h-16 max-w-6xl rounded-full border border-transparent bg-transparent px-0"
         }`}
       >
-        <Link href="/" className="flex items-center gap-2 text-dark-muted transition-colors hover:text-primary">
-          <ArrowLeft className="h-4 w-4" />
+        <Link
+          href="/"
+          aria-label="Voltar ao site"
+          className="flex items-center gap-2 text-dark-muted transition-colors hover:text-primary"
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           <span className="hidden text-sm sm:inline">Voltar ao site</span>
         </Link>
 

@@ -75,8 +75,14 @@ export default function Solucao() {
             <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/15 blur-3xl" />
             <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-primary via-accent-blue to-accent-purple" />
 
-            <h3 className="flex items-center gap-2.5 text-xl font-bold text-foreground">
-              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15 text-sm font-bold text-primary">
+            <h3
+              aria-label="Com a CompanyChat IA"
+              className="flex items-center gap-2.5 text-xl font-bold text-foreground"
+            >
+              <span
+                aria-hidden="true"
+                className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15 text-sm font-bold text-primary"
+              >
                 C
               </span>
               Com a CompanyChat IA

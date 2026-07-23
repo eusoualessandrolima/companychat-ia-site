@@ -13,7 +13,7 @@ const DESAFIOS = [
   "Clientes com péssimas experiências",
   "Dificuldade em escalar o atendimento",
   "Ausência fora do horário comercial",
-  "Entre outros...",
+  "Entre outros…",
 ];
 
 export default function Problemas() {
@@ -43,7 +43,10 @@ export default function Problemas() {
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <h2 className="text-3xl font-bold tracking-tight text-white md:text-4xl">
+          <h2
+            aria-label="Você tem algum desses desafios na sua empresa?"
+            className="text-3xl font-bold tracking-tight text-white md:text-4xl"
+          >
             Você tem algum desses{" "}
             <span className="text-primary">desafios</span>
             <br className="hidden sm:block" />
