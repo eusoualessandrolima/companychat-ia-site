@@ -49,7 +49,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #09090b;
 }
 
-/* Keyboard focus ring — verde da marca, consistente e só no foco por teclado.
+/* Keyboard focus ring: verde da marca, consistente e só no foco por teclado.
    Regra não-layered: vence utilitários como `outline-none` do Tailwind. */
 a:focus-visible,
 button:focus-visible,
@@ -62,7 +62,7 @@ select:focus-visible,
   border-radius: 4px;
 }
 
-/* Grain texture overlay — premium feel */
+/* Grain texture overlay - premium feel */
 body::before {
   content: "";
   position: fixed;
@@ -117,7 +117,7 @@ body::before {
   50%       { background-position: 100% 50%; }
 }
 
-/* 3D perspective grid floor — lines flow toward the viewer */
+/* 3D perspective grid floor - lines flow toward the viewer */
 @keyframes grid-flow {
   0%   { background-position: 0 0; }
   100% { background-position: 0 60px; }
@@ -157,7 +157,7 @@ body::before {
   to   { transform: scaleX(1); }
 }
 
-/* Feature badge float — staggered per badge */
+/* Feature badge float - staggered per badge */
 @keyframes badge-float {
   0%, 100% { transform: translateY(0px); }
   50%       { transform: translateY(-10px); }
@@ -213,7 +213,7 @@ body::before {
 .animate-pulse-ring { animation: pulse-ring 2.5s cubic-bezier(0,0,0.2,1) infinite; }
 
 /* =====================================================
-   ACCESSIBILITY — PREFERS-REDUCED-MOTION
+   ACCESSIBILITY - PREFERS-REDUCED-MOTION
    Honour user preference; collapse all animations to instant
    ===================================================== */
 @media (prefers-reduced-motion: reduce) {
@@ -237,7 +237,7 @@ body::before {
   background-clip: text;
 }
 
-/* Glow CTA wrapper — puts a gradient glow under the button */
+/* Glow CTA wrapper - puts a gradient glow under the button */
 .cta-glow-wrap {
   position: relative;
 }
@@ -258,7 +258,7 @@ body::before {
   opacity: 0.7;
 }
 
-/* Animated gradient border ring — crisp, always-on (mask technique) */
+/* Animated gradient border ring - crisp, always-on (mask technique) */
 .glow-border {
   position: relative;
 }

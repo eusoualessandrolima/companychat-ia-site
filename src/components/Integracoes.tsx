@@ -107,7 +107,7 @@ function GlassNode({
         </span>
       </motion.div>
 
-      {/* Tooltip — above node */}
+      {/* Tooltip - above node */}
       <AnimatePresence>
         {hovered && (
           <motion.div
@@ -192,7 +192,7 @@ function OrbitalDiagram() {
         height={SIZE}
         style={{ position: "absolute", inset: 0, overflow: "visible", pointerEvents: "none" }}
       >
-        {/* Inner dashed ring — slow CW rotation animates the dash pattern */}
+        {/* Inner dashed ring - slow CW rotation animates the dash pattern */}
         <circle
           cx={CX} cy={CX} r={R_IN}
           fill="none"

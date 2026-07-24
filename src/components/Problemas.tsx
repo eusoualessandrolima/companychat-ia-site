@@ -83,7 +83,7 @@ export default function Problemas() {
         </motion.div>
       </div>
 
-      {/* Wave bottom divider — transitions to light section */}
+      {/* Wave bottom divider - transitions to light section */}
       <div className="pointer-events-none absolute bottom-0 inset-x-0 leading-none">
         <svg
           viewBox="0 0 1440 80"
@@ -98,7 +98,7 @@ export default function Problemas() {
         </svg>
       </div>
 
-      {/* Scroll-down button — sits at wave peak (center) */}
+      {/* Scroll-down button - sits at wave peak (center) */}
       <div className="absolute bottom-[68px] left-1/2 z-10 -translate-x-1/2">
         <a
           href="#como-funciona"

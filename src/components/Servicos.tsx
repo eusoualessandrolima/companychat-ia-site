@@ -134,7 +134,7 @@ export default function Servicos() {
           ))}
         </div>
 
-        {/* Produtos com página própria — dá visibilidade e link ao portfólio */}
+        {/* Produtos com página própria: dá visibilidade e link ao portfólio */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

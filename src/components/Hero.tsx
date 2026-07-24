@@ -211,7 +211,7 @@ export default function Hero() {
       <div className="relative mx-auto w-full max-w-6xl px-4 py-20 lg:py-28">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-12">
           {/* ── Left: Copy ── */}
-          {/* LCP: mantém opacity 1 no SSR — anima só o deslize, para o título
+          {/* LCP: mantém opacity 1 no SSR, anima só o deslize, para o título
              da dobra pintar de imediato (não gated atrás do JS). */}
           <motion.div
             initial={{ y: 32 }}

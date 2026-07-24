@@ -109,7 +109,7 @@ export function SolucaoGrid({ variant = "light" }: { variant?: Variant }) {
   );
 }
 
-/** Seção completa "Um ecossistema completo" — usada em páginas internas. */
+/** Seção completa "Um ecossistema completo", usada em páginas internas. */
 export default function NossasSolucoes({ variant = "dark" }: { variant?: Variant }) {
   const t = theme[variant];
   return (
