@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
@@ -19,6 +20,13 @@ const faqs = [
     pergunta: "Preciso ter conhecimento técnico?",
     resposta:
       "Não! Nossa equipe cuida de toda a parte técnica. Você só precisa nos fornecer as informações do seu negócio: serviços, preços, horários e dúvidas frequentes.",
+  },
+  {
+    pergunta: "Quanto custa?",
+    resposta:
+      "O plano CompanyChat IA Pro custa R$ 497 por mês e já inclui o assistente de IA, o CRM com visão Kanban, atendentes ilimitados e toda a implantação, sem taxa de setup. Para operações com várias unidades ou mais de um número, montamos um plano sob medida.",
+    href: "/planos",
+    linkLabel: "Ver planos e preços",
   },
   {
     pergunta: "O que está incluso?",
@@ -45,10 +53,14 @@ const faqs = [
 function FAQItem({
   pergunta,
   resposta,
+  href,
+  linkLabel,
   idx,
 }: {
   pergunta: string;
   resposta: string;
+  href?: string;
+  linkLabel?: string;
   idx: number;
 }) {
   const [open, setOpen] = useState(false);
@@ -86,6 +98,14 @@ function FAQItem({
           >
             <p className="pb-5 leading-relaxed text-text-secondary">
               {resposta}
+              {href && (
+                <>
+                  {" "}
+                  <Link href={href} className="font-semibold text-primary hover:underline">
+                    {linkLabel}
+                  </Link>
+                </>
+              )}
             </p>
           </motion.div>
         )}

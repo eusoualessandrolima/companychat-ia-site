@@ -9,9 +9,10 @@ import { whatsappLink, loginLink } from "./WhatsAppButton";
 
 const navLinks = [
   { href: "/assistente-ia", label: "Assistente IA" },
-  { href: "#servicos",   label: "Serviços" },
-  { href: "#beneficios", label: "Benefícios" },
-  { href: "#sobre",      label: "Sobre" },
+  { href: "/planos",        label: "Planos" },
+  { href: "#servicos",      label: "Serviços",   desktop: "hidden lg:block" },
+  { href: "#beneficios",    label: "Benefícios", desktop: "hidden lg:block" },
+  { href: "#sobre",         label: "Sobre",      desktop: "hidden lg:block" },
 ];
 
 export default function Header() {
@@ -47,12 +48,12 @@ export default function Header() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-5 md:flex lg:gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm text-dark-muted transition-colors hover:text-primary"
+                className={`whitespace-nowrap text-sm text-dark-muted transition-colors hover:text-primary ${link.desktop ?? ""}`}
               >
                 {link.label}
               </a>
@@ -60,7 +61,7 @@ export default function Header() {
 
             <a
               href={loginLink}
-              className="rounded-full border border-dark-border px-5 py-2 text-sm font-semibold text-dark-text transition-all hover:border-primary/40 hover:text-primary"
+              className="whitespace-nowrap rounded-full border border-dark-border px-5 py-2 text-sm font-semibold text-dark-text transition-all hover:border-primary/40 hover:text-primary"
             >
               Fazer Login
             </a>
@@ -69,7 +70,7 @@ export default function Header() {
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25"
+              className="whitespace-nowrap rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25"
             >
               Fale Conosco
             </a>

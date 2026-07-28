@@ -185,6 +185,26 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 - **Verificação:** `tsc --noEmit` ✓ · `npm run lint` ✓ · `npm run build` ✓ (rota `/assistente-ia` prerenderizada estática) · inspeção visual em 1440px e 390px sem overflow horizontal · zero travessões longos
 - Nomes, valores e conversas das cenas são ilustrativos
 
+### 2026-07-28 — Página `/planos` (primeira vez que o site exibe preço)
+- **Contexto:** referência do BotConversa (cards com toggle anual, grupos de features, badge "Recomendado") + documento comercial do dono com o plano **CompanyChat IA Pro, R$ 497/mês**. Fecha o item antigo de "Próximos Passos" sobre criar seção de planos
+- **Decisões comerciais confirmadas com o dono antes de construir:** 2 planos (Pro + Sob medida), **só mensal** (sem toggle anual, o desconto do exemplo não existe aqui), **sem taxa de setup** e **custo das mensagens da Meta explicitamente à parte**, com link para a calculadora de `/api-oficial`
+- **Fonte única dos planos:** `src/components/planos/planos-data.ts`. Atualizar preço ou escopo **só ali**, nunca no JSX
+- **Componentes novos** em `src/components/planos/`:
+
+| Componente | Descrição |
+|------------|-----------|
+| `planos-data.ts` | Dados dos 2 planos: grupos de itens, nota opcional, rodapé e CTA |
+| `TabelaPlanos.tsx` | Hero + os 2 cards. O Pro usa `.glow-border` e `h-full`; o "Sob medida" tem altura natural (evita o vazio de 250px que aparecia quando ambos esticavam) |
+| `Incluso.tsx` | 4 pilares do que vem na mensalidade, com link para `/assistente-ia` e `/#crm-kanban` |
+| `CustoMeta.tsx` | Bloco de transparência (mensalidade nossa vs mensagem da Meta) com CTA para `/api-oficial#calculadora` |
+| `PlanosFaq.tsx` | 8 perguntas de objeção comercial (setup, custo Meta, fidelidade, número próprio) |
+| `PlanosCta.tsx` | CTA final (WhatsApp + `/assistente-ia`) |
+
+- **Nada de preço inventado:** o plano sob medida é "sob consulta" com escopo definido no diagnóstico. "Sem contrato de fidelidade" foi afirmado porque o FAQ da home **já dizia isso** desde antes, não é invenção nova
+- **Header ajustado:** nav ganhou "Planos"; "Serviços", "Benefícios" e "Sobre" agora só aparecem a partir de `lg` (em 768px o header quebrava em duas linhas com 5 itens). `whitespace-nowrap` aplicado nos links e botões do `Header` e do `ApiHeader`
+- **Pontes para a página:** `FAQ.tsx` da home ganhou a pergunta "Quanto custa?" com link (o item de FAQ agora aceita `href`/`linkLabel` opcionais), `Contato.tsx` ganhou "Prefere ver os valores antes?", além de `Footer` (Produto → "Planos e preços") e `sitemap.ts` (priority 0.9)
+- **Verificação:** `tsc --noEmit` ✓ · `npm run lint` ✓ · `npm run build` ✓ (rota `/planos` estática) · visual em 1440px, 768px e 390px sem overflow · zero travessões longos
+
 ---
 
 ## Aprendizados e Padrões
@@ -208,7 +228,7 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 - [ ] (Efeitos BotConversa) Avaliar um hero com grid 3D em perspectiva / partículas; efeito de tilt nos cards; contadores animados adicionais
 - [ ] Investigar overflow horizontal de ~14px na seção `Sobre` em mobile estreito (medição via chrome-devtools pode ser artefato de emulação; confirmar em device real)
 - [ ] Cadastrar `NEXT_PUBLIC_SITE_URL` e `NEXT_PUBLIC_WHATSAPP_NUMBER` no painel do Vercel (o código agora lê essas vars com fallback)
-- [ ] Decidir se cria seção de planos/preços (a meta description antiga citava R$347/mês; foi removido por não existir no site)
+- [x] ~~Decidir se cria seção de planos/preços~~ → resolvido em 2026-07-28 com a página `/planos` (Pro R$ 497/mês + Sob medida)
 - [ ] Avaliar analytics (GA/Umami) e skills de copy/SEO
 - [ ] Considerar refatorar `Integracoes.tsx` para classes Tailwind (hoje usa muito style inline; funcional, baixa prioridade)
 

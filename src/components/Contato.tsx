@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { whatsappLink, WhatsAppIcon } from "./WhatsAppButton";
 
@@ -35,6 +36,13 @@ export default function Contato() {
               Chamar no WhatsApp
             </a>
           </div>
+
+          <p className="mt-6 text-sm text-text-secondary">
+            Prefere ver os valores antes?{" "}
+            <Link href="/planos" className="font-semibold text-primary hover:underline">
+              Conheça os planos
+            </Link>
+          </p>
         </motion.div>
       </div>
     </section>

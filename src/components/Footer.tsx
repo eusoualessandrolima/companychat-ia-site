@@ -25,6 +25,7 @@ function MetaLogo({ className }: { className?: string }) {
 
 const links = {
   produto: [
+    { href: "/planos",      label: "Planos e preços" },
     { href: "/#servicos",   label: "Serviços" },
     { href: "/#beneficios", label: "Benefícios" },
     { href: "/#nichos",     label: "Nichos" },

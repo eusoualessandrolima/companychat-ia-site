@@ -40,7 +40,7 @@ export default function ApiHeader() {
         <div className="flex items-center gap-2 sm:gap-3">
           <a
             href={loginLink}
-            className="hidden rounded-full border border-dark-border px-5 py-2 text-sm font-semibold text-dark-text transition-all hover:border-primary/40 hover:text-primary sm:inline-flex"
+            className="hidden whitespace-nowrap rounded-full border border-dark-border px-5 py-2 text-sm font-semibold text-dark-text transition-all hover:border-primary/40 hover:text-primary sm:inline-flex"
           >
             Fazer Login
           </a>
@@ -48,7 +48,7 @@ export default function ApiHeader() {
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25"
+            className="whitespace-nowrap rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25"
           >
             Fale Conosco
           </a>
