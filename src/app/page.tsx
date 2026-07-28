@@ -8,6 +8,7 @@ import Beneficios from "@/components/Beneficios";
 import Solucao from "@/components/Solucao";
 import Nichos from "@/components/Nichos";
 import Sobre from "@/components/Sobre";
+import PlanosHome from "@/components/PlanosHome";
 import FAQ from "@/components/FAQ";
 import Contato from "@/components/Contato";
 import Footer from "@/components/Footer";
@@ -27,6 +28,7 @@ export default function Home() {
         <Solucao />
         <Nichos />
         <Sobre />
+        <PlanosHome />
         <FAQ />
         <Contato />
       </main>

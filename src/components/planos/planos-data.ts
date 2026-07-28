@@ -19,6 +19,8 @@ export type Plano = {
   grupos: Grupo[];
   nota?: { titulo: string; texto: string };
   rodape: string;
+  /** Versão curta usada na seção de planos da home. */
+  resumo: string[];
 };
 
 /** Fonte única dos planos. Atualizar aqui quando o comercial mudar valores ou escopo. */
@@ -73,6 +75,13 @@ export const planos: Plano[] = [
       },
     ],
     rodape: "O custo das mensagens é cobrado pela Meta e vem à parte.",
+    resumo: [
+      "Assistente de IA atendendo 24 horas por dia",
+      "CRM com visão Kanban e atendentes ilimitados",
+      "1 número de WhatsApp conectado",
+      "Implantação e treinamento inclusos",
+      "No ar em até 7 dias, sem fidelidade",
+    ],
   },
   {
     id: "sob-medida",
@@ -111,5 +120,11 @@ export const planos: Plano[] = [
         "Redes com várias lojas, franquias, clínicas com mais de uma unidade e operações que atendem em times separados, cada um com o seu número.",
     },
     rodape: "Conte como funciona a sua operação e a gente monta a proposta.",
+    resumo: [
+      "Mais de um número de WhatsApp",
+      "Vários assistentes, cada um com a sua função",
+      "Integração com o seu ERP ou sistema interno",
+      "Fluxo desenhado para o seu processo",
+    ],
   },
 ];

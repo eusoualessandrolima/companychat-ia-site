@@ -205,6 +205,19 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 - **Pontes para a página:** `FAQ.tsx` da home ganhou a pergunta "Quanto custa?" com link (o item de FAQ agora aceita `href`/`linkLabel` opcionais), `Contato.tsx` ganhou "Prefere ver os valores antes?", além de `Footer` (Produto → "Planos e preços") e `sitemap.ts` (priority 0.9)
 - **Verificação:** `tsc --noEmit` ✓ · `npm run lint` ✓ · `npm run build` ✓ (rota `/planos` estática) · visual em 1440px, 768px e 390px sem overflow · zero travessões longos
 
+### 2026-07-28 — Seção de planos na home (`PlanosHome.tsx`)
+- A subpágina sozinha não bastava: o dono queria o preço visível na home também. Criado `src/components/PlanosHome.tsx`, versão resumida dos 2 cards
+- **Sem duplicar conteúdo:** o componente lê o mesmo `planos/planos-data.ts`, usando o novo campo `resumo` (5 itens no Pro, 4 no Sob medida). Preço muda em um lugar só e reflete na home e na página
+- **Posição na home:** entre `Sobre` (claro) e `FAQ` (claro), com fundo `bg-dark-base` para quebrar o ritmo e destacar o preço. Ordem final: Hero → Problemas → ComoFunciona → Servicos → CrmKanban → Beneficios → Solucao → Nichos → Sobre → **PlanosHome** → FAQ → Contato
+- Cada card tem 2 ações: CTA de WhatsApp e "Ver tudo" levando para `/planos`. Rodapé da seção repete o aviso do custo da Meta com link para a calculadora
+- `whitespace-nowrap` nos botões (sem ele, "Ver tudo" quebrava em duas linhas no desktop)
+
+### 2026-07-28 — Incidente: Vercel Security Checkpoint no host `www`
+- Depois do deploy, o host `www.companychatia.com.br` passou a responder **403 "Vercel Security Checkpoint"** em todas as rotas, enquanto o apex `companychatia.com.br` continuava servindo 200 normalmente
+- **Causa:** verificação de deploy feita com polling de `curl` a cada 10s (cerca de 80 requisições seguidas no mesmo host). A mitigação automática de borda da Vercel interpretou como tráfego suspeito. Confirmado que não havia Attack Challenge Mode ligado nem regra de firewall no projeto (API `/v1/security/firewall/config/active` retorna `Config not found`)
+- **Resolução:** o bloqueio se dissipou sozinho. Medido: 403 aos 5 minutos, **200 aos 12 minutos** após parar as requisições
+- **Regra para as próximas vezes:** confirmar deploy com `vercel ls` (mostra status `Ready` e duração) ou com no máximo 2 requisições espaçadas em minutos. Nunca fazer polling curto contra o domínio de produção
+
 ---
 
 ## Aprendizados e Padrões
@@ -214,6 +227,8 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 - Estrutura de componentes: um arquivo `.tsx` por seção da landing page
 - Animações via Framer Motion — não usar CSS puro para animações complexas
 - CSS variables para tokens de cor e tipografia — centralizar em `globals.css`
+- Verificação de deploy: usar `vercel ls` (status `Ready`) em vez de polling de `curl` no domínio de produção, que dispara a proteção antibot da Vercel (ver incidente de 2026-07-28)
+- Botões e links de header ou de par lado a lado precisam de `whitespace-nowrap`, senão quebram em duas linhas em 768px e em cards estreitos
 
 ---
 
