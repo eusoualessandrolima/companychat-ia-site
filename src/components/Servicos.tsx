@@ -146,7 +146,7 @@ export default function Servicos() {
             Explore nossas <span className="text-primary">soluções</span>
           </h3>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
-            Três ferramentas que trabalham juntas no seu WhatsApp. Conheça cada uma em detalhes.
+            Quatro ferramentas que trabalham juntas no seu WhatsApp. Conheça cada uma em detalhes.
           </p>
         </motion.div>
 

@@ -37,6 +37,7 @@ const links = {
   recursos: [
     { href: "/#faq",           label: "FAQ" },
     { href: "/#como-funciona", label: "Como funciona" },
+    { href: "/assistente-ia",  label: "Assistente de IA" },
     { href: "/api-oficial",    label: "API Oficial" },
     { href: "/disparos",       label: "Disparo em massa" },
   ],

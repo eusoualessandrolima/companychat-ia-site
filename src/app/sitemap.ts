@@ -10,6 +10,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: `${BASE_URL}/assistente-ia`,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
       url: `${BASE_URL}/api-oficial`,
       changeFrequency: "monthly",
       priority: 0.8,

@@ -164,6 +164,27 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 - Arquivo `Integracoes.tsx` **preservado** (não deletado) para reativar fácil se quiser. Não está mais em uso na home
 - Ordem atual da home: Hero → Problemas → ComoFunciona → Servicos → CrmKanban → Beneficios → Solucao → Nichos → Sobre → FAQ → Contato
 
+### 2026-07-28 — Página `/assistente-ia` (o produto principal ganha página própria)
+- **Contexto:** print da landing do `fazer.ai agents` trazido pelo dono como referência. Decisão: em vez de espalhar o conteúdo pela home, criar a página dedicada, já que o assistente de IA era o único dos produtos do ecossistema sem página própria (CRM tem âncora, API e Disparos têm página)
+- **O que foi adaptado da referência:** a estrutura narrativa das "cenas" (mostrar o agente atendendo em situações reais) e o conjunto de capacidades. **O que foi descartado por não ser nosso modelo:** open source, licença Apache, instalação por linha de comando, self-hosted, GitHub, multi-tenant white-label. A CompanyChat vende serviço gerenciado, então a seção equivalente virou "Do zero ao assistente atendendo em 7 dias" (diagnóstico, treinamento, teste, ativação)
+- **Componentes novos** em `src/components/assistente-ia/`:
+
+| Componente | Descrição |
+|------------|-----------|
+| `ChatMock.tsx` | Janela de conversa reutilizável. Tipos de balão: `cliente`, `ia`, `audio` (com waveform e transcrição), `sistema` (evento) e `card` (agendamento/cobrança/resumo). Anima por `whileInView` |
+| `AgenteHero.tsx` | Hero dark com aurora + conversa de agendamento (áudio transcrito → card de agendamento) |
+| `Cenas.tsx` | Coração da página: 5 cenas alternando lado, cada uma com bullets + `ChatMock` próprio (ritmo de gente, resolve, base de conhecimento, transfere para humano, follow-up) |
+| `Capacidades.tsx` | Grade de 8 capacidades (padrão visual de `disparos/Recursos.tsx`) |
+| `Treinamento.tsx` | Timeline estática de 4 passos em card dark (diferente do stepper interativo de `/disparos` de propósito) |
+| `AgenteFaq.tsx` | 7 perguntas focadas em objeção real ("vai parecer robô?", "pode inventar?", "meus dados?") |
+| `AgenteCta.tsx` | CTA final (WhatsApp + cross-link `/api-oficial`) |
+
+- **`NossasSolucoes.tsx` virou o ecossistema de 4 produtos:** novo card "Assistente de IA" (primeiro, cor primary), API Oficial migrou de primary para `accent-amber` para não repetir cor. `SolucaoGrid` ganhou prop `omit` (esconde o card da própria página) e grid responsivo `sm:2 / lg:3 ou 4` conforme a quantidade
+- **Ligações:** `Header.tsx` (nav ganhou "Assistente IA"; "Contato" saiu da nav por ser redundante com o botão "Fale Conosco"), `Footer.tsx` (Recursos → "Assistente de IA"), `sitemap.ts` (priority 0.9, acima das outras internas), `Servicos.tsx` ("Três ferramentas" → "Quatro")
+- **Reuso:** a página usa `ApiHeader`, `NossasSolucoes variant="dark" omit="/assistente-ia"`, `Footer` e `WhatsAppButton`, sem duplicar nada
+- **Verificação:** `tsc --noEmit` ✓ · `npm run lint` ✓ · `npm run build` ✓ (rota `/assistente-ia` prerenderizada estática) · inspeção visual em 1440px e 390px sem overflow horizontal · zero travessões longos
+- Nomes, valores e conversas das cenas são ilustrativos
+
 ---
 
 ## Aprendizados e Padrões
@@ -178,6 +199,8 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 
 ## Próximos Passos
 
+- [ ] Commit + push da página `/assistente-ia` (via @devops) → deploy automático no Vercel
+- [ ] Avaliar se as cenas de `/assistente-ia` merecem animação de digitação ao vivo (hoje entram por `whileInView`, sem simulação de tempo real)
 - [ ] Commit + push das correções da auditoria de 2026-07-14 (via @devops) → deploy automático no Vercel
 - [ ] Verificar visualmente a home, a `/api-oficial` e a nova `/disparos` no navegador após o deploy (hero em ~1024px, mock do painel, responsividade do dashboard recriado)
 - [ ] Trocar os números ilustrativos do painel em `/disparos` por prints/dados reais se quiser (hoje são exemplos)

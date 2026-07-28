@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { LayoutGrid, BadgeCheck, Send, ArrowRight, type LucideIcon } from "lucide-react";
+import { LayoutGrid, BadgeCheck, Send, Bot, ArrowRight, type LucideIcon } from "lucide-react";
 
 type Variant = "light" | "dark";
 
@@ -19,6 +19,15 @@ type Solucao = {
 
 const solucoes: Solucao[] = [
   {
+    icon: Bot,
+    nome: "Assistente de IA",
+    href: "/assistente-ia",
+    desc: "Atende, qualifica, agenda e cobra no seu WhatsApp 24h por dia, com a linguagem da sua marca.",
+    text: "text-primary",
+    bg: "bg-primary/10",
+    bar: "from-primary to-[#00d4a0]",
+  },
+  {
     icon: LayoutGrid,
     nome: "CRM Kanban",
     href: "/#crm-kanban",
@@ -32,9 +41,9 @@ const solucoes: Solucao[] = [
     nome: "API Oficial",
     href: "/api-oficial",
     desc: "WhatsApp verificado pela Meta, sem risco de bloqueio. Cuidamos de toda a implementação por você.",
-    text: "text-primary",
-    bg: "bg-primary/10",
-    bar: "from-primary to-[#00d4a0]",
+    text: "text-accent-amber",
+    bg: "bg-accent-amber/10",
+    bar: "from-accent-amber to-[#fbbf24]",
   },
   {
     icon: Send,
@@ -61,12 +70,14 @@ const theme: Record<Variant, { card: string; titulo: string; desc: string }> = {
   },
 };
 
-/** Grid dos 3 produtos com página própria, clicáveis. Reutilizável em qualquer seção. */
-export function SolucaoGrid({ variant = "light" }: { variant?: Variant }) {
+/** Grid dos produtos do ecossistema, clicáveis. Reutilizável em qualquer seção.
+    `omit` esconde o card da própria página (evita link para si mesma). */
+export function SolucaoGrid({ variant = "light", omit }: { variant?: Variant; omit?: string }) {
   const t = theme[variant];
+  const lista = omit ? solucoes.filter((s) => s.href !== omit) : solucoes;
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-      {solucoes.map((s, i) => (
+    <div className={`grid grid-cols-1 gap-6 sm:grid-cols-2 ${lista.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"}`}>
+      {lista.map((s, i) => (
         <motion.div
           key={s.nome}
           initial={{ opacity: 0, y: 24 }}
@@ -110,7 +121,7 @@ export function SolucaoGrid({ variant = "light" }: { variant?: Variant }) {
 }
 
 /** Seção completa "Um ecossistema completo", usada em páginas internas. */
-export default function NossasSolucoes({ variant = "dark" }: { variant?: Variant }) {
+export default function NossasSolucoes({ variant = "dark", omit }: { variant?: Variant; omit?: string }) {
   const t = theme[variant];
   return (
     <section id="solucoes" className={`relative py-24 ${variant === "dark" ? "bg-dark-base" : "bg-background"}`}>
@@ -126,13 +137,13 @@ export default function NossasSolucoes({ variant = "dark" }: { variant?: Variant
             Um <span className="text-gradient-primary">ecossistema</span> completo
           </h2>
           <p className={`mx-auto mt-4 max-w-2xl ${t.desc}`}>
-            Muito além da API: o agente de IA atende, o CRM organiza e o disparo reengaja.
-            Conheça as soluções que trabalham juntas no seu WhatsApp.
+            O assistente de IA atende, o CRM organiza, a API Oficial garante o número e o
+            disparo reengaja. Conheça as soluções que trabalham juntas no seu WhatsApp.
           </p>
         </motion.div>
 
         <div className="mt-16">
-          <SolucaoGrid variant={variant} />
+          <SolucaoGrid variant={variant} omit={omit} />
         </div>
       </div>
     </section>

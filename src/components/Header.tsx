@@ -8,10 +8,10 @@ import Logo from "./Logo";
 import { whatsappLink, loginLink } from "./WhatsAppButton";
 
 const navLinks = [
+  { href: "/assistente-ia", label: "Assistente IA" },
   { href: "#servicos",   label: "Serviços" },
   { href: "#beneficios", label: "Benefícios" },
   { href: "#sobre",      label: "Sobre" },
-  { href: "#contato",    label: "Contato" },
 ];
 
 export default function Header() {
