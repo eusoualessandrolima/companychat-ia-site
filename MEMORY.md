@@ -218,6 +218,13 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 - **Resolução:** o bloqueio se dissipou sozinho. Medido: 403 aos 5 minutos, **200 aos 12 minutos** após parar as requisições
 - **Regra para as próximas vezes:** confirmar deploy com `vercel ls` (mostra status `Ready` e duração) ou com no máximo 2 requisições espaçadas em minutos. Nunca fazer polling curto contra o domínio de produção
 
+### 2026-07-28 — Redirect do apex para o www (SEO)
+- **Problema:** `companychatia.com.br` e `www.companychatia.com.br` serviam o mesmo conteúdo com 200 nos dois, dividindo a autoridade de SEO entre dois endereços
+- **Solução no código, não no painel:** regra `redirects()` em `next.config.ts` com `has: [{ type: "host", value: "companychatia.com.br" }]` → `https://www.companychatia.com.br/:path*`, `permanent: true` (308). Fica versionada e revisável, ao contrário de configuração feita no painel
+- **Direção escolhida:** apex → www, porque o www já era o canônico em `metadataBase`, `sitemap.ts` e `robots.ts`
+- Sem risco de loop: a regra só dispara quando o host é o apex. Testado antes do deploy com `curl -H "Host: ..."`: apex devolve 308 preservando o path, www e localhost seguem 200
+- A API de domínios da Vercel foi tentada primeiro, mas o token local da CLI retorna `forbidden/invalidToken` para `/v9/projects/{id}/domains`
+
 ---
 
 ## Aprendizados e Padrões
