@@ -311,10 +311,14 @@ Consultoria em IA entrou como frente em destaque (cartão grande antes das outra
 
 ## Próximos Passos
 
-- [ ] Confirmar o canal do YouTube usado em `Origem.tsx` (hoje: `@eusoualessandrolima1`) e cadastrar `NEXT_PUBLIC_YOUTUBE_URL` no Vercel
-- [ ] Validar com o usuário as quatro etapas de `ComoTrabalhamos.tsx`, que descrevem como o trabalho acontece
-- [ ] Atualizar a base de conhecimento da Jade com a frente Company AI (projetos sob medida)
-- [ ] Commit + push da Company AI (via @devops) → deploy automático no Vercel
+- [ ] Decidir se o padrão visual de `/company-ai` vai para as outras páginas internas (o usuário quis ver no ar primeiro, em 2026-07-30)
+- [ ] Instalar a CLI do CodeRabbit em `~/.local/bin/coderabbit`: o gate de revisão automática foi pulado nos três pushes de 2026-07-30
+- [ ] Revisar com o usuário o texto da consultoria em `company-ai-data.ts`: descreve um serviço ainda não vendido
+- [ ] Validar as quatro etapas de `ComoTrabalhamos.tsx`, que descrevem como o trabalho acontece
+- [ ] Avaliar remover o código morto do selo "grátis" em `Categorias.tsx` (flag `gratis` e ícone `Gift`, sem categoria que use)
+- [ ] Cadastrar `NEXT_PUBLIC_YOUTUBE_URL` no Vercel (o fallback `@eusoualessandrolima1` foi verificado com HTTP 200 e bate com o dono do repositório)
+- [x] ~~Commit + push da Company AI~~ → `88a65f4`, no ar em 2026-07-30
+- [x] ~~Atualizar a base da Jade com a Company AI~~ → documento 13 criado, `READY`, 4 chunks
 
 - [ ] Commit + push da página `/assistente-ia` (via @devops) → deploy automático no Vercel
 - [ ] Avaliar se as cenas de `/assistente-ia` merecem animação de digitação ao vivo (hoje entram por `whileInView`, sem simulação de tempo real)
