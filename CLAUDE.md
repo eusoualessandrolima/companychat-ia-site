@@ -40,6 +40,40 @@ Nunca inicie trabalho sem ler os quatro arquivos.
 
 ---
 
+## O site alimenta a Jade (agente em produção)
+
+O conteúdo comercial deste site é a **fonte de verdade** da base de conhecimento da **Jade**, o
+agente de IA que atende o WhatsApp oficial da CompanyChat IA (+55 64 9305-4630). Ela consulta essa
+base antes de falar de preço, prazo, o que está incluso, API Oficial e disparo.
+
+**A base não se atualiza sozinha.** Sempre que mudar preço, prazo, o que está incluso, condição
+comercial ou descrição de produto, ofereça ao usuário atualizar a base logo depois de aplicar a
+mudança no código. Um hook em `.claude/hooks/avisar-base-jade.sh` avisa automaticamente quando um
+arquivo de conteúdo comercial é editado.
+
+Arquivos que alimentam a base: `components/planos/planos-data.ts`, `components/api-oficial/pricing.ts`,
+os cinco blocos de FAQ, `Capacidades.tsx`, `Recursos.tsx`, `NossasSolucoes.tsx`, `Categorias.tsx` e
+os componentes de `components/company-ai/` (incluindo `company-ai-data.ts`).
+
+Como atualizar (ferramentas MCP `fazer-ai`, tenant `companychat-ia`):
+
+| Documento | id | Conteúdo |
+|---|---|---|
+| Planos e preços | 6 | valores, o que inclui, sob medida, regras comerciais |
+| Assistente de IA | 7 | capacidades e dúvidas comuns |
+| API Oficial e custo por mensagem | 8 | janela de 24h, categorias, preços da Meta |
+| Disparo em massa e CRM Kanban | 9 | campanhas, templates, relatórios |
+| Company AI | 13 | consultoria em IA e projetos sob medida, e a diferença para o plano Sob medida |
+
+Use `knowledge_document_create` para substituir o conteúdo e confirme que os documentos voltam ao
+estado `READY` com `knowledge_documents_list`. Divergência entre site e base já causou problema real:
+a Jade dizia que a implantação era cobrada enquanto o site prometia inclusa.
+
+O contexto completo do agente está em
+`~/.claude/Projetos Claude/alessandro-lima/criar-atendimentov2/`.
+
+---
+
 ## Regras de design
 
 - A skill `frontend-design` define o padrão estético deste projeto

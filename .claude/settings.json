@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/avisar-base-jade.sh\"",
+            "timeout": 15,
+            "statusMessage": "Checando impacto na base da Jade"
+          }
+        ]
+      }
+    ]
+  }
+}
