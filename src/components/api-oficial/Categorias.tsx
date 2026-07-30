@@ -16,15 +16,17 @@ export default function Categorias() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            As 4 categorias de <span className="text-primary">mensagem</span>
+            As 3 categorias <span className="text-primary">cobradas</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
             A Meta cobra por template enviado, e o valor muda conforme a categoria.
-            Mensagens de serviço, dentro da janela de 24h, são gratuitas.
+            A quarta categoria é a de serviço: dentro da janela de 24h ela é gratuita
+            e não entra nesta conta.
           </p>
         </motion.div>
 
-        <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {/* Três colunas fechadas: com grid de 4 os cartões encostavam à esquerda */}
+        <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
           {categorias.map((c, i) => (
             <motion.div
               key={c.id}
