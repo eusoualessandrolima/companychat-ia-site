@@ -38,6 +38,7 @@
 | Servicos | `Servicos.tsx` | Serviços oferecidos |
 | Beneficios | `Beneficios.tsx` | Benefícios da plataforma |
 | Nichos | `Nichos.tsx` | Segmentos de mercado atendidos |
+| CompanyAi | `CompanyAi.tsx` | Resumo da Company AI na home (projetos sob medida); detalhe em `/company-ai` |
 | Sobre | `Sobre.tsx` | Sobre a empresa |
 | FAQ | `FAQ.tsx` | Perguntas frequentes |
 | Contato | `Contato.tsx` | Formulário/CTA de contato |
@@ -76,6 +77,21 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 | Ecossistema | `Ecossistema.tsx` | 3 pilares: Agente IA + CRM + Disparo em massa |
 | DisparoFaq | `DisparoFaq.tsx` | FAQ específico de disparo em massa |
 | DisparoCta | `DisparoCta.tsx` | CTA final (WhatsApp + cross-link para `/api-oficial`) |
+
+### Página `/company-ai` (`src/app/company-ai/page.tsx`)
+
+Frente de projetos sob medida (desenvolvimento personalizado), separada dos produtos prontos.
+Mesmo padrão visual das outras páginas internas e reaproveita `ApiHeader`, `NossasSolucoes`,
+`Footer` e `WhatsAppButton`. Componentes em `src/components/company-ai/`:
+
+| Componente | Arquivo | Descrição |
+|------------|---------|-----------|
+| CompanyAiHero | `CompanyAiHero.tsx` | Hero com três cartões de "antes e depois" ilustrativos |
+| Origem | `Origem.tsx` | Por que a Company AI existe: narrativa do YouTube + citação do fundador |
+| OqueConstruimos | `OqueConstruimos.tsx` | Quatro frentes de construção, alimentado por `company-ai-data.ts` |
+| ComoTrabalhamos | `ComoTrabalhamos.tsx` | Conversa, desenho, construção, entrega e ajuste |
+| CompanyAiCta | `CompanyAiCta.tsx` | CTA final (WhatsApp + cross-link para `/planos`) |
+| company-ai-data | `company-ai-data.ts` | Fonte única das quatro frentes (home e página) |
 
 ---
 
@@ -227,6 +243,60 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 
 ---
 
+### 2026-07-30 — Company AI: seção na home + página `/company-ai`
+
+Referência trazida pelo usuário: o site da fazer.ai (print dos sitelinks no Google + estrutura da
+home). Adaptado, não copiado. O que veio de lá: a lógica de páginas internas com título e descrição
+próprios (que é o que alimenta sitelinks) e o enquadramento da seção "Educação" ("Não precisa nos
+contratar para aprender"), que casou com a narrativa de YouTube do fundador.
+
+- Nome "Company AI" mantido a pedido do usuário, apesar da proximidade com "CompanyChat IA". O risco
+  de confusão de marca foi levantado e a decisão foi dele.
+- Posição na home: entre `Nichos` e `Sobre`, em `bg-dark-base`, para alternar com as seções claras
+  vizinhas e emendar a narrativa "produtos prontos → e o que não cabe no pronto".
+- Sitelinks do Google não são configuráveis. O que foi feito é o que dá para fazer: rota indexável
+  com metadata própria, entrada no sitemap, link no header (desktop) e no footer.
+- `Serviços` no header passou de `lg` para `xl` para abrir espaço ao novo link sem lotar a barra em
+  1024px (verificado: 5 links + 2 botões em 1024, sem overflow horizontal).
+- Textos ilustrativos, sem número inventado: o "antes e depois" do hero e os exemplos dos cartões são
+  cenários genéricos, não casos de cliente.
+- Link do YouTube em `Origem.tsx` sai de `NEXT_PUBLIC_YOUTUBE_URL`, com fallback para
+  `@eusoualessandrolima1`. **Confirmar o canal antes de publicar.**
+
+### 2026-07-30 — Padrão visual "silêncio caro" em `/company-ai` (ref. fazer.ai)
+
+Inspeção do CSS ao vivo da fazer.ai revelou que o efeito "chique" não vem de biblioteca nenhuma.
+São quatro decisões, todas adotadas em `/company-ai` e na seção da home:
+
+1. **Palco de scroll.** Trilho de 140vh com filho `sticky top-0 h-screen`. O conteúdo fica preso e
+   sai por opacidade e escala dirigidas pelo scroll. Só em `lg+` e desligado com
+   `prefers-reduced-motion`; no mobile a dobra não cabe presa na tela.
+2. **Nenhuma animação em loop.** A fazer.ai tem exatamente um `@keyframes` no site inteiro (`spin`).
+   Todo o resto é scroll ou hover, com `cubic-bezier(0.4,0,0.2,1)` em 0,2s / 0,3s / 0,5s. Os blobs
+   flutuantes saíram de `/company-ai`, substituídos por um brilho estático `blur(150px)` a 0,10.
+3. **Título em duas tonalidades.** Duas linhas do mesmo tamanho, a primeira em `dark-text` e a
+   segunda em `dark-muted`. Peso 600 (nunca `font-bold`), entrelinha 1,06, tracking -0.025em.
+   Na home a seção manteve `text-gradient-primary` para não destoar das seções vizinhas.
+4. **Página inteira no escuro.** `/company-ai` não alterna claro e escuro: separa as seções com um
+   fio `bg-gradient-to-r from-transparent via-white/12 to-transparent`.
+
+Não copiado: SF Pro Display (fonte de sistema, proibida pelo CLAUDE.md) e a paleta azul da Apple.
+A Bricolage Grotesque sustenta a mesma escala; o verde da marca segue como único acento.
+
+**Duas armadilhas que custaram tempo, registradas para não repetir:**
+
+- `useScroll({ target: ref })` do Framer Motion não atualizou o progresso nesta página. A solução
+  foi usar `useScroll()` sem alvo e derivar o curso de `window.innerHeight`, o que funciona porque
+  o hero é sempre o primeiro elemento da página.
+- Um brilho `absolute` largo estourou 305px de rolagem horizontal no mobile porque o ancestral com
+  `overflow-hidden` não era posicionado. O elemento posicionado precisa ser o mesmo que recorta.
+  `getBoundingClientRect` não detecta isso (ignora recorte de ancestral); use
+  `documentElement.scrollWidth - clientWidth`.
+
+Consultoria em IA entrou como frente em destaque (cartão grande antes das outras quatro).
+
+---
+
 ## Aprendizados e Padrões
 
 - Tailwind v4 não usa `tailwind.config.js` — toda configuração fica em `globals.css`
@@ -240,6 +310,11 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 ---
 
 ## Próximos Passos
+
+- [ ] Confirmar o canal do YouTube usado em `Origem.tsx` (hoje: `@eusoualessandrolima1`) e cadastrar `NEXT_PUBLIC_YOUTUBE_URL` no Vercel
+- [ ] Validar com o usuário as quatro etapas de `ComoTrabalhamos.tsx`, que descrevem como o trabalho acontece
+- [ ] Atualizar a base de conhecimento da Jade com a frente Company AI (projetos sob medida)
+- [ ] Commit + push da Company AI (via @devops) → deploy automático no Vercel
 
 - [ ] Commit + push da página `/assistente-ia` (via @devops) → deploy automático no Vercel
 - [ ] Avaliar se as cenas de `/assistente-ia` merecem animação de digitação ao vivo (hoje entram por `whileInView`, sem simulação de tempo real)

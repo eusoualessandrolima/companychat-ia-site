@@ -31,6 +31,7 @@ const links = {
     { href: "/#nichos",     label: "Nichos" },
   ],
   empresa: [
+    { href: "/company-ai", label: "Company AI" },
     { href: "/#sobre",   label: "Sobre nós" },
     { href: "/#contato", label: "Contato" },
     { href: whatsappLink, label: "WhatsApp", external: true },
