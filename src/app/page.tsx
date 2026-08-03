@@ -7,7 +7,6 @@ import CrmKanban from "@/components/CrmKanban";
 import Beneficios from "@/components/Beneficios";
 import Solucao from "@/components/Solucao";
 import Nichos from "@/components/Nichos";
-import CompanyAi from "@/components/CompanyAi";
 import Sobre from "@/components/Sobre";
 import PlanosHome from "@/components/PlanosHome";
 import FAQ from "@/components/FAQ";
@@ -28,7 +27,6 @@ export default function Home() {
         <Beneficios />
         <Solucao />
         <Nichos />
-        <CompanyAi />
         <Sobre />
         <PlanosHome />
         <FAQ />

@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "CompanyChat IA: Automação Inteligente para sua Empresa";
+export const alt =
+  "CompanyChat IA: não somos apenas um CRM. Quem usa CompanyChat não acompanha o mercado, inova ele.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -42,26 +43,48 @@ export default function OpengraphImage() {
         </div>
         <div
           style={{
-            fontSize: "76px",
+            fontSize: "64px",
             fontWeight: 700,
             color: "#fafafa",
             lineHeight: 1.05,
             letterSpacing: "-0.03em",
             display: "flex",
-            flexDirection: "column",
           }}
         >
-          <span>Seu assistente IA vende</span>
-          <span style={{ color: "#00ab7a" }}>enquanto você dorme.</span>
+          Não somos apenas um CRM.
         </div>
         <div
           style={{
-            marginTop: "40px",
+            marginTop: "32px",
             fontSize: "30px",
+            fontWeight: 500,
             color: "#a1a1aa",
+            display: "flex",
           }}
         >
-          Atendimento com IA no WhatsApp, 24 horas por dia.
+          Quem usa CompanyChat não acompanha o mercado.
+        </div>
+        <div
+          style={{
+            marginTop: "6px",
+            fontSize: "56px",
+            fontWeight: 700,
+            letterSpacing: "-0.02em",
+            color: "#00ab7a",
+            display: "flex",
+          }}
+        >
+          Inova ele.
+        </div>
+        <div
+          style={{
+            marginTop: "36px",
+            fontSize: "26px",
+            color: "#a1a1aa",
+            display: "flex",
+          }}
+        >
+          IA, automações, BI interno e mensageria conectada em um só sistema.
         </div>
       </div>
     ),

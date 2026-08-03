@@ -295,6 +295,74 @@ A Bricolage Grotesque sustenta a mesma escala; o verde da marca segue como únic
 
 Consultoria em IA entrou como frente em destaque (cartão grande antes das outras quatro).
 
+### 2026-08-03 — Novo posicionamento do hero da home (ref. Datacrazy)
+
+O usuário achou "Seu assistente IA vende enquanto você dorme" pequeno demais para o que a
+plataforma entrega (integrações, BI, automações). Trocado por posicionamento de categoria, com o
+texto que ele mesmo escreveu:
+
+- **H1:** "Não somos apenas um CRM." (sem o "Somos X" da referência — decisão dele)
+- **Sub:** "Quem usa CompanyChat não acompanha o mercado." em texto secundário (20px), com
+  **"Inova ele."** em linha própria de 40px, negrito e gradiente — a promessa pesa mais que a
+  constatação. Na primeira versão as duas frases tinham o mesmo corpo e o "Inova ele." sumia
+- **Descrição:** IA, automações com regras de negócio, BI interno, mensageria e decisões em tempo real
+- **Badge:** "IA que trabalha por você" → "Plataforma com IA integrada"
+- `opengraph-image.tsx` alinhado ao mesmo texto
+
+O H1 caiu de `clamp(48px,6vw,88px)` para `clamp(44px,4.8vw,60px)`: em coluna de 50% da largura, o
+texto curto em 88px empurrava tudo para baixo.
+
+Esta copy **sobreviveu** à reformulação estrutural descrita abaixo — só a coluna direita mudou.
+
+### 2026-08-03 — Hero reformulado: explicar o porquê em 3 segundos
+
+O usuário avaliou que o hero anterior ainda tinha a estrutura de qualquer landing de CRM: bonito,
+mas o visitante não entendia **por que** a CompanyChat é diferente. Referências pedidas: Linear,
+Stripe, Vercel, Arc, Raycast. Reescrita completa de `Hero.tsx`.
+
+**Copy da coluna esquerda:** mantida a da seção anterior (H1 + "Quem usa CompanyChat… / Inova
+ele." + descrição). Uma variante intermediária trocou isso por "Somos a central operacional da sua
+empresa" e sete chips de benefício; foi descartada — a dupla "não acompanha / inova" carrega o
+contraste sem precisar listar features na dobra.
+
+**Coluna direita: o produto funcionando.** Uma única linha do tempo (`CENA`) comanda o chat e a
+trilha de fluxo, para os dois contarem a mesma história:
+
+- Roteiro de ~15s: pergunta de preço → qualificação ("quantas pessoas atendem hoje?") →
+  agendamento → dois eventos de automação ("Lead criado no CRM Kanban", "Vendedor notificado no
+  WhatsApp"), depois desvanece e reinicia
+- Conversa com altura fixa e `mask-image` no topo: as mensagens antigas saem por cima
+- `HISTORICO` com duas mensagens fixas evita o quadro vazio nos primeiros segundos
+- Os cinco badges flutuantes viraram uma **trilha de quatro etapas** abaixo do chat (mensagem
+  recebida → lead qualificado → reunião agendada → time notificado), que acende em sincronia. Isso
+  também eliminou a colisão de badge com texto que exigia ajuste fino de tipografia
+
+**Decisões técnicas:**
+
+- `useSyncExternalStore` para ler `prefers-reduced-motion` (o lint proíbe `setState` síncrono
+  dentro de `useEffect`; hooks personalizados precisam do prefixo `use`). Com movimento reduzido a
+  cena entrega o estado final sem timers
+- O relógio da cena vive em `PainelVivo`, não no `Hero`: só a coluna direita re-renderiza a cada
+  passo. Medido: zero long tasks em 8s de animação, heap de 5MB
+- O hero fecha em 834px, exatamente a altura da janela em 1440x900, com o CTA terminando em 750px
+- Em 390x844 o hero mede 1300px, mas isso **não é regressão**: badge, H1, "Inova ele.", descrição e
+  os dois CTAs terminam em 666px, dentro da dobra. O que estende a altura é o painel de chat
+  empilhando abaixo, comportamento esperado quando a grade de duas colunas vira uma. Sem overflow
+  horizontal
+- `opengraph-image.tsx` alinhado à mesma copy do hero. A versão intermediária deixou o card social
+  prometendo "central operacional" enquanto a página abria com "Inova ele." — quem compartilhava o
+  link via uma promessa diferente da que a página entrega
+
+### 2026-08-03 — Seção Company AI removida da home
+
+A home já leva à Company AI pelo menu e pelo rodapé (rota `/company-ai`), então a seção no meio da
+página era repetição. Removido `<CompanyAi />` de `src/app/page.tsx`; a página dedicada e os
+componentes de `components/company-ai/` continuam intactos. `src/components/CompanyAi.tsx` ficou
+sem uso — mantido no repositório caso o usuário queira a seção de volta.
+
+Nenhum link apontava para a âncora `#company-ai` (verificado por busca), então a navegação não
+quebrou. A home foi de 13 para 12 seções.
+
 ---
 
 ## Aprendizados e Padrões
@@ -305,7 +373,9 @@ Consultoria em IA entrou como frente em destaque (cartão grande antes das outra
 - Animações via Framer Motion — não usar CSS puro para animações complexas
 - CSS variables para tokens de cor e tipografia — centralizar em `globals.css`
 - Verificação de deploy: usar `vercel ls` (status `Ready`) em vez de polling de `curl` no domínio de produção, que dispara a proteção antibot da Vercel (ver incidente de 2026-07-28)
+- "Está no ar" exige três evidências, todas fora da máquina local: working tree limpo, HEAD publicado no remoto e o deploy ativo em `vercel ls` apontando para esse commit. Em 2026-08-03 uma sessão registrou o hero como publicado tendo verificado só o `localhost`; o trabalho ficou quatro dias parado sem commit
 - Botões e links de header ou de par lado a lado precisam de `whitespace-nowrap`, senão quebram em duas linhas em 768px e em cards estreitos
+- Validação visual: use o build de produção numa porta dedicada (`npx next start -p 3005`). O servidor de desenvolvimento recarrega a página na primeira compilação, o que derruba a captura do MCP do Chrome e esconde os elementos animados por Framer Motion
 
 ---
 
