@@ -281,6 +281,20 @@ export default function Hero() {
     <section className="relative flex min-h-screen items-center overflow-hidden bg-dark-base pt-16">
       {/* Fundo: aurora + pontos de profundidade */}
       <div className="pointer-events-none absolute inset-0">
+        {/* Malha de pontos: textura de fundo que some nas bordas para não
+            competir com o texto nem com o painel do chat. */}
+        <div
+          className="absolute inset-0 opacity-75"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1px)",
+            backgroundSize: "26px 26px",
+            maskImage:
+              "radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 75%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 75%)",
+          }}
+        />
         <div
           className="absolute -top-40 -left-40 h-[700px] w-[700px] rounded-full opacity-[0.10]"
           style={{

@@ -1,11 +1,22 @@
 export const WHATSAPP_NUMBER =
   process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "5564993054630";
 
+/** Número do suporte. Sem variável definida, cai no mesmo número do comercial —
+ *  o que muda é a mensagem, que já entrega o contexto para a Jade triar. */
+const WHATSAPP_SUPORTE =
+  process.env.NEXT_PUBLIC_WHATSAPP_SUPORTE ?? WHATSAPP_NUMBER;
+
 const WHATSAPP_MESSAGE = encodeURIComponent(
   "Olá! Gostaria de saber mais sobre os serviços da CompanyChat IA."
 );
 
+const MENSAGEM_SUPORTE = encodeURIComponent(
+  "Olá! Já sou cliente da CompanyChat IA e preciso de suporte."
+);
+
 export const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`;
+
+export const suporteLink = `https://wa.me/${WHATSAPP_SUPORTE}?text=${MENSAGEM_SUPORTE}`;
 
 /** URL de login do sistema (app). Configurável via NEXT_PUBLIC_LOGIN_URL. */
 export const loginLink =
@@ -25,16 +36,56 @@ export function WhatsAppIcon({ className = "" }: { className?: string }) {
   );
 }
 
+const CANAIS = [
+  {
+    rotulo: "Comercial",
+    href: whatsappLink,
+    aria: "Falar com o comercial pelo WhatsApp",
+    cor: "bg-[#25D366]",
+    destaque: true,
+  },
+  {
+    rotulo: "Suporte",
+    href: suporteLink,
+    aria: "Falar com o suporte pelo WhatsApp",
+    cor: "bg-[#0092ff]",
+    destaque: false,
+  },
+] as const;
+
 export default function WhatsAppButton() {
   return (
-    <a
-      href={whatsappLink}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Fale conosco pelo WhatsApp"
-      className="animate-breath-glow fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-xl shadow-black/30 transition-transform hover:scale-110"
-    >
-      <WhatsAppIcon className="h-8 w-8 text-white" />
-    </a>
+    <div className="fixed bottom-6 right-4 z-50 flex flex-col items-end gap-3 sm:right-6">
+      {CANAIS.map((canal) => (
+        <a
+          key={canal.rotulo}
+          href={canal.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={canal.aria}
+          className="group flex items-center gap-2.5"
+        >
+          {/* No celular o rótulo cobriria o conteúdo da página: só o ícone fica */}
+          <span className="hidden rounded-full bg-dark-elevated/95 px-3 py-1.5 text-xs font-semibold text-dark-text shadow-lg shadow-black/25 backdrop-blur-sm sm:inline-block">
+            {canal.rotulo}
+          </span>
+          <span
+            className={`flex items-center justify-center rounded-full shadow-xl shadow-black/30 transition-transform group-hover:scale-110 ${canal.cor} ${
+              canal.destaque
+                ? "animate-breath-glow h-12 w-12 sm:h-14 sm:w-14"
+                : "h-11 w-11 sm:h-12 sm:w-12"
+            }`}
+          >
+            <WhatsAppIcon
+              className={
+                canal.destaque
+                  ? "h-7 w-7 text-white sm:h-8 sm:w-8"
+                  : "h-6 w-6 text-white sm:h-7 sm:w-7"
+              }
+            />
+          </span>
+        </a>
+      ))}
+    </div>
   );
 }

@@ -37,7 +37,7 @@
 | ComoFunciona | `ComoFunciona.tsx` | Passo a passo de como a plataforma funciona |
 | Servicos | `Servicos.tsx` | Serviços oferecidos |
 | Beneficios | `Beneficios.tsx` | Benefícios da plataforma |
-| Nichos | `Nichos.tsx` | Segmentos de mercado atendidos |
+| Nichos | `Nichos.tsx` | Carrossel de segmentos atendidos; cada card abre o WhatsApp com a mensagem do segmento |
 | CompanyAi | `CompanyAi.tsx` | Resumo da Company AI na home (projetos sob medida); detalhe em `/company-ai` |
 | Sobre | `Sobre.tsx` | Sobre a empresa |
 | FAQ | `FAQ.tsx` | Perguntas frequentes |
@@ -362,6 +362,71 @@ sem uso — mantido no repositório caso o usuário queira a seção de volta.
 
 Nenhum link apontava para a âncora `#company-ai` (verificado por busca), então a navegação não
 quebrou. A home foi de 13 para 12 seções.
+
+### 2026-08-04 — Nichos vira carrossel (ref. Digisac)
+
+**Contexto:** o dono trouxe 15 prints do digisac.com.br, e o carrossel de segmentos deles apareceu
+em 5 — foi o padrão que mais chamou atenção. Nosso `Nichos` era um grid 4×2 estático, sem link e
+sem CTA: a seção mais fraca da home em conversão.
+
+Reescrito `src/components/Nichos.tsx` como carrossel, adaptando o padrão deles à nossa paleta:
+
+- Scroll horizontal nativo com `snap-x` — ganha swipe no mobile sem biblioteca. As setas fazem
+  `scrollBy` de exatamente um card + gap, então o próximo sempre entra alinhado à esquerda
+- O card seguinte fica **cortado na borda do container** (cards a 30% da largura no desktop). É o
+  que sinaliza "arraste" sem precisar de instrução — copiado direto do comportamento deles
+- CTA "Falar sobre {segmento}" só aparece no card sob o cursor (`md:group-hover`). No toque não
+  existe hover, então abaixo de `md` fica sempre visível
+- Ícone em quadrado com gradiente esmeralda (`from-primary to-#00d4a0`), no lugar do quadrado
+  chapado antigo
+
+**Decisão de conteúdo:** o Digisac linka cada segmento para uma landing própria. Não temos essas
+páginas, e um CTA que não leva a lugar nenhum é pior que CTA nenhum. Em vez disso, cada card abre o
+WhatsApp com a mensagem já preenchida ("Atuo no segmento de X…") — o lead chega qualificado e a
+Jade pula a primeira pergunta. Páginas por segmento ficam para depois, se virarem prioridade de SEO.
+
+Os dois botões que fecham a seção: "Não achei meu segmento" (WhatsApp) e "Ver planos" (`#planos`).
+
+**Observação apurada nesta sessão:** seis das doze seções da home não têm nenhum CTA — `Problemas`,
+`Servicos`, `Beneficios`, `Solucao`, `Nichos` (resolvido aqui) e `Sobre`. No Digisac, quase toda
+seção fecha com botão. É a maior oportunidade de conversão pendente na home.
+
+### 2026-08-04 — Botões flutuantes por canal + malha de pontos no hero (ref. Digisac)
+
+**WhatsAppButton:** de um botão para dois, Comercial (verde `#25D366`, maior, com o glow que já
+existia) e Suporte (azul `#0092ff`, menor). Empilhados à direita, com rótulo ao lado.
+
+Não temos número de suporte separado, e um segundo botão para o mesmo destino seria enfeite. A
+solução: `suporteLink` usa `NEXT_PUBLIC_WHATSAPP_SUPORTE` com fallback para o número comercial, e o
+que muda hoje é a **mensagem** — "Já sou cliente e preciso de suporte" contra a mensagem comercial.
+A Jade recebe o contexto e tria. Se um dia houver número dedicado, basta definir a variável.
+
+Os rótulos são `hidden sm:inline-block`: no celular eles cobriam o mock de chat do hero — a mesma
+poluição de lateral direita que descartamos do site do Digisac.
+
+### 2026-08-04 — Título da Solução: testado e revertido
+
+Tentativa de trocar o h2 "A solução que faz a diferença" por uma frase de três verbos com
+palavras-chave em verde ("Atenda no WhatsApp, qualifique cada lead e venda todo dia com
+inteligência artificial"), inspirada na estrutura do hero do Digisac.
+
+**Revertido a pedido do dono** — o texto original ficou melhor. `Solucao.tsx` está como antes:
+h2 "A solução que faz a diferença" + legenda "Qualifique seus leads, atenda e venda todos os dias
+de forma inteligente e automática".
+
+**Aprendizado:** o argumento de que "título genérico desperdiça a linha mais valiosa" não se
+sustentou na prática aqui. O h2 curto funciona como respiro entre a faixa escura de `Beneficios` e
+a comparação em duas colunas; a frase longa competia com o conteúdo das colunas logo abaixo. Não
+repropor essa troca sem um motivo novo.
+
+Registro do que não trazer do Digisac: "Centralize todos os seus canais" promete multicanal
+(Instagram, Telegram, SMS, e-mail) — somos WhatsApp-first, a frase viraria promessa cobrada na
+primeira reunião.
+
+**Hero:** acrescentada malha de pontos ao fundo (`radial-gradient` 26px, branco a 10%, sobre a
+aurora que já existia), com máscara elíptica que apaga nas bordas. É a textura do hero deles
+traduzida para o dark. O layout dividido (texto + chat animado) foi **mantido de propósito** — o
+deles é centralizado, mas trocar custaria o mock de chat, que é o ativo mais forte da nossa dobra.
 
 ---
 
