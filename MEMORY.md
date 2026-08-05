@@ -37,7 +37,9 @@
 | ComoFunciona | `ComoFunciona.tsx` | Passo a passo de como a plataforma funciona |
 | Servicos | `Servicos.tsx` | Serviços oferecidos |
 | Beneficios | `Beneficios.tsx` | Benefícios da plataforma |
-| Nichos | `Nichos.tsx` | Carrossel de segmentos atendidos; cada card abre o WhatsApp com a mensagem do segmento |
+| Nichos | `Nichos.tsx` | Carrossel de 16 segmentos, gira sozinho; cada card abre o WhatsApp com a mensagem do segmento |
+| PorteEmpresa | `PorteEmpresa.tsx` | "A solução certa para qualquer tamanho de empresa" — pequenas, médias e grandes em zigue-zague, fundo escuro |
+| Garantias | `Garantias.tsx` | "O que você pode esperar da CompanyChat IA" — 6 compromissos, grid 3×2, antes dos planos |
 | CompanyAi | `CompanyAi.tsx` | Resumo da Company AI na home (projetos sob medida); detalhe em `/company-ai` |
 | Sobre | `Sobre.tsx` | Sobre a empresa |
 | FAQ | `FAQ.tsx` | Perguntas frequentes |
@@ -403,6 +405,72 @@ A Jade recebe o contexto e tria. Se um dia houver número dedicado, basta defini
 
 Os rótulos são `hidden sm:inline-block`: no celular eles cobriam o mock de chat do hero — a mesma
 poluição de lateral direita que descartamos do site do Digisac.
+
+### 2026-08-04 — Nichos ampliados + duas seções novas (ref. Digisac)
+
+**Nichos: de 8 para 16 segmentos.** Acrescentados Contabilidade, Provedores de Internet, Seguros &
+Consórcios, Franquias, Turismo & Hotelaria, Logística & Transporte, Indústria & Distribuição e
+Tecnologia & Software — os que o Digisac cobria e nós não.
+
+Título trocado de "Nichos de Atuação" para **"Soluções para diferentes segmentos"**, com a frase de
+apoio deles adaptada. Onde eles escrevem "centraliza canais" (multicanal), o nosso diz "organiza o
+WhatsApp" — a estrutura da frase é boa, a promessa de multicanal não é nossa.
+
+**`Garantias.tsx` (novo)** — "O que você pode esperar da CompanyChat IA", grid 3×2, ancorado logo
+antes de `PlanosHome` para matar objeção junto do preço.
+
+⚠️ **Três dos seis cards do Digisac foram descartados de propósito:** "Segurança de dados com
+criptografia avançada", "Pagamento facilitado: boleto, cartão ou Pix" e "Conformidade LGPD". Nada
+disso aparece em lugar nenhum do site (verificado por busca em `src/`), e a base da Jade não
+sustentaria. Os seis que entraram saem todos de `planos-data.ts` ou do `FAQ.tsx`: implantação
+inclusa, feito a quatro mãos, no ar em até 7 dias, sem fidelidade, suporte exclusivo, ajustes
+contínuos. **Se um dia quisermos os cards de segurança/LGPD/pagamento, a informação precisa existir
+antes** — e a base da Jade tem que ser atualizada junto.
+
+**`PorteEmpresa.tsx` (novo)** — "A solução certa para qualquer tamanho de empresa", três blocos em
+zigue-zague (pequenas, médias, grandes). Os itens de cada porte saem do Pro e do Sob medida em
+`planos-data.ts`.
+
+⚠️ **Sem fotos:** `public/` está vazio, e o layout do Digisac depende de foto de pessoa em metade do
+card. No lugar entrou um painel com gradiente esmeralda e o ícone do porte. Funciona, mas foto real
+de cliente seria melhor — trocar quando houver.
+
+Seção em fundo escuro (`bg-dark-base` + malha de pontos) de propósito: quebra a sequência de seções
+claras do miolo. É o "ritmo de faixas" do Digisac traduzido para a nossa paleta, sem virar azul.
+
+Ordem da home agora: Hero → Problemas → ComoFunciona → Servicos → CrmKanban → Beneficios → Solucao →
+**PorteEmpresa** → Nichos → Sobre → **Garantias** → PlanosHome → FAQ → Contato (14 seções).
+
+### 2026-08-04 — Carrossel de nichos gira sozinho
+
+O dono notou que o carrossel do Digisac avança sozinho, chega ao fim, rebobina e recomeça — e pediu
+o mesmo. Implementado em `Nichos.tsx`: um card a cada 3,8s; ao atingir o fim, `scrollTo(0)` e o laço
+recomeça. As setas continuam funcionando.
+
+**Regras de pausa** (o giro só acontece quando todas passam):
+- A seção está à vista — `IntersectionObserver` com threshold 0.25
+- O sistema não pediu movimento reduzido — hook `useMovimentoReduzido`
+- O cursor não está sobre a trilha
+- Passaram-se 9s desde a última interação (seta, arrasto, foco por teclado)
+
+**Duas armadilhas encontradas testando no navegador — não reintroduzir:**
+
+1. **Hover em estado do React trava o carrossel.** A primeira versão usava
+   `onMouseEnter`/`onMouseLeave` para ligar `sobCursor`. Quando o `mouseleave` não dispara (acontece
+   ao rolar a página com o cursor parado sobre o elemento, entre outros casos), o giro parava para
+   sempre. Trocado por `trilha.matches(":hover")` conferido **no instante do tique** — não tem como
+   emperrar porque não guarda estado.
+
+2. **Adiamento em `useState` se perde.** `setPausaTemporaria(true)` recriava o efeito e o
+   temporizador, e o giro voltava em ~5s em vez de 9s. Trocado por `liberadoEmRef` com
+   `performance.now()`, conferido no tique. Mesmo princípio do item anterior: estado que entra nas
+   dependências do efeito não serve para controlar o próprio efeito.
+
+Medido no Chrome: paradas em `0 → 360 → 720 → 1080 → 1440 → 1736 → 0`, intervalos de 3,2-3,9s, e
+o giro só volta 10,7s depois de um clique na seta.
+
+`useMovimentoReduzido` saiu de dentro do `Hero.tsx` para `src/hooks/useMovimentoReduzido.ts`, agora
+compartilhado pelos dois componentes. É o primeiro arquivo em `src/hooks/`.
 
 ### 2026-08-04 — Título da Solução: testado e revertido
 

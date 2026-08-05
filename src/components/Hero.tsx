@@ -10,7 +10,8 @@ import {
   BellRing,
   Check,
 } from "lucide-react";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
+import { useMovimentoReduzido } from "@/hooks/useMovimentoReduzido";
 import { whatsappLink } from "./WhatsAppButton";
 
 /* ─── Roteiro da cena ────────────────────────────────
@@ -50,20 +51,6 @@ const ETAPAS = [
   { icon: CalendarCheck, label: "Reunião agendada" },
   { icon: BellRing,      label: "Time notificado" },
 ] as const;
-
-const QUERY_MOVIMENTO = "(prefers-reduced-motion: reduce)";
-
-function useMovimentoReduzido() {
-  return useSyncExternalStore(
-    (avisar) => {
-      const mq = window.matchMedia(QUERY_MOVIMENTO);
-      mq.addEventListener("change", avisar);
-      return () => mq.removeEventListener("change", avisar);
-    },
-    () => window.matchMedia(QUERY_MOVIMENTO).matches,
-    () => false
-  );
-}
 
 /** Avança pela CENA em laço. Com movimento reduzido, entrega o
  *  estado final de uma vez, sem timers. */

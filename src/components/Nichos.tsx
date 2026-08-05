@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { useMovimentoReduzido } from "@/hooks/useMovimentoReduzido";
 import {
   ArrowRight,
   ChevronLeft,
@@ -14,6 +15,14 @@ import {
   Stethoscope,
   Building2,
   Utensils,
+  Calculator,
+  Wifi,
+  Landmark,
+  Network,
+  Plane,
+  Truck,
+  Factory,
+  Cpu,
 } from "lucide-react";
 import { WHATSAPP_NUMBER, WhatsAppIcon, whatsappLink } from "./WhatsAppButton";
 
@@ -66,6 +75,54 @@ const nichos = [
     descricao:
       "Pedidos, reservas e cardápios digitais integrados ao WhatsApp. Zero perda de cliente.",
   },
+  {
+    icon: Calculator,
+    titulo: "Contabilidade",
+    descricao:
+      "Cobrança de documentos, prazos fiscais e dúvidas de clientes organizados em um só lugar.",
+  },
+  {
+    icon: Wifi,
+    titulo: "Provedores de Internet",
+    descricao:
+      "Suporte técnico de primeiro nível, segunda via de boleto e abertura de chamado sem fila.",
+  },
+  {
+    icon: Landmark,
+    titulo: "Seguros & Consórcios",
+    descricao:
+      "Simulações, envio de propostas e acompanhamento de renovação com atendimento consultivo.",
+  },
+  {
+    icon: Network,
+    titulo: "Franquias",
+    descricao:
+      "Padronize o atendimento de todas as unidades e acompanhe a performance de cada uma.",
+  },
+  {
+    icon: Plane,
+    titulo: "Turismo & Hotelaria",
+    descricao:
+      "Reservas, confirmações e dúvidas de hóspedes respondidas na hora, inclusive fora do expediente.",
+  },
+  {
+    icon: Truck,
+    titulo: "Logística & Transporte",
+    descricao:
+      "Status de entrega, coleta e cotação automatizados, sem ocupar o time com consulta repetida.",
+  },
+  {
+    icon: Factory,
+    titulo: "Indústria & Distribuição",
+    descricao:
+      "Pedidos de representantes, tabela de preços e prazo de entrega em atendimento estruturado.",
+  },
+  {
+    icon: Cpu,
+    titulo: "Tecnologia & Software",
+    descricao:
+      "Onboarding de clientes, suporte e retenção com qualidade constante mesmo crescendo rápido.",
+  },
 ];
 
 /** Abre o WhatsApp já dizendo de qual segmento o lead veio — poupa a primeira pergunta. */
@@ -76,8 +133,19 @@ function linkDoSegmento(titulo: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${texto}`;
 }
 
+/** Intervalo entre avanços automáticos. */
+const GIRO_MS = 3800;
+/** Quanto o giro espera depois que a pessoa mexe no carrossel. */
+const RETOMAR_MS = 9000;
+
 export default function Nichos() {
   const trilhaRef = useRef<HTMLDivElement>(null);
+  const secaoRef = useRef<HTMLElement>(null);
+  /** Instante a partir do qual o giro pode voltar a acontecer. */
+  const liberadoEmRef = useRef(0);
+
+  const movimentoReduzido = useMovimentoReduzido();
+  const [aVista, setAVista] = useState(false);
 
   const deslizar = useCallback((direcao: 1 | -1) => {
     const trilha = trilhaRef.current;
@@ -88,8 +156,56 @@ export default function Nichos() {
     trilha.scrollBy({ left: passo * direcao, behavior: "smooth" });
   }, []);
 
+  /** Quem mexeu no carrossel manda: o giro só volta depois de RETOMAR_MS.
+   *  Guardado em ref e conferido no tique — mudar estado aqui recriaria o
+   *  temporizador e o adiamento se perderia no meio do caminho. */
+  const adiarGiro = useCallback(() => {
+    liberadoEmRef.current = performance.now() + RETOMAR_MS;
+  }, []);
+
+  const irPara = useCallback(
+    (direcao: 1 | -1) => {
+      adiarGiro();
+      deslizar(direcao);
+    },
+    [adiarGiro, deslizar]
+  );
+
+  // Girar fora da tela só gastaria bateria e atrapalharia o scroll.
+  useEffect(() => {
+    const alvo = secaoRef.current;
+    if (!alvo) return;
+    const observador = new IntersectionObserver(
+      ([entrada]) => setAVista(entrada.isIntersecting),
+      { threshold: 0.25 }
+    );
+    observador.observe(alvo);
+    return () => observador.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!aVista || movimentoReduzido) return;
+
+    const relogio = setInterval(() => {
+      const trilha = trilhaRef.current;
+      if (!trilha) return;
+      // Ainda dentro da janela de silêncio pedida pela última interação.
+      if (performance.now() < liberadoEmRef.current) return;
+      // Consulta o hover no instante do tique em vez de guardar em estado: um
+      // `mouseleave` que não dispare deixaria o carrossel parado para sempre.
+      if (trilha.matches(":hover")) return;
+      // Chegou ao último card: rebobina para o começo em vez de travar no fim.
+      const noFim =
+        trilha.scrollLeft + trilha.clientWidth >= trilha.scrollWidth - 8;
+      if (noFim) trilha.scrollTo({ left: 0, behavior: "smooth" });
+      else deslizar(1);
+    }, GIRO_MS);
+
+    return () => clearInterval(relogio);
+  }, [aVista, movimentoReduzido, deslizar]);
+
   return (
-    <section id="nichos" className="relative py-24">
+    <section ref={secaoRef} id="nichos" className="relative py-24">
       <div className="mx-auto max-w-6xl px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -102,10 +218,13 @@ export default function Nichos() {
             Segmentos atendidos
           </span>
           <h2 className="mt-5 text-3xl font-bold md:text-4xl">
-            Nichos de <span className="text-primary">Atuação</span>
+            Soluções para <span className="text-primary">diferentes</span> segmentos
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
-            Adaptamos o assistente para qualquer segmento. Se atende pelo WhatsApp, nós automatizamos.
+          <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-text-secondary">
+            Cada área tem desafios próprios de atendimento, vendas e relacionamento.
+            Com a CompanyChat IA, sua empresa organiza o WhatsApp, automatiza processos
+            e adapta o assistente ao seu fluxo para entregar um atendimento mais ágil,
+            organizado e eficiente.
           </p>
         </motion.div>
       </div>
@@ -114,6 +233,9 @@ export default function Nichos() {
       <div className="mx-auto mt-14 max-w-6xl px-4">
         <div
           ref={trilhaRef}
+          onPointerDown={adiarGiro}
+          onTouchStart={adiarGiro}
+          onFocusCapture={adiarGiro}
           className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
           {nichos.map((n, i) => (
@@ -158,7 +280,7 @@ export default function Nichos() {
         <div className="flex items-center gap-3">
           <button
             type="button"
-            onClick={() => deslizar(-1)}
+            onClick={() => irPara(-1)}
             aria-label="Ver segmentos anteriores"
             className="flex h-11 w-11 items-center justify-center rounded-full border border-card-border bg-card text-foreground shadow-sm transition-all hover:border-primary/40 hover:text-primary hover:shadow-md"
           >
@@ -166,7 +288,7 @@ export default function Nichos() {
           </button>
           <button
             type="button"
-            onClick={() => deslizar(1)}
+            onClick={() => irPara(1)}
             aria-label="Ver próximos segmentos"
             className="flex h-11 w-11 items-center justify-center rounded-full border border-card-border bg-card text-foreground shadow-sm transition-all hover:border-primary/40 hover:text-primary hover:shadow-md"
           >

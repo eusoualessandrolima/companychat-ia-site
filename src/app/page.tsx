@@ -6,8 +6,10 @@ import Servicos from "@/components/Servicos";
 import CrmKanban from "@/components/CrmKanban";
 import Beneficios from "@/components/Beneficios";
 import Solucao from "@/components/Solucao";
+import PorteEmpresa from "@/components/PorteEmpresa";
 import Nichos from "@/components/Nichos";
 import Sobre from "@/components/Sobre";
+import Garantias from "@/components/Garantias";
 import PlanosHome from "@/components/PlanosHome";
 import FAQ from "@/components/FAQ";
 import Contato from "@/components/Contato";
@@ -26,8 +28,10 @@ export default function Home() {
         <CrmKanban />
         <Beneficios />
         <Solucao />
+        <PorteEmpresa />
         <Nichos />
         <Sobre />
+        <Garantias />
         <PlanosHome />
         <FAQ />
         <Contato />
