@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /* Empacota o servidor com só o necessário para rodar, o que permite uma
+     imagem enxuta no Coolify (sem `node_modules` inteiro). */
+  output: "standalone",
+
   /* Apex e www serviam o mesmo conteúdo, dividindo o SEO entre dois endereços.
      O canônico é o www (mesmo host usado em metadataBase, sitemap e robots),
      então o apex redireciona para ele. A regra só dispara no host sem www,

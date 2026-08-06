@@ -51,6 +51,35 @@
 
 > `Depoimentos.tsx` foi removido em 2026-07-14 (código morto desde a remoção da seção da home; recuperável via git se necessário).
 
+### Página `/comecar` (`src/app/comecar/page.tsx`)
+
+Quiz de captação para anúncio do Meta. Fora do menu, fora do `sitemap.ts` e com
+`robots: { index: false, follow: false }` — não existe link para ela em nenhum lugar do site.
+Não tem seções: é uma tela por pergunta, sem rolagem. Componentes em `src/components/comecar/`:
+
+| Componente | Arquivo | Descrição |
+|------------|---------|-----------|
+| Quiz | `Quiz.tsx` | Capa + 4 etapas: os três dados de contato numa tela só (nome, empresa, WhatsApp) e depois três perguntas de escolha (quem atende, volume, dor), que avançam sozinhas em 220 ms. Grava no banco a cada etapa. Tela final "Dados enviados com sucesso" com botão "Falar com um especialista" |
+| MetaPixel | `MetaPixel.tsx` | Pixel do Meta; não injeta nada sem `NEXT_PUBLIC_META_PIXEL_ID` |
+
+### Página `/leads` (`src/app/leads/page.tsx`)
+
+Painel dos leads do quiz, protegido por senha única. `noindex` e bloqueado no `robots.ts`.
+
+| Arquivo | Descrição |
+|---------|-----------|
+| `src/lib/leads.ts` | Grava e lê no Postgres próprio (Coolify) com o driver `pg`. Pool guardada no `globalThis` para o hot reload não estourar conexões |
+| `src/lib/painel.ts` | Senha única em `PAINEL_LEADS_SENHA`. O cookie guarda um HMAC da senha, não a senha; comparação com `timingSafeEqual` |
+| `src/components/leads/FormSenha.tsx` | Tela de senha |
+| `src/components/leads/ListaLeads.tsx` | Resumo (total, concluíram, hoje), busca, filtro, cartão por lead com botão de WhatsApp e exportação CSV |
+| `src/app/api/leads/entrar/route.ts` | POST valida a senha e grava o cookie; DELETE encerra a sessão |
+| `src/app/api/leads/csv/route.ts` | Exportação CSV, protegida pelo mesmo cookie. Escapa fórmulas (`=`, `+`, `-`, `@`) para o arquivo não virar execução no Excel |
+| `db/leads_site.sql` | DDL da tabela `leads_site` |
+| `db/README.md` | Como criar o banco no Coolify, a variável `DATABASE_URL` e os cuidados de segurança |
+
+Rota de apoio: `src/app/api/lead/route.ts` — valida o lead, normaliza o telefone para E.164 e
+entrega em `LEAD_WEBHOOK_URL` (com `LEAD_WEBHOOK_TOKEN` opcional como Bearer).
+
 ### Página `/api-oficial` (`src/app/api-oficial/page.tsx`)
 
 Seção dedicada explicando a API Oficial do WhatsApp + calculadora de custo. Componentes em `src/components/api-oficial/`:
@@ -496,6 +525,180 @@ aurora que já existia), com máscara elíptica que apaga nas bordas. É a textu
 traduzida para o dark. O layout dividido (texto + chat animado) foi **mantido de propósito** — o
 deles é centralizado, mas trocar custaria o mock de chat, que é o ativo mais forte da nossa dobra.
 
+### 2026-08-05 — `/comecar`: LP com seções foi descartada, virou quiz
+
+Primeira página do site feita para tráfego pago, não para SEO. Fluxo: anúncio do Meta →
+`/comecar` → 6 perguntas → tela final com "Testar agora no meu WhatsApp" → a Jade atende já
+sabendo tudo o que a pessoa respondeu.
+
+**Primeira versão (descartada no mesmo dia):** landing page longa no padrão da referência de
+WhatsApp API, com hero dividido + formulário e cinco seções embaixo (dor, como funciona, o que
+está incluso, FAQ, CTA final). O dono viu no navegador e reprovou: *"muita seção, muita coisa"*.
+Arquivos preservados no scratchpad da sessão, fora do repositório.
+
+**Versão atual — quiz de tela cheia.** Formato do projeto `--- Arquivados/quiz/company-quiz`,
+que o dono já tinha feito e gostava. Diferenças em relação ao original: as perguntas de escolha
+**avançam sozinhas** ao clicar (o original exigia clicar na opção e depois em "Continuar"), e o
+fim **não redireciona sozinho** — mostra a tela "Pronto, {nome}" com o botão de teste, a pedido
+do dono.
+
+Perguntas, nesta ordem: quem atende hoje → volume diário → maior dor → nome → empresa →
+WhatsApp. As três primeiras qualificam antes de pedir contato: quem desiste no meio ainda
+deixou o perfil, e quem chega ao fim entregou os dados já convencido.
+
+**Aprendizado:** o argumento de "a LP faz o trabalho de venda enquanto a pessoa decide" não
+convenceu na prática. Para este produto e este dono, a página de anúncio é uma tarefa única,
+sem nada em volta. Não repropor seções de conteúdo em `/comecar` sem um motivo novo.
+
+**Descartado do concorrente Datacrazy:** o modal de duas opções ("Agendar demo" / "Call
+express"). Para tráfego frio, obrigar o visitante a escolher antes de entregar o contato é
+atrito puro, e a Jade já agenda dentro da conversa.
+
+**Copy: "teste gratuitamente" foi recusado.** Não existe trial gratuito em `planos-data.ts` e a
+Jade não sustentaria a promessa no WhatsApp. Trocado por "diagnóstico gratuito" e "demonstração
+sem custo e sem compromisso", que já constam do plano Sob medida. Toda a página repete promessas
+que já estão em `planos-data.ts`, `Garantias.tsx` e no FAQ — nenhuma oferta nova foi criada,
+então a base de conhecimento da Jade não precisou ser atualizada.
+
+**Decisões técnicas:**
+- A rota `/api/lead` nunca segura o lead: se o webhook falhar ou não existir, ela responde
+  `{ ok: true, entregue: false }` e o redirecionamento para o WhatsApp acontece igual
+- UTMs e `fbclid` são lidos de `window.location.search` em vez de `useSearchParams`, para a
+  página continuar estática e sem fronteira de Suspense
+- Consentimento por texto sob o botão, não por checkbox obrigatório (menos atrito, mesma
+  ação afirmativa)
+- A página é `noindex` e não entra no `sitemap.ts`: se indexasse, competiria com a home pelas
+  mesmas palavras-chave de Goiânia
+
+**Segunda rodada de ajustes, no mesmo dia:** contato antes da qualificação, persistência no
+banco e painel próprio.
+
+- **Ordem invertida a pedido do dono:** nome, empresa e WhatsApp vêm primeiro; quem atende,
+  volume e dor vêm depois. O raciocínio dele: quem clicou no anúncio já demonstrou interesse,
+  então pode entregar o contato logo, e o lead precisa existir no banco antes das perguntas de
+  perfil. Custo aceito conscientemente: pedir telefone na 3ª tela derruba mais gente do que
+  pedir na 6ª.
+- **Gravação a cada etapa.** Um `crypto.randomUUID()` por visita identifica a linha; cada
+  avanço faz upsert no mesmo `id`. Quem larga no meio fica registrado com `concluido = false`
+  e a etapa em que parou. O clique no botão do WhatsApp usa `navigator.sendBeacon`, que
+  sobrevive à saída da página.
+- **Banco: Postgres próprio no Coolify** (decidido em 2026-08-06, trocando o Supabase que tinha
+  sido escolhido horas antes). Motivo do dono, correto: o plano gratuito do Supabase **pausa o
+  projeto após 7 dias sem atividade**, e um anúncio rodando no fim de semana cairia numa segunda
+  com o banco fora do ar. A VPS já está paga e ligada.
+  - Isso trocou o acesso via PostgREST (`fetch`) pelo driver `pg` com SQL direto, já que
+    Postgres puro não expõe API REST.
+  - O `on conflict do update` usa `coalesce` por coluna e `greatest` na etapa: uma gravação
+    posterior nunca apaga o que veio antes, o que importa porque o rascunho chega incompleto.
+  - Exige expor a porta do Postgres na internet (a Vercel não tem IP fixo para liberar no
+    firewall). Mitigado com senha longa, `sslmode=require` e porta fora da padrão. A alternativa
+    sem exposição nenhuma é hospedar o site no próprio Coolify. Ver `db/README.md`.
+- **Painel com senha única**, não link secreto: link vaza em print e encaminhamento.
+
+**Terceira rodada: copy pelo método Copychefe + revisão `text-quality`.**
+
+Fonte do tom de voz: `~/.claude/Projetos Claude/AlessandroLima/criar-copy/` (agente `copychefe.md`
+e `COPIES-COMPANYCHAT-GOIANIA.md`, com as copies dos anúncios já validadas).
+
+- **Furo corrigido:** o quiz abria pedindo o nome sem prometer nada. Quem vem de anúncio via um
+  pedido antes de uma promessa. A primeira pergunta virou "Vamos colocar uma IA atendendo no seu
+  WhatsApp. Como podemos te chamar?" e o cabeçalho ganhou o selo "Teste sem custo".
+- **Ângulo da página:** *a IA que te atende agora é a mesma que vai atender seus clientes* — o
+  teste é a própria prova. A tela final explora isso: "Repare no tempo que ela leva para
+  responder."
+- **Opções da última pergunta viraram cenário concreto** ("Some gente que estava quase fechando"
+  no lugar de "Perco o lead no meio da conversa"), seguindo a regra de específico vende do
+  Copychefe e o padrão das copies de anúncio.
+- **Micro-copy que dá sensação de construção:** cada campo explica para que serve ("É esse nome
+  que a IA vai usar quando falar com os seus clientes").
+- **Revisão `text-quality`:** os 4 travessões do escopo estão todos em comentários de código, que
+  a skill protege e que seguem o padrão do resto do projeto. Nenhum em texto visível.
+
+**Quarta rodada: visual trazido do quiz antigo.** O dono rodou o `company-quiz` original no
+navegador e pediu três coisas de volta, todas aplicadas:
+
+1. **Capa de abertura** com ícone de robô, headline de curiosidade ("Descubra quantos clientes
+   o seu WhatsApp deixa escapar"), faixa de garantias e botão "Começar agora". Reverte a
+   decisão anterior de entrar direto na pergunta.
+2. **Cartão branco sobre fundo preto**, no lugar do dark uniforme. O contraste é o que dava a
+   sensação de aplicativo no quiz original.
+3. **Opções com emoji em quadrado de gradiente colorido + descrição** em duas linhas.
+
+**Não trazido de propósito:** a faixa de prova social do original ("Mais de 300 empresas já
+transformaram o atendimento") e o "aumentar suas vendas em até 40%". Números não verificáveis
+são risco de reprovação na Meta e viram cobrança em cima da Jade. No lugar entrou o que já é
+compromisso da empresa: implantação inclusa, no ar em até 7 dias, sem fidelidade.
+
+**Correção de premissa apontada pelo dono (importante, não repetir o erro):** o quiz chegou a
+prometer *"converse com a nossa IA e veja como ela atenderia os seus clientes"*. Está errado.
+Quem atende o WhatsApp da CompanyChat é a **Jade, que é comercial** — ela vende a solução, não
+demonstra o assistente que o cliente teria. Prometer teste de atendimento é vender uma coisa e
+entregar outra logo no primeiro contato.
+
+Corrigido em todos os pontos: a capa fala em "fala com um especialista que já vai saber como
+funciona o seu atendimento", a tela final virou "Dados enviados com sucesso" com o botão
+**"Falar com um especialista"**, e a mensagem pré-preenchida virou "Respondi as perguntas no
+site e quero saber como funciona o assistente de IA".
+
+**Regra que fica:** o quiz é peça de **qualificação**, não de demonstração. Qualquer copy que
+sugira teste do produto no WhatsApp do próprio lead está errada enquanto a Jade for comercial.
+
+**Outros ajustes da mesma rodada:** removidas as descrições abaixo do título nas telas de
+digitação (só as de escolha mantêm), "Qual o seu WhatsApp?" virou "Qual o seu WhatsApp com
+DDD?", e a última pergunta (de escolha) ganhou aviso de "Enviando as suas respostas", que antes
+ficava em silêncio durante o envio.
+
+**Contato virou uma tela só (última mudança do dia).** As três perguntas de digitação
+seguidas cansavam antes de a pessoa chegar na parte fácil. Agora: capa → uma tela com nome,
+empresa e WhatsApp → três perguntas de escolha → tela final. Passou de 6 para 4 etapas.
+
+Efeito colateral aceito conscientemente: quem escreve só o nome e desiste **não** fica mais no
+banco, porque a gravação agora só acontece quando os três campos são enviados. Em compensação,
+todo lead gravado já tem telefone, e contato sem telefone não servia para nada. Quem desiste
+depois disso continua registrado com a etapa em que parou.
+
+`TOTAL_PERGUNTAS` em `ListaLeads.tsx` acompanha esse número (hoje 4). Mudou `ETAPAS` no
+`Quiz.tsx`? Muda lá também.
+
+**Banco criado na VPS em 2026-08-06.** Coolify em `coolify.companychatia.com.br`, VPS
+`srv1027472.hstgr.cloud` (72.60.152.110), projeto **CompanyChat IA**:
+
+| | |
+|---|---|
+| Recurso | `leads-site` (postgres:16-alpine), uuid `zodw9ve89i8c3m0hspu3qhqy` |
+| Banco / usuário | `leads_site` / `leads` |
+| Porta pública | 5435 |
+| Tabela | `leads_site`, criada pelo `npm run db:verificar` |
+
+**TLS continua pendente e é bloqueante para lead real.** O toggle existe e persiste (o método
+Livewire é `instantSaveSSL`, no componente `project.database.postgresql.status-info`; a API REST
+recusa o campo com "This field is not allowed"). O Coolify chega a gerar o certificado, mas o
+container **não sobe** com SSL ligado: fica em `restarting:unhealthy` e a porta para de
+responder. Revertido para restaurar o serviço. Suspeita: permissão do arquivo de chave privada,
+que o Postgres exige em 0600 com dono correto. Diagnosticar exige SSH, e a API da Hostinger
+cadastra a chave pública (id 553749) mas não a anexa à VM por nenhuma rota encontrada.
+
+**Detalhes da UI do Coolify que custaram tempo:** a URL de um recurso é
+`/project/{uuid}/environment/{uuid}/database/{uuid}`; qualquer outro formato redireciona para o
+dashboard sem erro. Os ids de campo do Livewire mudam a cada render, então seletores precisam
+usar prefixo (`input[id^="enableSsl-"]`) ou ir pelo `window.Livewire.all()`.
+
+**Rascunho de quem desiste no meio do preenchimento.** Para fechar o buraco criado pela tela
+única de contato: ouvintes de `visibilitychange` e `pagehide` gravam por `sendBeacon` o que já
+foi digitado, com `etapa = 0`. `visibilitychange` é o que importa no celular, onde sair é
+trocar de aplicativo, não fechar a aba. Só dispara se algum campo tiver mais de um caractere,
+então quem abre e fecha não vira lixo no painel. Como o `id` é o mesmo da visita, um envio
+posterior atualiza a linha em vez de duplicar. No painel esses leads aparecem como
+**"Não chegou a enviar"**.
+
+**CTA final:** "Falar com um especialista" virou **"Falar no WhatsApp agora"**, mais direto.
+Recusado "Testar agora no WhatsApp", que recria a promessa de demonstração corrigida acima.
+
+**Validado ponta a ponta em 2026-08-05, contra um PostgREST falso local:** as 6 perguntas
+geram 6 upserts na mesma linha (nome já na etapa 1, telefone na 3), o clique no WhatsApp marca
+`clicou_whatsapp`, o painel separa quem concluiu de quem parou no meio, o CSV sai com acentos
+corretos e responde 401 sem cookie, e senha errada é recusada. Sem overflow horizontal em 390px.
+
 ---
 
 ## Aprendizados e Padrões
@@ -514,6 +717,12 @@ deles é centralizado, mas trocar custaria o mock de chat, que é o ativo mais f
 
 ## Próximos Passos
 
+- [ ] **Bloqueante para o anúncio:** criar o Postgres no Coolify, rodar `db/leads_site.sql` e cadastrar `DATABASE_URL` no Vercel (passo a passo em `db/README.md`). Sem isso o quiz funciona mas nenhum lead é salvo
+- [ ] Cadastrar `PAINEL_LEADS_SENHA` no Vercel para liberar `/leads`
+- [ ] Cadastrar `NEXT_PUBLIC_META_PIXEL_ID` no Vercel — sem o pixel a campanha do Meta não otimiza por conversão nem monta público de retargeting
+- [ ] Opcional: `LEAD_WEBHOOK_URL` (n8n/CRM) para receber o lead concluído além do banco
+- [ ] Commit + push de `/comecar` (via @devops) → deploy automático no Vercel
+- [ ] Depois de rodar o anúncio: medir onde as pessoas abandonam o quiz (hoje só o lead completo chega ao webhook; abandono no meio não é registrado)
 - [ ] Decidir se o padrão visual de `/company-ai` vai para as outras páginas internas (o usuário quis ver no ar primeiro, em 2026-07-30)
 - [ ] Instalar a CLI do CodeRabbit em `~/.local/bin/coderabbit`: o gate de revisão automática foi pulado nos três pushes de 2026-07-30
 - [ ] Revisar com o usuário o texto da consultoria em `company-ai-data.ts`: descreve um serviço ainda não vendido
