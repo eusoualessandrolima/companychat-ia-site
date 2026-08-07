@@ -18,7 +18,7 @@ const faqs = [
   {
     pergunta: "Preciso da API Oficial do WhatsApp para ter o assistente?",
     resposta:
-      "Recomendamos sim. A API Oficial é o que garante número verificado, sem risco de bloqueio, e libera o volume de atendimento. Cuidamos de todo esse processo com a Meta por você. Na página da API Oficial você entende como funciona e simula o custo por mensagem.",
+      "Recomendamos sim. A API Oficial é o que garante número verificado, sem o risco de bloqueio das APIs não oficiais, e libera o volume de atendimento. Cuidamos de todo esse processo com a Meta por você. Na página da API Oficial você entende como funciona e simula o custo por mensagem.",
   },
   {
     pergunta: "Ele consegue passar o atendimento para a minha equipe?",

@@ -71,7 +71,8 @@ export default function DisparoHero() {
           >
             Envie campanhas de marketing para milhares de contatos com templates
             aprovados, acompanhe entregas e leituras em tempo real e integre tudo ao
-            seu CRM. Sem risco de bloqueio, no número oficial da sua empresa.
+            seu CRM. Sem o risco de bloqueio das APIs não oficiais, no número oficial
+            da sua empresa.
           </motion.p>
 
           <motion.div
@@ -107,7 +108,7 @@ export default function DisparoHero() {
             className="mt-8 flex items-center justify-center gap-2 text-xs text-dark-muted lg:justify-start"
           >
             <ShieldCheck aria-hidden="true" className="h-4 w-4 text-primary" />
-            100% via API Oficial da Meta · número verificado, sem risco de banimento
+            100% via API Oficial da Meta · número verificado pela Meta
           </motion.div>
         </div>
 

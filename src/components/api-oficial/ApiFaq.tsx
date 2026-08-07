@@ -8,7 +8,7 @@ const faqs = [
   {
     pergunta: "O que é a API Oficial do WhatsApp?",
     resposta:
-      "É a forma oficial da Meta para empresas atenderem no WhatsApp de forma automatizada e em escala, com número verificado, selo de empresa e sem risco de bloqueio. É o que permite conectar a IA, o CRM e disparar mensagens com segurança.",
+      "É a forma oficial da Meta para empresas atenderem no WhatsApp de forma automatizada e em escala, com número verificado, selo de empresa e sem o risco de bloqueio das APIs não oficiais. É o que permite conectar a IA, o CRM e disparar mensagens com segurança.",
   },
   {
     pergunta: "Quando eu pago e quando é gratuito?",
@@ -28,7 +28,7 @@ const faqs = [
   {
     pergunta: "Preciso da API Oficial para usar a IA da CompanyChat?",
     resposta:
-      "Para um atendimento profissional, em escala e sem risco de bloqueio, sim, a API Oficial é o caminho recomendado. Nós cuidamos de toda a configuração: verificação do número, aprovação de templates e integração com a IA.",
+      "Para um atendimento profissional, em escala e sem o risco de bloqueio das APIs não oficiais, sim, a API Oficial é o caminho recomendado. Nós cuidamos de toda a configuração: verificação do número, aprovação de templates e integração com a IA.",
   },
 ];
 

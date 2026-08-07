@@ -40,7 +40,7 @@ const solucoes: Solucao[] = [
     icon: BadgeCheck,
     nome: "API Oficial",
     href: "/api-oficial",
-    desc: "WhatsApp verificado pela Meta, sem risco de bloqueio. Cuidamos de toda a implementação por você.",
+    desc: "WhatsApp verificado pela Meta, sem o risco de bloqueio das APIs não oficiais. Cuidamos de toda a implementação por você.",
     text: "text-accent-amber",
     bg: "bg-accent-amber/10",
     bar: "from-accent-amber to-[#fbbf24]",
