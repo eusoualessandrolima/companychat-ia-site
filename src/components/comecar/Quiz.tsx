@@ -52,20 +52,25 @@ type Etapa =
 const ETAPAS: Etapa[] = [
   {
     tipo: "contato",
-    pergunta: "Para começar, seus dados",
-    ajuda: "É por aqui que a gente vai falar com você.",
+    pergunta: "Vamos personalizar sua experiência",
+    ajuda: "Preencha seus dados para adaptar a demonstração ao seu negócio.",
     campos: [
-      { campo: "nome", rotulo: "Seu nome", exemplo: "Como podemos te chamar", icone: User },
+      {
+        campo: "nome",
+        rotulo: "Qual é o seu nome?",
+        exemplo: "Ex.: João Silva",
+        icone: User,
+      },
       {
         campo: "empresa",
-        rotulo: "Nome da empresa",
-        exemplo: "Do jeito que o cliente conhece",
+        rotulo: "Qual é o nome da sua empresa?",
+        exemplo: "Ex.: Empresa Modelo",
         icone: Building2,
       },
       {
         campo: "telefone",
-        rotulo: "WhatsApp com DDD",
-        exemplo: "(62) 99999-9999",
+        rotulo: "Qual é o seu WhatsApp com DDD?",
+        exemplo: "Ex.: (62) 99999-9999",
         icone: Phone,
         telefone: true,
       },
@@ -212,7 +217,10 @@ function montarLink(r: Respostas) {
 /* ─── Fundo compartilhado ─────────────────────────────── */
 function Fundo() {
   return (
-    <div className="pointer-events-none absolute inset-0">
+    /* overflow-clip aqui, e não na página: os blobs saem da caixa de
+       propósito e sem isto esticariam o documento, revelando uma faixa
+       clara abaixo do rodapé em telas baixas. */
+    <div className="pointer-events-none absolute inset-0 overflow-clip">
       <div
         className="absolute inset-0 opacity-60"
         style={{
@@ -256,17 +264,16 @@ function Capa({ aoComecar }: { aoComecar: () => void }) {
     >
       <div className="flex w-fit items-center gap-2.5 rounded-full border border-card-border bg-section px-4 py-2 text-sm font-medium text-text-secondary">
         <Bot aria-hidden="true" className="h-4 w-4 text-primary" />
-        Assistente de IA treinado no seu negócio
+        IA para atendimento no WhatsApp
       </div>
 
       <h1 className="mt-6 text-[clamp(26px,3.6vw,36px)] font-bold leading-[1.08] tracking-[-0.02em] text-foreground">
-        Descubra como colocar um{" "}
-        <span className="text-gradient-primary">assistente de IA</span> no seu atendimento
+        Veja a <span className="text-gradient-primary">IA atendendo</span> no seu WhatsApp
       </h1>
 
       <p className="mt-5 leading-relaxed text-text-secondary">
-        Responda quatro perguntas rápidas sobre a sua operação. No fim, você fala com um
-        especialista que já vai saber como funciona o seu atendimento hoje.
+        São 4 etapas rápidas sobre você e o seu atendimento. No fim, você conversa com a
+        nossa IA no WhatsApp, e ela já chega sabendo como a sua operação funciona.
       </p>
 
       <ul className="mt-7 space-y-3">
@@ -275,7 +282,9 @@ function Capa({ aoComecar }: { aoComecar: () => void }) {
             <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-light">
               <Check aria-hidden="true" className="h-3 w-3 text-primary" />
             </span>
-            <span className="text-[15px] leading-snug text-foreground">{beneficio}</span>
+            <span className="min-w-0 break-words text-[15px] leading-snug text-foreground">
+              {beneficio}
+            </span>
           </li>
         ))}
       </ul>
@@ -349,13 +358,13 @@ function Final({
         <Check aria-hidden="true" className="h-8 w-8 text-primary" />
       </motion.div>
 
-      <h2 className="mt-6 text-[clamp(24px,3.2vw,32px)] font-bold leading-tight tracking-[-0.02em] text-foreground">
+      <h2 className="mt-6 break-words text-[clamp(24px,3.2vw,32px)] font-bold leading-tight tracking-[-0.02em] text-foreground">
         Pronto, {respostas.nome.trim().split(" ")[0]}.
         <span className="mt-1 block text-primary">Dados enviados com sucesso.</span>
       </h2>
       <p className="mx-auto mt-4 max-w-md leading-relaxed text-text-secondary">
-        Agora é só chamar a gente no WhatsApp. A conversa já começa com tudo o que você
-        respondeu aqui, então ninguém vai repetir as mesmas perguntas.
+        Agora é só falar com a nossa IA no WhatsApp. A conversa já começa com tudo o que
+        você respondeu aqui, então ninguém vai repetir as mesmas perguntas.
       </p>
 
       <a
@@ -573,14 +582,16 @@ export default function Quiz() {
   const terminou = indice >= ETAPAS.length;
 
   return (
-    <div className="relative flex min-h-svh flex-col overflow-hidden bg-dark-base">
+    /* overflow-x-clip em vez de overflow-hidden: contém o Fundo decorativo
+       sem travar a rolagem vertical em zoom alto ou tela baixa. */
+    <div className="relative flex min-h-dvh flex-col overflow-x-clip bg-dark-base">
       <Fundo />
 
-      <header className="relative flex items-center justify-center px-4 py-7">
+      <header className="relative flex items-center justify-center px-4 py-7 pt-[max(1.75rem,env(safe-area-inset-top))]">
         <Logo dark />
       </header>
 
-      <main className="relative flex flex-1 items-start justify-center px-4 pb-12 sm:items-center">
+      <main className="relative flex flex-1 items-start justify-center px-[max(1rem,env(safe-area-inset-left))] pb-12 sm:items-center">
         <div className="w-full max-w-xl">
           <AnimatePresence mode="wait">
             {!iniciado ? (
@@ -676,15 +687,20 @@ export default function Quiz() {
 
                       <button
                         type="submit"
-                        className="mt-6 flex w-full items-center justify-center gap-2.5 rounded-full bg-primary px-8 py-4 font-semibold text-white shadow-lg shadow-primary/25 transition-colors hover:bg-primary-dark"
+                        /* px reduzido no mobile: o rótulo é longo e a 320px
+                           quebrava em duas linhas com a seta desalinhada. */
+                        className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-4 text-[15px] font-semibold leading-snug text-white shadow-lg shadow-primary/25 transition-colors hover:bg-primary-dark sm:gap-2.5 sm:px-8 sm:text-base"
                       >
-                        Enviar e continuar
-                        <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                        Continuar para as perguntas
+                        <ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0" />
                       </button>
 
-                      <p className="mt-4 flex items-center justify-center gap-2 text-xs text-text-secondary">
-                        <Lock aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
-                        Seus dados ficam só com a CompanyChat IA
+                      <p className="mt-4 flex items-start justify-center gap-2 text-xs leading-relaxed text-text-secondary">
+                        <Lock aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                        <span className="min-w-0">
+                          Seus dados serão usados para personalizar a experiência e
+                          apresentar a CompanyChat IA.
+                        </span>
                       </p>
                     </form>
                   ) : (
@@ -713,11 +729,13 @@ export default function Quiz() {
                                 {opcao.emoji}
                               </span>
 
-                              <span className="flex-1">
-                                <span className="block font-bold text-foreground">
+                              {/* min-w-0 + wrap: sem isso um texto longo empurra
+                                  o card para fora em telas de 320px. */}
+                              <span className="min-w-0 flex-1">
+                                <span className="block break-words font-bold text-foreground">
                                   {opcao.valor}
                                 </span>
-                                <span className="mt-0.5 block text-sm leading-snug text-text-secondary">
+                                <span className="mt-0.5 block break-words text-sm leading-snug text-text-secondary">
                                   {opcao.descricao}
                                 </span>
                               </span>
@@ -767,9 +785,9 @@ export default function Quiz() {
         </div>
       </main>
 
-      <footer className="relative flex items-center justify-center gap-2 px-4 pb-8 text-center text-xs text-dark-muted/70">
+      <footer className="relative flex items-center justify-center gap-2 px-4 pb-[max(2rem,env(safe-area-inset-bottom))] text-center text-xs text-dark-muted/70">
         <Lock aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
-        Leva menos de um minuto. Seus dados ficam só com a CompanyChat IA.
+        Leva menos de um minuto.
       </footer>
     </div>
   );

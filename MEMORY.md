@@ -670,7 +670,44 @@ depois disso continua registrado com a etapa em que parou.
 | Porta pública | 5435 |
 | Tabela | `leads_site`, criada pelo `npm run db:verificar` |
 
-**TLS continua pendente e é bloqueante para lead real.** O toggle existe e persiste (o método
+**Migração para o Coolify (2026-08-06).** Resolveu o problema de TLS pela raiz: o site saiu da
+Vercel e passou a rodar na mesma VPS do banco.
+
+| | |
+|---|---|
+| Aplicação | `site-companychat`, uuid `rk7m8v4yjc9q4d7vu0jfae2c` |
+| Build | Dockerfile na raiz do repo, Next em `output: "standalone"`, imagem de 314 MB |
+| Domínios | `www.companychatia.com.br`, apex e `site.72-60-152-110.sslip.io` (rota de emergência) |
+| DNS | `www` e `@` viraram registros **A** para `72.60.152.110` em 2026-08-06 (antes: CNAME/A da Vercel). Backup da zona no scratchpad da sessão |
+| Reversão | restaurar `www` CNAME `cname.vercel-dns.com` e `@` A `76.76.21.21`; o deploy da Vercel segue intacto |
+
+**Armadilha na troca de DNS:** depois que o DNS propaga, o Coolify **não emite o certificado
+sozinho**. O Traefik serve o certificado padrão e o site fica inacessível por HTTPS
+(`curl` acusa `unable to get local issuer certificate`, o navegador mostra aviso de segurança).
+A correção é forçar um redeploy da aplicação, que reconfigura o Traefik e dispara o pedido ao
+Let's Encrypt. Da próxima vez: **trocar o DNS e já disparar o redeploy em seguida**, sem esperar.
+| Deploy automático da Vercel | **desconectado** (`vercel git disconnect`), o site antigo segue servindo o `www` |
+
+**Como o site fala com o banco:** `postgres://leads:...@72.60.152.110:5435/leads_site?sslmode=disable`.
+Parece inseguro, mas não é: o container e o Postgres estão no mesmo host, então o pacote não
+atravessa a internet. Duas alternativas melhores foram tentadas e falharam nesta versão do
+Coolify (4.1.2):
+
+- **Nome interno do container** (`@zodw9ve89i8c3m0hspu3qhqy:5432`): não resolve, mesmo com os
+  dois recursos apontando para `destination.network = coolify`. Não há toggle de "connect to
+  predefined network" para aplicações com Dockerfile.
+- **`host.docker.internal`**: dá `ENOTFOUND` no Linux, e o `custom_docker_run_options` com
+  `--add-host=...:host-gateway` persistiu na API mas não surtiu efeito no container.
+
+Se um dia o Coolify passar a resolver o nome interno, troque a URL e feche a porta 5435.
+
+**Sequência de erros que levou até aqui, para não repetir a investigação:** `gravado: false`
+silencioso → log do container mostra `ENOTFOUND host.docker.internal` → troca para o IP →
+`The server does not support SSL connections` (prova de que alcançou o banco) → `sslmode=disable`
+→ `gravado: true`.
+
+**TLS no Postgres continua desligado, mas deixou de ser bloqueante** depois da migração, porque
+nada trafega mais pela internet aberta. O histórico do que falhou: O toggle existe e persiste (o método
 Livewire é `instantSaveSSL`, no componente `project.database.postgresql.status-info`; a API REST
 recusa o campo com "This field is not allowed"). O Coolify chega a gerar o certificado, mas o
 container **não sobe** com SSL ligado: fica em `restarting:unhealthy` e a porta para de

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Outfit, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import StructuredData from "@/components/StructuredData";
@@ -14,6 +14,15 @@ const bricolage = Bricolage_Grotesque({
   display: "swap",
   variable: "--font-bricolage",
 });
+
+/* `viewportFit: cover` deixa o conteúdo alcançar a borda em telas com notch;
+   os paddings de safe-area no Quiz cuidam para nada ficar sob o recorte.
+   Zoom liberado de propósito: bloquear escala quebra acessibilidade. */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(

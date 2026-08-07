@@ -7,7 +7,7 @@ import MetaPixel from "@/components/comecar/MetaPixel";
 export const metadata: Metadata = {
   title: "Teste o assistente de IA no seu WhatsApp | CompanyChat IA",
   description:
-    "Responda seis perguntas rápidas e veja o assistente de IA atendendo no seu WhatsApp.",
+    "São 4 etapas rápidas. No fim, você conversa com a nossa IA no WhatsApp, e ela já chega sabendo como o seu atendimento funciona.",
   robots: { index: false, follow: false },
   alternates: { canonical: "/comecar" },
 };

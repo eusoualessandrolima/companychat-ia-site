@@ -4,6 +4,10 @@
 FROM node:22-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
+# O Next precisa das devDependencies para compilar, então não dá para omitir
+# o grupo inteiro. O Playwright (usado só em tests/responsivo.mjs) baixaria
+# ~150 MB de browsers no postinstall: aqui só o pacote é instalado.
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 RUN npm ci
 
 FROM node:22-alpine AS builder

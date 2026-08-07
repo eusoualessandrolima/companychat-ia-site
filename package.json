@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:verificar": "node db/verificar.mjs"
+    "db:verificar": "node db/verificar.mjs",
+    "test:responsivo": "node tests/responsivo.mjs"
   },
   "dependencies": {
     "@types/pg": "^8.20.4",
@@ -25,6 +26,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "^16.2.10",
+    "playwright": "^1.62.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
