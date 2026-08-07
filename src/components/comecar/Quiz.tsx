@@ -190,6 +190,16 @@ const VAZIO: Respostas = {
   telefone: "",
 };
 
+/** Lead com time OU volume de mensagens relevante.
+ *
+ *  Só o quadrante mais frio fica de fora — quem atende sozinho e recebe até
+ *  20 mensagens por dia. Autônomo com volume alto continua qualificado: no
+ *  histórico da operação, advogado solo é cliente real. Porte pequeno não é
+ *  o mesmo que lead ruim. */
+function temPorte(r: Respostas) {
+  return r.equipe !== "Só eu" || r.volume !== "Até 20 por dia";
+}
+
 function mascararTelefone(valor: string) {
   const d = valor.replace(/\D/g, "").slice(0, 11);
   if (d.length <= 2) return d;
@@ -511,6 +521,13 @@ export default function Quiz() {
     await registrar(finais, { etapa: ETAPAS.length, concluido: true });
 
     window.fbq?.("track", "Lead");
+
+    // Sinal de porte para o Meta. `Lead` conta todo mundo — o algoritmo trata
+    // um autônomo de 10 mensagens por dia igual a uma clínica de 100 e vai
+    // atrás do mais barato, que é sempre o menor. Este evento separa quem tem
+    // time ou volume. Só medição por enquanto; vira alvo de otimização quando
+    // a verba comportar o volume que a fase de aprendizagem exige.
+    if (temPorte(finais)) window.fbq?.("track", "LeadQualificado");
     setLink(montarLink(finais));
     setEnviando(false);
     setIndice(ETAPAS.length);
@@ -522,6 +539,11 @@ export default function Quiz() {
       concluir(finais);
       return;
     }
+    // Fim da etapa de contato: o lead já está no banco com nome e telefone.
+    // É o evento intermediário de maior volume — serve de alvo de otimização
+    // quando `Lead` não gera conversões suficientes para a campanha aprender.
+    if (indice === 0) window.fbq?.("track", "InitiateCheckout");
+
     // Não esperamos a resposta: a próxima pergunta entra na hora.
     registrar(finais, { etapa: indice + 1 });
     setIndice(indice + 1);
@@ -589,7 +611,13 @@ export default function Quiz() {
         <div className="w-full max-w-xl">
           <AnimatePresence mode="wait">
             {!iniciado ? (
-              <Capa key="capa" aoComecar={() => setIniciado(true)} />
+              <Capa
+                key="capa"
+                aoComecar={() => {
+                  window.fbq?.("track", "ViewContent");
+                  setIniciado(true);
+                }}
+              />
             ) : terminou ? (
               <Final
                 key="final"
