@@ -10,7 +10,6 @@ import {
   Loader2,
   Lock,
   Phone,
-  ShieldCheck,
   User,
 } from "lucide-react";
 import Logo from "@/components/Logo";
@@ -293,16 +292,11 @@ function Capa({ aoComecar }: { aoComecar: () => void }) {
         type="button"
         onClick={aoComecar}
         whileTap={{ scale: 0.98 }}
-        className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-full bg-primary px-8 py-4 text-lg font-semibold text-white shadow-xl shadow-primary/30 transition-colors hover:bg-primary-dark"
+        className="animate-cta-pulse mt-8 flex w-full items-center justify-center gap-2.5 rounded-full bg-primary px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-primary-dark"
       >
         Começar agora
-        <ArrowRight aria-hidden="true" className="h-5 w-5" />
+        <ArrowRight aria-hidden="true" className="h-5 w-5 shrink-0" />
       </motion.button>
-
-      <p className="mt-6 flex items-center gap-2 text-xs text-text-secondary">
-        <ShieldCheck aria-hidden="true" className="h-4 w-4 shrink-0 text-primary" />
-        Configuração e treinamento por nossa conta, no ar em até 7 dias
-      </p>
     </motion.div>
   );
 }

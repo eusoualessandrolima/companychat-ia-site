@@ -89,6 +89,14 @@ body::before {
   50%       { box-shadow: 0 0 0 12px rgba(37, 211, 102, 0), 0 8px 32px rgba(0,0,0,0.45); }
 }
 
+/* Pulso do CTA da landing de anúncio. Só box-shadow, sem transform: o botão
+   é um motion.button com whileTap, e uma animação CSS de transform
+   sobrescreveria o feedback de toque do Framer Motion. */
+@keyframes cta-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 171, 122, 0.5), 0 12px 32px rgba(0, 171, 122, 0.28); }
+  50%       { box-shadow: 0 0 0 16px rgba(0, 171, 122, 0), 0 12px 32px rgba(0, 171, 122, 0.28); }
+}
+
 @keyframes blob-float {
   0%, 100% { transform: translate(0, 0) scale(1); }
   33%       { transform: translate(40px, -60px) scale(1.08); }
@@ -187,6 +195,7 @@ body::before {
 .animate-blob-float-slow { animation: blob-float-slow 16s ease-in-out infinite; }
 .animate-dot-ping        { animation: dot-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite; }
 .animate-breath-glow     { animation: breath-glow  2.5s ease-in-out infinite; }
+.animate-cta-pulse       { animation: cta-pulse    2.2s ease-in-out infinite; }
 
 .animate-gradient-border {
   background-size: 300% 300%;
