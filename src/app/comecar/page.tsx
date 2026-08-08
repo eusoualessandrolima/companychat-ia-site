@@ -17,6 +17,24 @@ export const metadata: Metadata = {
     "atendimento automatizado com IA",
     "IA para atendimento",
   ],
+  /* openGraph próprio pelo mesmo motivo das keywords: o do layout fala do
+     site inteiro ("disparo em massa e CRM"), termos que não descrevem esta
+     landing e que apareceriam na revisão do anúncio e em qualquer
+     compartilhamento do link. */
+  openGraph: {
+    title: "Veja a IA atendendo no seu WhatsApp | CompanyChat IA",
+    description:
+      "São 4 etapas rápidas. No fim, você conversa com a nossa IA no WhatsApp, e ela já chega sabendo como o seu atendimento funciona.",
+    type: "website",
+    locale: "pt_BR",
+    siteName: "CompanyChat IA",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Veja a IA atendendo no seu WhatsApp | CompanyChat IA",
+    description:
+      "São 4 etapas rápidas. No fim, você conversa com a nossa IA no WhatsApp, e ela já chega sabendo como o seu atendimento funciona.",
+  },
   robots: { index: false, follow: false },
   alternates: { canonical: "/comecar" },
 };
