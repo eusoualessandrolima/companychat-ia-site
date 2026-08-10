@@ -736,6 +736,30 @@ geram 6 upserts na mesma linha (nome já na etapa 1, telefone na 3), o clique no
 `clicou_whatsapp`, o painel separa quem concluiu de quem parou no meio, o CSV sai com acentos
 corretos e responde 401 sem cookie, e senha errada é recusada. Sem overflow horizontal em 390px.
 
+### 2026-08-10 — Lead do quiz cai direto no CRM (coluna "Lead novo")
+
+O lead deixou de morar só no painel `/leads`: ele agora entra no CRM Comercial
+(`crm.companychatia.com.br` → Leads & Oportunidades → **Lead novo**), que é a tela
+que o dono já abre todo dia enquanto o anúncio roda.
+
+O gancho já existia e estava sem destino: `entregarNoWebhook` em
+`src/app/api/lead/route.ts` só precisava de `LEAD_WEBHOOK_URL`. Duas mudanças do lado
+do site:
+
+- **Quando avisar** — antes o webhook só saía com o quiz concluído. Como nome, empresa
+  e WhatsApp são capturados **na etapa 1**, esperar o fim descartava justamente quem
+  travou no meio — metade da verba de anúncio. Agora sai quando o lead fica
+  *contatável* (nome + telefone com DDD) e só nos marcos que mudam o card: nascer,
+  concluir e clicar no WhatsApp (`contatavel` + `marcoDoLead` na rota). As etapas 2 e 3
+  gravam no banco sem incomodar o CRM.
+- **`salvarLead` devolve `inserido`** (`returning (xmax = 0)`) — é assim que a rota sabe
+  que a linha acabou de nascer, em vez de ser mais uma etapa da mesma visita.
+
+O receptor mora no outro repositório (`company-crm`): Edge Function `lead-site` +
+RPC `com_lead_site_registrar`, idempotente pelo `id` do lead — reenvio não duplica card.
+Variáveis: `LEAD_WEBHOOK_URL` (URL da função) e `LEAD_WEBHOOK_TOKEN` (mesmo valor do
+`LEAD_SITE_TOKEN` lá).
+
 ---
 
 ## Aprendizados e Padrões
@@ -757,7 +781,7 @@ corretos e responde 401 sem cookie, e senha errada é recusada. Sem overflow hor
 - [ ] **Bloqueante para o anúncio:** criar o Postgres no Coolify, rodar `db/leads_site.sql` e cadastrar `DATABASE_URL` no Vercel (passo a passo em `db/README.md`). Sem isso o quiz funciona mas nenhum lead é salvo
 - [ ] Cadastrar `PAINEL_LEADS_SENHA` no Vercel para liberar `/leads`
 - [ ] Cadastrar `NEXT_PUBLIC_META_PIXEL_ID` no Vercel — sem o pixel a campanha do Meta não otimiza por conversão nem monta público de retargeting
-- [ ] Opcional: `LEAD_WEBHOOK_URL` (n8n/CRM) para receber o lead concluído além do banco
+- [ ] Cadastrar `LEAD_WEBHOOK_URL` + `LEAD_WEBHOOK_TOKEN` no Coolify e redeployar — é o que liga o quiz ao CRM (Edge Function `lead-site`, decisão de 2026-08-10). Sem isso o lead continua só no `/leads`
 - [ ] Commit + push de `/comecar` (via @devops) → deploy automático no Vercel
 - [ ] Depois de rodar o anúncio: medir onde as pessoas abandonam o quiz (hoje só o lead completo chega ao webhook; abandono no meio não é registrado)
 - [ ] Decidir se o padrão visual de `/company-ai` vai para as outras páginas internas (o usuário quis ver no ar primeiro, em 2026-07-30)

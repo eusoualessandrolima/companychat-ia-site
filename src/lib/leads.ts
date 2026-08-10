@@ -60,6 +60,14 @@ function pool() {
 
 /** Grava ou atualiza o lead. Chamado a cada etapa do quiz, então a linha
  *  existe desde o primeiro envio e o abandono no meio fica registrado. */
+export type ResultadoGravacao = {
+  ok: boolean;
+  gravado: boolean;
+  /** Verdadeiro só na primeira gravação da visita. Quem consome o lead lá fora
+   *  (CRM) usa isto para saber que é um lead novo, e não mais uma etapa. */
+  inserido: boolean;
+};
+
 export async function salvarLead(lead: {
   id: string;
   nome: string | null;
@@ -73,12 +81,12 @@ export async function salvarLead(lead: {
   concluido: boolean;
   clicou_whatsapp: boolean;
   origem: Record<string, unknown>;
-}) {
+}): Promise<ResultadoGravacao> {
   const conexao = pool();
-  if (!conexao) return { ok: true, gravado: false };
+  if (!conexao) return { ok: true, gravado: false, inserido: false };
 
   try {
-    await conexao.query(
+    const { rows } = await conexao.query<{ inserido: boolean }>(
       `insert into leads_site (
          id, nome, empresa, telefone, telefone_e164, equipe, volume, dor,
          etapa, concluido, clicou_whatsapp, origem
@@ -100,7 +108,10 @@ export async function salvarLead(lead: {
                              when leads_site.origem = '{}'::jsonb then excluded.origem
                              else leads_site.origem
                            end,
-         atualizado_em   = now()`,
+         atualizado_em   = now()
+       -- xmax = 0 é a marca do INSERT: numa linha que veio do DO UPDATE ele
+       -- carrega o id da transação que a atualizou.
+       returning (xmax = 0) as inserido`,
       [
         lead.id,
         lead.nome,
@@ -117,10 +128,10 @@ export async function salvarLead(lead: {
       ]
     );
 
-    return { ok: true, gravado: true };
+    return { ok: true, gravado: true, inserido: rows[0]?.inserido === true };
   } catch (erro) {
     console.error("Falha ao gravar lead no Postgres:", erro);
-    return { ok: true, gravado: false };
+    return { ok: true, gravado: false, inserido: false };
   }
 }
 

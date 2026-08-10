@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { salvarLead } from "@/lib/leads";
 
-/** Destino opcional além do banco (n8n, CRM). Só dispara quando o lead
- *  termina o quiz — não faz sentido notificar a cada pergunta. */
+/** Destino opcional além do banco (CRM, n8n). O quiz grava a cada etapa, mas o
+ *  webhook só sai nos marcos que mudam alguma coisa lá fora — ver `marcoDoLead`. */
 const WEBHOOK = process.env.LEAD_WEBHOOK_URL;
 const TOKEN = process.env.LEAD_WEBHOOK_TOKEN;
 
@@ -13,6 +13,24 @@ type Corpo = Record<string, unknown>;
 function texto(valor: unknown, limite = 120) {
   const limpo = typeof valor === "string" ? valor.trim().slice(0, limite) : "";
   return limpo || null;
+}
+
+/** Um lead vira card no CRM quando dá para ligar para ele: nome e um WhatsApp
+ *  com DDD. Sem isso é rascunho de digitação, não lead. */
+function contatavel(lead: { nome: string | null; telefone_e164: string | null }) {
+  return Boolean(lead.telefone_e164) && (lead.nome?.length ?? 0) >= 2;
+}
+
+/** Os momentos em que vale avisar o CRM. O quiz manda uma gravação por etapa;
+ *  destas, só três mudam o card: ele nascer, o lead terminar o quiz (traz
+ *  equipe/volume/dor) e ele abrir a conversa no WhatsApp. A etapa 1 entra
+ *  porque é quando o contato fica completo — a linha pode ter nascido antes,
+ *  como rascunho, sem telefone. */
+function marcoDoLead(
+  lead: { etapa: number; concluido: boolean; clicou_whatsapp: boolean },
+  inserido: boolean
+) {
+  return inserido || lead.etapa === 1 || lead.concluido || lead.clicou_whatsapp;
 }
 
 async function entregarNoWebhook(lead: Record<string, unknown>) {
@@ -71,10 +89,9 @@ export async function POST(requisicao: Request) {
         : {},
   };
 
-  const { gravado } = await salvarLead(lead);
+  const { gravado, inserido } = await salvarLead(lead);
 
-  // O webhook recebe o lead completo uma vez só, quando o quiz termina.
-  if (lead.concluido && corpo.clicouWhatsapp !== true) {
+  if (contatavel(lead) && marcoDoLead(lead, inserido)) {
     await entregarNoWebhook(lead);
   }
 
