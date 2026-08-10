@@ -1,5 +1,5 @@
 export const WHATSAPP_NUMBER =
-  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "5564993054630";
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "556493054630";
 
 /** Número do suporte. Sem variável definida, cai no mesmo número do comercial —
  *  o que muda é a mensagem, que já entrega o contexto para a Jade triar. */
