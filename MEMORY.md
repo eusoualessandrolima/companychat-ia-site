@@ -62,6 +62,23 @@ Não tem seções: é uma tela por pergunta, sem rolagem. Componentes em `src/co
 | Quiz | `Quiz.tsx` | Capa + 4 etapas: os três dados de contato numa tela só (nome, empresa, WhatsApp) e depois três perguntas de escolha (quem atende, volume, dor), que avançam sozinhas em 220 ms. Grava no banco a cada etapa. Tela final "Dados enviados com sucesso" com botão "Falar com um especialista" |
 | MetaPixel | `MetaPixel.tsx` | Pixel do Meta; não injeta nada sem `NEXT_PUBLIC_META_PIXEL_ID` |
 
+### Página `/comecar2` (`src/app/comecar2/page.tsx`)
+
+Segunda landing de captação para anúncio do Meta (2026-08-11), focada nos 20 nichos de
+saúde e bem-estar. Estrutura adaptada do template `matheusmontelro/template-landing-page-sem-clientes`
+(landing longa de conversão, sem depoimentos de cliente): hero → barra de autoridade →
+problema → calculadora de perda → como funciona → provas de competência → marquee de nichos →
+antes/depois → oferta com formulário → FAQ → CTA final. Mesmo isolamento da `/comecar`
+(fora do menu, fora do sitemap, `noindex`) e mesmos eventos de Pixel (ViewContent no CTA,
+Lead no envio do formulário, Contact no clique do WhatsApp), para as duas campanhas serem
+comparáveis. Componentes em `src/components/comecar2/`:
+
+| Componente | Arquivo | Descrição |
+|------------|---------|-----------|
+| Landing | `Landing.tsx` | Página inteira, tema escuro da marca. Todas as seções com reveal `whileInView`. Responsividade validada de 320px a 4K (2026-08-11): sem overflow horizontal em nenhuma largura da matriz 320/360/390/430/640/768/1024/1366/1920/2560/3840, padding lateral fluido com `clamp(1rem,4vw,2rem)`, alvos de toque ≥44px, safe-area no topo e no rodapé. FAQ inclui item de limites clínicos (IA não diagnostica nem prescreve — exigência do nicho saúde) |
+| Calculadora | `Calculadora.tsx` | Estimativa de receita perdida (contatos × % agenda × % comparece × ticket); premissas de 45%/85% explícitas como estimativa |
+| FormularioLead | `FormularioLead.tsx` | Nome, clínica, WhatsApp e segmento (select com os 20 nichos — `SEGMENTOS` é a fonte única, o marquee da Landing importa daqui). Grava via `/api/lead` com `etapa: 1, concluido: true`; segmento vai em `origem.segmento` porque a tabela não tem coluna própria. Tela de sucesso com botão "Testar a IA no WhatsApp" que abre com nome/clínica/segmento na mensagem. Integração com o CRM: mesma rota `/api/lead` da `/comecar`, então o lead vira card no Kanban automaticamente; a migração `0012_lead_site_segmento.sql` do CRM (2026-08-11, aplicada em produção) faz o card mostrar o segmento e a página `/comecar2` |
+
 ### Página `/leads` (`src/app/leads/page.tsx`)
 
 Painel dos leads do quiz, protegido por senha única. `noindex` e bloqueado no `robots.ts`.
