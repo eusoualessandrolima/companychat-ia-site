@@ -17,6 +17,15 @@ const nextConfig: NextConfig = {
         destination: "https://www.companychatia.com.br/:path*",
         permanent: true,
       },
+      /* A LP de saúde nasceu como /comecar2 e foi renomeada quando o
+         ecossistema de LPs por nicho ganhou slugs descritivos (lp-saude,
+         lp-empresas, lp-adv, lp-seguros). O redirect preserva qualquer
+         anúncio ou link antigo. */
+      {
+        source: "/comecar2",
+        destination: "/lp-saude",
+        permanent: true,
+      },
     ];
   },
 };

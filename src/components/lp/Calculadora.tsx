@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { TrendingUp } from "lucide-react";
+import type { LPConteudo } from "@/components/lp/tipos";
 
 const moeda = new Intl.NumberFormat("pt-BR", {
   style: "currency",
@@ -9,46 +10,33 @@ const moeda = new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 0,
 });
 
-/* Cenário possível conservador: melhora de agendamento e de comparecimento
-   com resposta imediata + confirmação de véspera. São premissas da simulação,
-   não promessa: o texto ao lado do resultado deixa isso explícito. */
-const AGENDAMENTO_POSSIVEL = 45;
-const COMPARECIMENTO_POSSIVEL = 85;
+type Config = LPConteudo["calculadora"];
+type Chave = "contatos" | "conv1" | "conv2" | "ticket";
 
-type CampoCalc = {
-  chave: "contatos" | "agendamento" | "comparecimento" | "ticket";
-  rotulo: string;
-  sufixo?: string;
-  max?: number;
-};
+export default function Calculadora({ config }: { config: Config }) {
+  const [valores, setValores] = useState(config.padrao);
 
-const CAMPOS: CampoCalc[] = [
-  { chave: "contatos", rotulo: "Contatos no WhatsApp por mês" },
-  { chave: "agendamento", rotulo: "% que agenda", sufixo: "%", max: 100 },
-  { chave: "comparecimento", rotulo: "% que comparece", sufixo: "%", max: 100 },
-  { chave: "ticket", rotulo: "Ticket médio (R$)" },
-];
+  const campos: { chave: Chave; rotulo: string; sufixo?: string; max?: number }[] = [
+    { chave: "contatos", rotulo: config.rotuloContatos },
+    { chave: "conv1", rotulo: config.rotuloConv1, sufixo: "%", max: 100 },
+    { chave: "conv2", rotulo: config.rotuloConv2, sufixo: "%", max: 100 },
+    { chave: "ticket", rotulo: config.rotuloTicket },
+  ];
 
-export default function Calculadora() {
-  const [valores, setValores] = useState({
-    contatos: 200,
-    agendamento: 30,
-    comparecimento: 70,
-    ticket: 250,
-  });
-
+  /* Cenário possível conservador definido no conteúdo da LP. São premissas da
+     simulação, não promessa: o texto ao lado do resultado deixa isso explícito. */
   const resultado = useMemo(() => {
-    const { contatos, agendamento, comparecimento, ticket } = valores;
-    const atual = contatos * (agendamento / 100) * (comparecimento / 100) * ticket;
+    const { contatos, conv1, conv2, ticket } = valores;
+    const atual = contatos * (conv1 / 100) * (conv2 / 100) * ticket;
     const possivel =
       contatos *
-      (Math.max(agendamento, AGENDAMENTO_POSSIVEL) / 100) *
-      (Math.max(comparecimento, COMPARECIMENTO_POSSIVEL) / 100) *
+      (Math.max(conv1, config.possivel.conv1) / 100) *
+      (Math.max(conv2, config.possivel.conv2) / 100) *
       ticket;
     return { atual, ganho: Math.max(possivel - atual, 0) };
-  }, [valores]);
+  }, [valores, config.possivel]);
 
-  function alterar(chave: CampoCalc["chave"], bruto: string, max?: number) {
+  function alterar(chave: Chave, bruto: string, max?: number) {
     const numero = Math.max(Number(bruto.replace(/\D/g, "")) || 0, 0);
     setValores((atuais) => ({
       ...atuais,
@@ -59,7 +47,7 @@ export default function Calculadora() {
   return (
     <div className="rounded-3xl bg-card p-6 shadow-2xl shadow-black/50 sm:p-8">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {CAMPOS.map((campo) => (
+        {campos.map((campo) => (
           <label key={campo.chave} className="block">
             <span className="text-sm font-semibold text-foreground">
               {campo.rotulo}
@@ -100,8 +88,8 @@ export default function Calculadora() {
         <div className="mt-5 border-t border-card-border pt-5">
           <p className="flex items-center gap-2 text-sm font-semibold text-primary">
             <TrendingUp aria-hidden="true" className="h-4 w-4" />
-            Ganho possível com {AGENDAMENTO_POSSIVEL}% de agendamento e{" "}
-            {COMPARECIMENTO_POSSIVEL}% de comparecimento
+            Ganho possível com {config.possivel.conv1}% de {config.nomeConv1} e{" "}
+            {config.possivel.conv2}% de {config.nomeConv2}
           </p>
           <p className="mt-1 text-4xl font-bold text-primary">
             {moeda.format(resultado.ganho)}

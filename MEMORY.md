@@ -62,22 +62,43 @@ Não tem seções: é uma tela por pergunta, sem rolagem. Componentes em `src/co
 | Quiz | `Quiz.tsx` | Capa + 4 etapas: os três dados de contato numa tela só (nome, empresa, WhatsApp) e depois três perguntas de escolha (quem atende, volume, dor), que avançam sozinhas em 220 ms. Grava no banco a cada etapa. Tela final "Dados enviados com sucesso" com botão "Falar com um especialista" |
 | MetaPixel | `MetaPixel.tsx` | Pixel do Meta; não injeta nada sem `NEXT_PUBLIC_META_PIXEL_ID` |
 
-### Página `/comecar2` (`src/app/comecar2/page.tsx`)
+### Ecossistema de LPs por nicho (`src/app/lp-*/page.tsx` + `src/components/lp/`)
 
-Segunda landing de captação para anúncio do Meta (2026-08-11), focada nos 20 nichos de
-saúde e bem-estar. Estrutura adaptada do template `matheusmontelro/template-landing-page-sem-clientes`
-(landing longa de conversão, sem depoimentos de cliente): hero → barra de autoridade →
-problema → calculadora de perda → como funciona → provas de competência → marquee de nichos →
-antes/depois → oferta com formulário → FAQ → CTA final. Mesmo isolamento da `/comecar`
-(fora do menu, fora do sitemap, `noindex`) e mesmos eventos de Pixel (ViewContent no CTA,
-Lead no envio do formulário, Contact no clique do WhatsApp), para as duas campanhas serem
-comparáveis. Componentes em `src/components/comecar2/`:
+Quatro landings de captação para anúncio do Meta (2026-08-11), todas com a mesma
+estrutura de conversão adaptada do template `matheusmontelro/template-landing-page-sem-clientes`:
+hero → barra de autoridade → problema → calculadora de perda → como funciona → provas de
+competência → marquee de nichos → antes/depois → oferta com formulário → FAQ → CTA final.
+Fora do menu, fora do sitemap, `noindex`, e mesmos eventos de Pixel (ViewContent, Lead,
+Contact) para as campanhas serem comparáveis.
 
-| Componente | Arquivo | Descrição |
-|------------|---------|-----------|
-| Landing | `Landing.tsx` | Página inteira, tema escuro da marca. Todas as seções com reveal `whileInView`. Responsividade validada de 320px a 4K (2026-08-11): sem overflow horizontal em nenhuma largura da matriz 320/360/390/430/640/768/1024/1366/1920/2560/3840, padding lateral fluido com `clamp(1rem,4vw,2rem)`, alvos de toque ≥44px, safe-area no topo e no rodapé. FAQ inclui item de limites clínicos (IA não diagnostica nem prescreve — exigência do nicho saúde) |
-| Calculadora | `Calculadora.tsx` | Estimativa de receita perdida (contatos × % agenda × % comparece × ticket); premissas de 45%/85% explícitas como estimativa |
-| FormularioLead | `FormularioLead.tsx` | Nome, clínica, WhatsApp e segmento (select com os 20 nichos — `SEGMENTOS` é a fonte única, o marquee da Landing importa daqui). Grava via `/api/lead` com `etapa: 1, concluido: true`; segmento vai em `origem.segmento` porque a tabela não tem coluna própria. Tela de sucesso com botão "Testar a IA no WhatsApp" que abre com nome/clínica/segmento na mensagem. Integração com o CRM: mesma rota `/api/lead` da `/comecar`, então o lead vira card no Kanban automaticamente; a migração `0012_lead_site_segmento.sql` do CRM (2026-08-11, aplicada em produção) faz o card mostrar o segmento e a página `/comecar2` |
+| Rota | Nicho | Conteúdo |
+|------|-------|----------|
+| `/lp-saude` | Clínicas e saúde/bem-estar (20 segmentos) | `conteudos/saude.ts` — copy validada na ex-`/comecar2` |
+| `/lp-empresas` | PMEs em geral (16 segmentos) | `conteudos/empresas.ts` |
+| `/lp-adv` | Advogados e escritórios (12 áreas) | `conteudos/advogados.ts` — FAQ deixa claro que a IA não dá orientação jurídica |
+| `/lp-seguros` | Corretoras de seguros (12 ramos) | `conteudos/seguros.ts` — FAQ deixa claro que a IA não cota nem emite apólice |
+
+`/comecar2` → redirect permanente para `/lp-saude` (em `next.config.ts`). A `/comecar`
+(quiz) segue intocada por ser o destino do anúncio ativo.
+
+Arquitetura em `src/components/lp/`: `tipos.ts` define `LPConteudo` (toda copy);
+`Landing.tsx`, `Calculadora.tsx` e `FormularioLead.tsx` são genéricos. As páginas
+(Server Components) passam só o NOME do nicho (`<Landing nicho="saude" />`) porque os
+conteúdos carregam componentes de ícone, que não podem cruzar a fronteira
+servidor→cliente como prop — o registro `CONTEUDOS` vive dentro da `Landing` (client).
+Barra de autoridade é compartilhada (fundamentos institucionais reais).
+
+Pixel por LP: `MetaPixel` aceita `pixelId` opcional; cada página passa a sua env
+(`NEXT_PUBLIC_META_PIXEL_ID_SAUDE`, `_EMPRESAS`, `_ADV`, `_SEGUROS`), com fallback para
+o `NEXT_PUBLIC_META_PIXEL_ID` global enquanto os Pixels separados não existirem. As
+envs por nicho ainda NÃO estão criadas no Coolify.
+
+Leads: mesma rota `/api/lead` (painel `/leads` + card no CRM). O segmento vai em
+`origem.segmento` e a página em `origem.pagina` — a migração `0012_lead_site_segmento.sql`
+do CRM (aplicada em produção) mostra ambos no comentário do card, então cada LP fica
+identificada no Kanban automaticamente. Responsividade validada de 320px a 4K na
+estrutura compartilhada (2026-08-11): padding fluido `clamp(1rem,4vw,2rem)`, alvos de
+toque ≥44px, safe-area, sem overflow horizontal.
 
 ### Página `/leads` (`src/app/leads/page.tsx`)
 

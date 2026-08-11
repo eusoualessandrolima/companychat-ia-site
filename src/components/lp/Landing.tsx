@@ -1,28 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  AlarmClock,
-  ArrowDown,
-  ArrowRight,
-  Bot,
-  CalendarCheck,
-  CalendarX2,
-  ClipboardList,
-  Headset,
-  KanbanSquare,
-  MessageCircleOff,
-  MessagesSquare,
-  Moon,
-  Repeat2,
-  Sparkles,
-  Stethoscope,
-  UserCheck,
-} from "lucide-react";
+import { ArrowDown, ArrowRight, Bot, MessageCircleOff } from "lucide-react";
 import Logo from "@/components/Logo";
 import { WHATSAPP_NUMBER, WhatsAppIcon } from "@/components/WhatsAppButton";
-import Calculadora from "@/components/comecar2/Calculadora";
-import FormularioLead, { SEGMENTOS } from "@/components/comecar2/FormularioLead";
+import Calculadora from "@/components/lp/Calculadora";
+import FormularioLead from "@/components/lp/FormularioLead";
+import { advogados } from "@/components/lp/conteudos/advogados";
+import { empresas } from "@/components/lp/conteudos/empresas";
+import { saude } from "@/components/lp/conteudos/saude";
+import { seguros } from "@/components/lp/conteudos/seguros";
 
 declare global {
   interface Window {
@@ -30,6 +17,15 @@ declare global {
   }
 }
 
+/* As páginas (Server Components) passam só o nome do nicho: os conteúdos
+   carregam componentes de ícone, que não podem cruzar a fronteira
+   servidor→cliente como prop. */
+const CONTEUDOS = { saude, empresas, advogados, seguros } as const;
+
+export type Nicho = keyof typeof CONTEUDOS;
+
+/* Fundamentos reais da empresa, iguais em todas as LPs de nicho. Copy de
+   nicho mora em `conteudos/`; isto aqui é institucional. */
 const AUTORIDADE = [
   {
     marcador: "01",
@@ -52,158 +48,6 @@ const AUTORIDADE = [
     descricao: "Você testa antes de contratar",
   },
 ];
-
-const PROBLEMAS = [
-  {
-    icone: Moon,
-    titulo: "O paciente chama às 21h",
-    consequencia:
-      "Sem resposta na hora, ele agenda com quem respondeu primeiro na manhã seguinte.",
-  },
-  {
-    icone: AlarmClock,
-    titulo: "A resposta demora horas",
-    consequencia:
-      "Cada hora no vácuo esfria o interesse. Saúde é decisão por impulso de cuidado.",
-  },
-  {
-    icone: CalendarX2,
-    titulo: "Falta sem aviso",
-    consequencia:
-      "Sem confirmação de véspera, o horário vago vira prejuízo que ninguém recupera.",
-  },
-  {
-    icone: Repeat2,
-    titulo: "Equipe repetindo o básico",
-    consequencia:
-      "Preço, convênio e endereço o dia inteiro, enquanto quem está na clínica espera atenção.",
-  },
-];
-
-const ETAPAS_MECANISMO = [
-  {
-    fase: "Entrada",
-    icone: MessagesSquare,
-    titulo: "O paciente chama no WhatsApp",
-    descricao: "A IA responde em segundos, de madrugada, no domingo e no feriado.",
-  },
-  {
-    fase: "Entendimento",
-    icone: Bot,
-    titulo: "Entende texto, áudio e foto",
-    descricao: "O paciente fala do jeito dele; a IA pergunta só o que falta.",
-  },
-  {
-    fase: "Qualificação",
-    icone: UserCheck,
-    titulo: "Qualifica a conversa",
-    descricao: "Procedimento, convênio e urgência, antes de ocupar a sua equipe.",
-  },
-  {
-    fase: "Agendamento",
-    icone: CalendarCheck,
-    titulo: "Agenda e confirma",
-    descricao: "Marca o horário e envia lembrete de véspera para reduzir faltas.",
-  },
-  {
-    fase: "Registro",
-    icone: KanbanSquare,
-    titulo: "Registra tudo no CRM",
-    descricao: "Cada conversa vira um card no funil: ninguém some sem deixar rastro.",
-  },
-  {
-    fase: "Transbordo",
-    icone: Headset,
-    titulo: "Chama um humano quando precisa",
-    descricao: "Caso delicado ou fora do escopo vai direto para a sua equipe.",
-  },
-];
-
-const PROVAS = [
-  {
-    indice: "01",
-    tipo: "Diagnóstico",
-    icone: ClipboardList,
-    titulo: "Mapa do seu atendimento",
-    descricao:
-      "Antes de ativar, mapeamos como a sua clínica atende hoje: canais, horários, perguntas repetidas e onde os pacientes desistem.",
-    artefato: "Diagnóstico do fluxo de atendimento",
-  },
-  {
-    indice: "02",
-    tipo: "Método",
-    icone: Stethoscope,
-    titulo: "Funil de agendamento",
-    descricao:
-      "Responder, qualificar, agendar, confirmar e recuperar: cada etapa com dono e registrada no CRM, em vez de conversa solta no celular.",
-    artefato: "Fluxo aplicado ao seu segmento",
-  },
-  {
-    indice: "03",
-    tipo: "Execução",
-    icone: Sparkles,
-    titulo: "A IA atendendo de verdade",
-    descricao:
-      "O WhatsApp oficial da CompanyChat IA é atendido pela mesma IA que você vai contratar. É a demonstração mais honesta que existe.",
-    artefato: "Teste ao vivo no fim desta página",
-  },
-];
-
-const ANTES = [
-  "Resposta só em horário comercial",
-  "Agenda com buracos por falta e esquecimento",
-  "Conversas perdidas no celular de cada um",
-  "Equipe presa em pergunta repetida",
-];
-
-const DEPOIS = [
-  "Resposta em segundos, 24 horas por dia",
-  "Confirmação e lembrete automáticos",
-  "Todo contato registrado no CRM",
-  "Equipe focada em quem está na clínica",
-];
-
-const FAQ = [
-  {
-    pergunta: "Serve para o meu segmento?",
-    resposta:
-      "A IA é treinada com as informações do seu negócio: procedimentos, convênios, horários e regras. Atendemos clínicas odontológicas, médicas, de estética, psicólogos, veterinários, academias, laboratórios e outros negócios de saúde e bem-estar.",
-  },
-  {
-    pergunta: "E se a IA não souber responder?",
-    resposta:
-      "Ela transfere a conversa para a sua equipe na hora, com todo o histórico. Casos delicados, urgências e o que fugir do escopo nunca ficam presos na automação.",
-  },
-  {
-    pergunta: "A IA entende áudio e foto?",
-    resposta:
-      "Sim. O paciente pode mandar áudio, foto ou documento, e a IA entende e responde de acordo. É importante em saúde, onde muita gente prefere falar a digitar.",
-  },
-  {
-    pergunta: "A IA dá orientação clínica ao paciente?",
-    resposta:
-      "Não. A IA cuida do atendimento administrativo: informações, qualificação, agendamento, confirmação e follow-up. Ela não faz diagnóstico, não prescreve e não interpreta exames. Questões clínicas, sensíveis ou urgentes são encaminhadas para a sua equipe e para os profissionais habilitados.",
-  },
-  {
-    pergunta: "Quanto custa?",
-    resposta:
-      "Os planos começam em R$ 497 por mês, com implantação e treinamento inclusos e sem taxa de setup. Projetos maiores têm proposta sob medida, com escopo e valor fechados antes de começar.",
-  },
-  {
-    pergunta: "Como começo?",
-    resposta:
-      "Preencha o formulário desta página. Você conversa com a nossa IA no WhatsApp, vê como ela atende na prática e depois fazemos o diagnóstico do seu atendimento, sem compromisso.",
-  },
-];
-
-function Selo() {
-  return (
-    <div className="flex w-fit items-center gap-2.5 rounded-full border border-dark-border bg-white/[0.04] px-4 py-2 text-sm font-medium text-dark-muted">
-      <Stethoscope aria-hidden="true" className="h-4 w-4 text-primary" />
-      Para clínicas e negócios de saúde e bem-estar
-    </div>
-  );
-}
 
 function Revelar({
   children,
@@ -289,8 +133,10 @@ function Fundo() {
   );
 }
 
-export default function Landing() {
+export default function Landing({ nicho }: { nicho: Nicho }) {
+  const conteudo = CONTEUDOS[nicho];
   const aoClicarCTA = () => window.fbq?.("track", "ViewContent");
+  const metadeNichos = Math.ceil(conteudo.nichos.itens.length / 2);
 
   return (
     <div className="relative overflow-x-clip bg-dark-base text-dark-text">
@@ -302,7 +148,7 @@ export default function Landing() {
         <a
           href="#oferta"
           onClick={aoClicarCTA}
-          className="inline-flex min-h-11 items-center rounded-full bg-primary px-[clamp(1rem,4vw,2rem)] py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
+          className="inline-flex min-h-11 items-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
         >
           Testar a IA
         </a>
@@ -313,29 +159,30 @@ export default function Landing() {
         <section className="mx-auto max-w-6xl px-[clamp(1rem,4vw,2rem)] pb-20 pt-10 sm:pt-16">
           <div className="mx-auto max-w-3xl text-center">
             <Revelar className="flex justify-center">
-              <Selo />
+              <div className="flex w-fit items-center gap-2.5 rounded-full border border-dark-border bg-white/[0.04] px-4 py-2 text-sm font-medium text-dark-muted">
+                <conteudo.selo.icone
+                  aria-hidden="true"
+                  className="h-4 w-4 text-primary"
+                />
+                {conteudo.selo.texto}
+              </div>
             </Revelar>
 
             <Revelar atraso={0.08}>
               <h1 className="mt-7 text-[clamp(34px,5.4vw,58px)] font-bold leading-[1.05] tracking-[-0.025em]">
-                Pare de perder pacientes
-                <span className="text-gradient-primary"> no WhatsApp</span>
+                {conteudo.hero.inicio}
+                <span className="text-gradient-primary"> {conteudo.hero.destaque}</span>
               </h1>
             </Revelar>
 
             <Revelar atraso={0.16}>
               <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-dark-muted">
-                A CompanyChat IA responde em segundos, qualifica o paciente,
-                agenda e confirma consultas, 24 horas por dia, inclusive quando
-                a sua clínica está fechada.
+                {conteudo.hero.descricao}
               </p>
             </Revelar>
 
             <Revelar atraso={0.24} className="mt-9 flex flex-col items-center gap-4">
-              <CTAPrincipal
-                rotulo="Quero ver a IA atendendo"
-                aoClicar={aoClicarCTA}
-              />
+              <CTAPrincipal rotulo={conteudo.hero.cta} aoClicar={aoClicarCTA} />
               <p className="flex items-center gap-2 text-sm text-dark-muted">
                 <WhatsAppIcon className="h-4 w-4 text-[#25D366]" />
                 Você testa direto no WhatsApp, sem instalar nada
@@ -368,24 +215,19 @@ export default function Landing() {
           <div className="mx-auto max-w-6xl px-[clamp(1rem,4vw,2rem)]">
             <div className="max-w-2xl">
               <Revelar>
-                <Rotulo>O vazamento silencioso</Rotulo>
+                <Rotulo>{conteudo.problema.rotulo}</Rotulo>
                 <h2 className="text-[clamp(26px,3.6vw,40px)] font-bold leading-[1.12] tracking-[-0.02em]">
-                  Sua clínica não precisa de mais pacientes.
-                  <span className="text-dark-muted">
-                    {" "}
-                    Precisa parar de perder os que já chamam.
-                  </span>
+                  {conteudo.problema.titulo}
+                  <span className="text-dark-muted"> {conteudo.problema.tituloSuave}</span>
                 </h2>
                 <p className="mt-5 leading-relaxed text-dark-muted">
-                  Quem procura uma clínica no WhatsApp está pronto para agendar.
-                  O que decide é a velocidade e a constância da resposta. É
-                  exatamente aí que o atendimento manual vaza.
+                  {conteudo.problema.descricao}
                 </p>
               </Revelar>
             </div>
 
             <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2">
-              {PROBLEMAS.map((problema, i) => (
+              {conteudo.problema.itens.map((problema, i) => (
                 <Revelar key={problema.titulo} atraso={i * 0.07}>
                   <div className="glass-card-dark h-full rounded-2xl p-6">
                     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-red-500/10">
@@ -412,12 +254,10 @@ export default function Landing() {
               <Revelar>
                 <Rotulo>Calculadora de oportunidade</Rotulo>
                 <h2 className="text-[clamp(26px,3.6vw,40px)] font-bold leading-[1.12] tracking-[-0.02em]">
-                  Quanto a demora está custando por mês?
+                  {conteudo.calculadora.titulo}
                 </h2>
                 <p className="mt-5 leading-relaxed text-dark-muted">
-                  Coloque os números da sua clínica e veja uma estimativa do que
-                  fica na mesa quando contatos não viram agendamento e
-                  agendamentos não viram comparecimento.
+                  {conteudo.calculadora.descricao}
                 </p>
                 <div className="mt-8 hidden lg:block">
                   <CTAPrincipal
@@ -428,7 +268,7 @@ export default function Landing() {
               </Revelar>
 
               <Revelar atraso={0.1}>
-                <Calculadora />
+                <Calculadora config={conteudo.calculadora} />
               </Revelar>
 
               <div className="lg:hidden">
@@ -448,14 +288,13 @@ export default function Landing() {
               <Revelar>
                 <Rotulo>Como funciona</Rotulo>
                 <h2 className="text-[clamp(26px,3.6vw,40px)] font-bold leading-[1.12] tracking-[-0.02em]">
-                  Do &ldquo;oi&rdquo; ao horário confirmado, sem ninguém da sua
-                  equipe no teclado
+                  {conteudo.mecanismo.titulo}
                 </h2>
               </Revelar>
             </div>
 
             <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {ETAPAS_MECANISMO.map((etapa, i) => (
+              {conteudo.mecanismo.etapas.map((etapa, i) => (
                 <Revelar key={etapa.titulo} atraso={i * 0.06}>
                   <div className="glass-card-dark h-full rounded-2xl p-6">
                     <div className="flex items-center justify-between">
@@ -487,13 +326,13 @@ export default function Landing() {
               <Revelar>
                 <Rotulo>Provas de competência</Rotulo>
                 <h2 className="text-[clamp(26px,3.6vw,40px)] font-bold leading-[1.12] tracking-[-0.02em]">
-                  Autoridade se demonstra trabalhando, não prometendo
+                  {conteudo.provas.titulo}
                 </h2>
               </Revelar>
             </div>
 
             <div className="mt-12 grid grid-cols-1 gap-5 lg:grid-cols-3">
-              {PROVAS.map((prova, i) => (
+              {conteudo.provas.itens.map((prova, i) => (
                 <Revelar key={prova.indice} atraso={i * 0.08}>
                   <div className="flex h-full flex-col rounded-2xl border border-dark-border bg-dark-surface p-6">
                     <div className="flex items-center justify-between">
@@ -528,9 +367,9 @@ export default function Landing() {
         <section className="border-y border-dark-border bg-dark-surface py-16">
           <div className="mx-auto max-w-6xl px-[clamp(1rem,4vw,2rem)] text-center">
             <Revelar>
-              <Rotulo>Feita para o seu segmento</Rotulo>
+              <Rotulo>{conteudo.nichos.rotulo}</Rotulo>
               <h2 className="mx-auto max-w-2xl text-[clamp(24px,3.2vw,36px)] font-bold leading-[1.15] tracking-[-0.02em]">
-                Da recepção da clínica ao balcão da farmácia
+                {conteudo.nichos.titulo}
               </h2>
             </Revelar>
           </div>
@@ -539,15 +378,21 @@ export default function Landing() {
               loop do marquee não mostrar emenda. */}
           <div className="mt-10 space-y-4 overflow-hidden">
             {[
-              { classe: "animate-marquee-left", itens: SEGMENTOS.slice(0, 10) },
-              { classe: "animate-marquee-right", itens: SEGMENTOS.slice(10) },
+              {
+                classe: "animate-marquee-left",
+                itens: conteudo.nichos.itens.slice(0, metadeNichos),
+              },
+              {
+                classe: "animate-marquee-right",
+                itens: conteudo.nichos.itens.slice(metadeNichos),
+              },
             ].map((fileira, f) => (
               <div key={f} className="flex overflow-hidden">
                 <div className={`flex w-max gap-4 pr-4 ${fileira.classe}`}>
                   {[...fileira.itens, ...fileira.itens].map((segmento, i) => (
                     <span
                       key={`${segmento}-${i}`}
-                      className="whitespace-nowrap rounded-full border border-dark-border bg-white/[0.04] px-[clamp(1rem,4vw,2rem)] py-2.5 text-sm font-medium text-dark-text/90"
+                      className="whitespace-nowrap rounded-full border border-dark-border bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-dark-text/90"
                     >
                       {segmento}
                     </span>
@@ -565,7 +410,7 @@ export default function Landing() {
               <Revelar>
                 <Rotulo>Antes e depois</Rotulo>
                 <h2 className="text-[clamp(26px,3.6vw,40px)] font-bold leading-[1.12] tracking-[-0.02em]">
-                  O mesmo WhatsApp, duas operações diferentes
+                  {conteudo.comparacao.titulo}
                 </h2>
               </Revelar>
             </div>
@@ -575,10 +420,10 @@ export default function Landing() {
                 <div className="h-full rounded-2xl border border-dark-border bg-dark-surface p-7">
                   <h3 className="flex items-center gap-2.5 text-lg font-bold text-dark-muted">
                     <MessageCircleOff aria-hidden="true" className="h-5 w-5" />
-                    Atendimento manual
+                    {conteudo.comparacao.tituloAntes}
                   </h3>
                   <ul className="mt-5 space-y-3.5">
-                    {ANTES.map((item) => (
+                    {conteudo.comparacao.antes.map((item) => (
                       <li
                         key={item}
                         className="flex items-start gap-3 text-[15px] leading-snug text-dark-muted"
@@ -604,7 +449,7 @@ export default function Landing() {
                     </span>
                   </h3>
                   <ul className="mt-5 space-y-3.5">
-                    {DEPOIS.map((item) => (
+                    {conteudo.comparacao.depois.map((item) => (
                       <li
                         key={item}
                         className="flex items-start gap-3 text-[15px] leading-snug"
@@ -635,26 +480,19 @@ export default function Landing() {
               <div>
                 <Revelar>
                   <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
-                    Implantação e treinamento inclusos
+                    {conteudo.oferta.badge}
                   </span>
                   <h2 className="mt-6 text-[clamp(26px,3.6vw,40px)] font-bold leading-[1.12] tracking-[-0.02em]">
-                    Veja a IA atendendo como se já fosse a sua clínica
+                    {conteudo.oferta.titulo}
                   </h2>
                   <p className="mt-5 leading-relaxed text-dark-muted">
-                    Preencha ao lado e fale com a nossa IA no WhatsApp. Ela já
-                    chega sabendo o seu segmento, e você sente na pele o que o
-                    seu paciente sentiria.
+                    {conteudo.oferta.descricao}
                   </p>
                 </Revelar>
 
                 <Revelar atraso={0.1}>
                   <ul className="mt-8 space-y-3.5">
-                    {[
-                      "Demonstração ao vivo com a IA no seu WhatsApp",
-                      "Diagnóstico do seu atendimento atual",
-                      "Proposta com escopo e valor fechados",
-                      "Sem compromisso e sem taxa de setup",
-                    ].map((item) => (
+                    {conteudo.oferta.bullets.map((item) => (
                       <li key={item} className="flex items-start gap-3 text-[15px]">
                         <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15">
                           <ArrowDown
@@ -670,7 +508,10 @@ export default function Landing() {
               </div>
 
               <Revelar atraso={0.12}>
-                <FormularioLead />
+                <FormularioLead
+                  config={conteudo.form}
+                  segmentos={conteudo.nichos.itens}
+                />
               </Revelar>
             </div>
           </div>
@@ -683,13 +524,13 @@ export default function Landing() {
               <Revelar>
                 <Rotulo>Perguntas frequentes</Rotulo>
                 <h2 className="text-[clamp(26px,3.6vw,40px)] font-bold leading-[1.12] tracking-[-0.02em]">
-                  O que toda clínica pergunta antes
+                  {conteudo.faq.titulo}
                 </h2>
               </Revelar>
             </div>
 
             <div className="mt-10 space-y-3">
-              {FAQ.map((item, i) => (
+              {conteudo.faq.itens.map((item, i) => (
                 <Revelar key={item.pergunta} atraso={i * 0.05}>
                   <details className="group rounded-2xl border border-dark-border bg-dark-surface open:border-primary/30">
                     <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-semibold [&::-webkit-details-marker]:hidden">
@@ -715,17 +556,13 @@ export default function Landing() {
             <Revelar>
               <Rotulo>Próximo passo</Rotulo>
               <h2 className="text-[clamp(28px,4vw,44px)] font-bold leading-[1.1] tracking-[-0.02em]">
-                Enquanto você lê isto, tem paciente esperando resposta
+                {conteudo.ctaFinal.titulo}
               </h2>
               <p className="mx-auto mt-5 max-w-xl leading-relaxed text-dark-muted">
-                Leva menos de um minuto para preencher, e a demonstração
-                acontece no seu próprio WhatsApp, sem compromisso.
+                {conteudo.ctaFinal.descricao}
               </p>
               <div className="mt-9 flex justify-center">
-                <CTAPrincipal
-                  rotulo="Testar a IA agora"
-                  aoClicar={aoClicarCTA}
-                />
+                <CTAPrincipal rotulo="Testar a IA agora" aoClicar={aoClicarCTA} />
               </div>
             </Revelar>
           </div>

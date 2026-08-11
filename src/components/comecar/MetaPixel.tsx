@@ -4,9 +4,14 @@ const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
 /** Pixel do Meta para otimização de campanha. Sem a variável de ambiente
  *  nada é injetado e a página continua idêntica. O evento `Lead` é
- *  disparado no envio do formulário, em `FormularioCaptura`. */
-export default function MetaPixel() {
-  if (!PIXEL_ID) return null;
+ *  disparado no envio do formulário, em `FormularioCaptura`.
+ *
+ *  `pixelId` permite um Pixel próprio por LP de nicho (as páginas passam a
+ *  env específica, ex.: NEXT_PUBLIC_META_PIXEL_ID_SAUDE); sem ele, vale o
+ *  Pixel global do site. */
+export default function MetaPixel({ pixelId }: { pixelId?: string } = {}) {
+  const id = pixelId || PIXEL_ID;
+  if (!id) return null;
 
   return (
     <>
@@ -19,7 +24,7 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window,document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','${PIXEL_ID}');fbq('track','PageView');`}
+fbq('init','${id}');fbq('track','PageView');`}
       </Script>
       <noscript>
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -28,7 +33,7 @@ fbq('init','${PIXEL_ID}');fbq('track','PageView');`}
           width="1"
           style={{ display: "none" }}
           alt=""
-          src={`https://www.facebook.com/tr?id=${PIXEL_ID}&ev=PageView&noscript=1`}
+          src={`https://www.facebook.com/tr?id=${id}&ev=PageView&noscript=1`}
         />
       </noscript>
     </>

@@ -9,35 +9,13 @@ import {
   Loader2,
   Lock,
   Phone,
-  Stethoscope,
+  Tag,
   User,
 } from "lucide-react";
 import { WHATSAPP_NUMBER, WhatsAppIcon } from "@/components/WhatsAppButton";
+import type { LPConteudo } from "@/components/lp/tipos";
 
-/* Os 20 segmentos que a campanha vai prospectar. Alimentam o seletor daqui
-   e o marquee da Landing: mudou a lista de nichos, muda aqui. */
-export const SEGMENTOS = [
-  "Clínicas odontológicas",
-  "Médicos especialistas",
-  "Psicólogos",
-  "Nutricionistas",
-  "Academias",
-  "Fisioterapeutas",
-  "Spas",
-  "Clínicas de estética",
-  "Veterinários",
-  "Farmácias",
-  "Laboratórios",
-  "Clínicas de terapia",
-  "Hospitais",
-  "Clínicas de cirurgia plástica",
-  "Nutrologistas",
-  "Personal trainers",
-  "Yoga e meditação",
-  "Quiropraxistas",
-  "Clínicas de acne",
-  "Massoterapeutas",
-];
+type Config = LPConteudo["form"];
 
 type Campos = {
   nome: string;
@@ -57,19 +35,25 @@ function mascararTelefone(valor: string) {
 }
 
 /** O WhatsApp abre com o formulário inteiro na mensagem: quem atender do
- *  outro lado já sabe nome, clínica e segmento. */
-function montarLink(campos: Campos) {
+ *  outro lado já sabe nome, negócio e segmento. */
+function montarLink(campos: Campos, config: Config) {
   const texto = [
     "Olá! Acabei de preencher o formulário e quero testar a IA para o meu negócio.",
     "",
     `Nome: ${campos.nome.trim()}`,
-    `Clínica/negócio: ${campos.empresa.trim()}`,
+    `${config.waRotuloEmpresa}: ${campos.empresa.trim()}`,
     `Segmento: ${campos.segmento}`,
   ].join("\n");
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(texto)}`;
 }
 
-export default function FormularioLead() {
+export default function FormularioLead({
+  config,
+  segmentos,
+}: {
+  config: Config;
+  segmentos: string[];
+}) {
   const [campos, setCampos] = useState<Campos>({
     nome: "",
     empresa: "",
@@ -209,11 +193,11 @@ export default function FormularioLead() {
         </h3>
         <p className="mx-auto mt-4 max-w-md leading-relaxed text-text-secondary">
           Agora teste a nossa IA no WhatsApp. Ela já conhece o seu segmento e
-          vai atender você como se fosse um paciente da sua clínica.
+          vai atender você como se fosse {config.sucessoComo}.
         </p>
 
         <a
-          href={montarLink(campos)}
+          href={montarLink(campos, config)}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => {
@@ -244,8 +228,8 @@ export default function FormularioLead() {
     },
     {
       campo: "empresa" as const,
-      rotulo: "Qual é o nome da clínica ou negócio?",
-      exemplo: "Ex.: Clínica Modelo",
+      rotulo: config.rotuloEmpresa,
+      exemplo: config.exemploEmpresa,
       icone: Building2,
       autoComplete: "organization",
       telefone: false,
@@ -320,10 +304,10 @@ export default function FormularioLead() {
             htmlFor="lead-segmento"
             className="mb-1.5 block text-sm font-semibold text-foreground"
           >
-            Qual é o seu segmento?
+            {config.rotuloSegmento}
           </label>
           <div className="relative">
-            <Stethoscope
+            <Tag
               aria-hidden="true"
               className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary"
             />
@@ -345,14 +329,12 @@ export default function FormularioLead() {
               <option value="" disabled>
                 Escolha na lista
               </option>
-              {SEGMENTOS.map((segmento) => (
+              {segmentos.map((segmento) => (
                 <option key={segmento} value={segmento}>
                   {segmento}
                 </option>
               ))}
-              <option value="Outro segmento de saúde">
-                Outro segmento de saúde
-              </option>
+              <option value={config.outroSegmento}>{config.outroSegmento}</option>
             </select>
             <ArrowRight
               aria-hidden="true"
