@@ -6,9 +6,11 @@ import {
   CheckCircle2,
   CircleDashed,
   Download,
+  Loader2,
   LogOut,
   RefreshCw,
   Search,
+  Trash2,
   Users,
 } from "lucide-react";
 import type { Lead } from "@/lib/leads";
@@ -58,20 +60,33 @@ export default function ListaLeads({ leads }: { leads: Lead[] }) {
   const [busca, setBusca] = useState("");
   const [filtro, setFiltro] = useState<Filtro>("todos");
   const [atualizando, setAtualizando] = useState(false);
+  const [confirmando, setConfirmando] = useState<string | null>(null);
+  const [excluindo, setExcluindo] = useState<string | null>(null);
+  const [erro, setErro] = useState<string | null>(null);
+  /* O `router.refresh()` leva um instante para trazer a lista nova do
+     servidor; até lá o card sai da tela por aqui, senão o lead reaparece
+     depois de o usuário já ter visto que apagou. */
+  const [removidos, setRemovidos] = useState<string[]>([]);
   const router = useRouter();
+
+  const presentes = useMemo(
+    () => leads.filter((lead) => !removidos.includes(lead.id)),
+    [leads, removidos]
+  );
 
   const resumo = useMemo(() => {
     const hoje = new Date().toDateString();
     return {
-      total: leads.length,
-      concluidos: leads.filter((l) => l.concluido).length,
-      hoje: leads.filter((l) => new Date(l.criado_em).toDateString() === hoje).length,
+      total: presentes.length,
+      concluidos: presentes.filter((l) => l.concluido).length,
+      hoje: presentes.filter((l) => new Date(l.criado_em).toDateString() === hoje)
+        .length,
     };
-  }, [leads]);
+  }, [presentes]);
 
   const visiveis = useMemo(() => {
     const termo = busca.trim().toLowerCase();
-    return leads.filter((lead) => {
+    return presentes.filter((lead) => {
       if (filtro === "concluidos" && !lead.concluido) return false;
       if (filtro === "abandonados" && lead.concluido) return false;
       if (!termo) return true;
@@ -79,7 +94,23 @@ export default function ListaLeads({ leads }: { leads: Lead[] }) {
         .filter(Boolean)
         .some((campo) => (campo as string).toLowerCase().includes(termo));
     });
-  }, [leads, busca, filtro]);
+  }, [presentes, busca, filtro]);
+
+  async function excluir(id: string) {
+    setExcluindo(id);
+    setErro(null);
+    try {
+      const resposta = await fetch(`/api/leads/${id}`, { method: "DELETE" });
+      if (!resposta.ok) throw new Error(String(resposta.status));
+      setRemovidos((atuais) => [...atuais, id]);
+      setConfirmando(null);
+      router.refresh();
+    } catch {
+      setErro("Não deu para excluir agora. Tente de novo.");
+    } finally {
+      setExcluindo(null);
+    }
+  }
 
   async function sair() {
     await fetch("/api/leads/entrar", { method: "DELETE" });
@@ -253,16 +284,62 @@ export default function ListaLeads({ leads }: { leads: Lead[] }) {
                     </div>
                   )}
 
-                  {whats && (
-                    <a
-                      href={whats}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-semibold text-white transition-transform hover:scale-[1.03]"
-                    >
-                      <WhatsAppIcon className="h-4 w-4" />
-                      {lead.telefone}
-                    </a>
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                    {whats ? (
+                      <a
+                        href={whats}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-semibold text-white transition-transform hover:scale-[1.03]"
+                      >
+                        <WhatsAppIcon className="h-4 w-4" />
+                        {lead.telefone}
+                      </a>
+                    ) : (
+                      <span />
+                    )}
+
+                    {confirmando === lead.id ? (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-dark-muted">Excluir de vez?</span>
+                        <button
+                          type="button"
+                          onClick={() => excluir(lead.id)}
+                          disabled={excluindo === lead.id}
+                          className="inline-flex items-center gap-1.5 rounded-full bg-red-500/90 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-red-500 disabled:opacity-60"
+                        >
+                          {excluindo === lead.id && (
+                            <Loader2 aria-hidden="true" className="h-3.5 w-3.5 animate-spin" />
+                          )}
+                          Sim, excluir
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setConfirmando(null)}
+                          disabled={excluindo === lead.id}
+                          className="rounded-full border border-dark-border px-3 py-1.5 text-xs font-medium text-dark-muted transition-colors hover:text-dark-text disabled:opacity-60"
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setErro(null);
+                          setConfirmando(lead.id);
+                        }}
+                        aria-label={`Excluir o lead ${lead.nome ?? "sem nome"}`}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-dark-border px-3 py-1.5 text-xs font-medium text-dark-muted transition-colors hover:border-red-400/50 hover:text-red-400"
+                      >
+                        <Trash2 aria-hidden="true" className="h-3.5 w-3.5" />
+                        Excluir
+                      </button>
+                    )}
+                  </div>
+
+                  {erro && confirmando === lead.id && (
+                    <p className="mt-2 text-right text-xs text-red-400">{erro}</p>
                   )}
                 </li>
               );

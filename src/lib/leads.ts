@@ -135,6 +135,25 @@ export async function salvarLead(lead: {
   }
 }
 
+/** Apaga o lead de vez. Usado pelo painel para limpar testes.
+ *  Devolve `false` quando o id não existe mais — assim o painel não mente
+ *  dizendo que excluiu algo que já não estava lá. */
+export async function excluirLead(id: string): Promise<boolean> {
+  const conexao = pool();
+  if (!conexao) return false;
+
+  try {
+    const { rowCount } = await conexao.query(
+      `delete from leads_site where id = $1`,
+      [id]
+    );
+    return (rowCount ?? 0) > 0;
+  } catch (erro) {
+    console.error("Falha ao excluir lead no Postgres:", erro);
+    return false;
+  }
+}
+
 export async function listarLeads(limite = 500): Promise<Lead[]> {
   const conexao = pool();
   if (!conexao) return [];
