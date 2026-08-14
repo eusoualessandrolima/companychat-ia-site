@@ -720,8 +720,18 @@ export default function Quiz() {
                       <p className="mt-4 flex items-start justify-center gap-2 text-xs leading-relaxed text-text-secondary">
                         <Lock aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                         <span className="min-w-0">
-                          Seus dados serão usados para personalizar a experiência e
-                          apresentar a CompanyChat IA.
+                          Ao continuar, você concorda que os seus dados sejam
+                          usados para personalizar a experiência e para a nossa
+                          equipe entrar em contato. Saiba mais na{" "}
+                          <a
+                            href="/privacidade"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline underline-offset-2 hover:text-foreground"
+                          >
+                            Política de Privacidade
+                          </a>
+                          .
                         </span>
                       </p>
                     </form>

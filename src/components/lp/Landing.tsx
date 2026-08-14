@@ -585,6 +585,12 @@ export default function Landing({ nicho }: { nicho: Nicho }) {
             <WhatsAppIcon className="h-4 w-4 text-[#25D366]" />
             Fale com a gente no WhatsApp
           </a>
+          <a
+            href="/privacidade"
+            className="text-sm text-dark-muted underline underline-offset-4 transition-colors hover:text-dark-text"
+          >
+            Política de Privacidade
+          </a>
         </div>
       </footer>
     </div>

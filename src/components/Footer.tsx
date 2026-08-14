@@ -147,6 +147,10 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} CompanyChat IA Ltda. Todos os direitos reservados
             <span className="mx-3 opacity-40">|</span>
             CNPJ 36.076.441/0001-14
+            <span className="mx-3 opacity-40">|</span>
+            <a href="/privacidade" className="underline underline-offset-4 transition-colors hover:text-primary">
+              Política de Privacidade
+            </a>
           </p>
         </div>
       </div>
