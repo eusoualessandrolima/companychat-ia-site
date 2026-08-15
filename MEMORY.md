@@ -46,7 +46,7 @@
 | Contato | `Contato.tsx` | Formulário/CTA de contato |
 | Footer | `Footer.tsx` | Rodapé |
 | Logo | `Logo.tsx` | Componente de logo |
-| WhatsAppButton | `WhatsAppButton.tsx` | Botão flutuante do WhatsApp (exporta `WHATSAPP_NUMBER` e `whatsappLink` — fonte única) |
+| WhatsAppButton | `WhatsAppButton.tsx` | Botão flutuante do WhatsApp (`"use client"`). No desktop mostra Comercial e Suporte; no celular vira um botão só que abre os dois rotulados. Números e links moram em `src/lib/whatsapp.ts` |
 | CountUp | `CountUp.tsx` | Contador animado compartilhado (usado em Hero e Sobre) |
 
 > `Depoimentos.tsx` foi removido em 2026-07-14 (código morto desde a remoção da seção da home; recuperável via git se necessário).
@@ -161,6 +161,18 @@ Mesmo padrão visual das outras páginas internas e reaproveita `ApiHeader`, `No
 | ComoTrabalhamos | `ComoTrabalhamos.tsx` | Conversa, desenho, construção, entrega e ajuste |
 | CompanyAiCta | `CompanyAiCta.tsx` | CTA final (WhatsApp + cross-link para `/planos`) |
 | company-ai-data | `company-ai-data.ts` | Fonte única das quatro frentes (home e página) |
+
+### Calculadora de impacto — `components/calculadora/` (rota `/calculadora`)
+
+| Componente | Arquivo | Descrição |
+|------------|---------|-----------|
+| Calculadora | `Calculadora.tsx` | Orquestrador: hero, estado das respostas, alterna wizard e resultado |
+| Wizard | `Wizard.tsx` | Wizard de 6 passos (ativa) ou 3 (receptiva), com painel lateral de ajuda |
+| Resultado | `Resultado.tsx` | Resumo, 3 cards de cenário, banner de urgência, gráficos, tabela, imprimir |
+| Graficos | `Graficos.tsx` | Barras e linha em SVG puro, sem biblioteca de gráficos |
+| ModalLead | `ModalLead.tsx` | Captura de lead via `/api/lead`, com os números da simulação na origem |
+| calculo | `calculo.ts` | Fórmulas, formatadores e preços; consome `api-oficial/pricing.ts` |
+| perguntas | `perguntas.ts` | Passos, textos de ajuda, copy dos cenários e linhas da tabela |
 
 ---
 
@@ -798,6 +810,78 @@ RPC `com_lead_site_registrar`, idempotente pelo `id` do lead — reenvio não du
 Variáveis: `LEAD_WEBHOOK_URL` (URL da função) e `LEAD_WEBHOOK_TOKEN` (mesmo valor do
 `LEAD_SITE_TOKEN` lá).
 
+### 2026-08-12 — `/calculadora`: cópia da calculadora de impacto do ChatGuru
+
+Página nova inspirada em `calculadora-impacto.chatguru.com.br`, cuja estrutura foi
+levantada por engenharia reversa do bundle de produção. A investigação completa
+(fórmulas, tokens de design, blocos da tela de resultado) está em
+`docs/calculadora-impacto-spec.md`.
+
+O que foi copiado: wizard de 6 passos com painel lateral de ajuda, três cenários com o
+do meio marcado como risco e o nosso como escolha, banner de prejuízo anual, gráficos,
+tabela comparativa e imprimir/PDF.
+
+Onde divergimos de propósito:
+
+- **Tema escuro**, não claro. A referência é clara, mas o site inteiro é `dark-base`;
+  uma página clara faria o visitante sentir que trocou de site ao clicar em "voltar".
+- **Preços vêm de `api-oficial/pricing.ts`**, não dos valores do ChatGuru (que cobra
+  autenticação ao mesmo preço de utilidade). Aquele arquivo já é a fonte de verdade do
+  site e da base da Jade — um segundo número oficial para a mesma pergunta é o tipo de
+  divergência que já deu problema antes.
+- **`R$ 0,035` exibido com três casas.** A referência arredonda para `R$ 0,04` na tela
+  mas calcula com `0,035`: quem confere na mão acha um erro de R$ 192 que não existe.
+- **Gráfico de linha mostra só o custo variável.** Somando o template, as três curvas
+  se achatam numa faixa estreita no topo e a divergência — que é o argumento inteiro —
+  some. Sem ele, a linha verde estaciona no roteamento e a vermelha sobe sem parar.
+- **Gráficos em SVG puro**, sem Recharts: são três barras e três retas, não justificam
+  ~100 KB de dependência.
+- **Formulário próprio** em vez do embed do HubSpot, reaproveitando `/api/lead`. Os
+  números da simulação viajam na `origem` do lead, então quem atende abre a conversa já
+  sabendo qual conta assustou o visitante.
+
+### Hero: smartphone com WhatsApp em vez da janela de chat (2026-08-15)
+
+- **Aparelho desenhado em CSS, não o PNG entregue no pacote** `~/Desktop/CompanyChat-IA-Novo-Hero`.
+  O mockup aprovado (`companychat-hero-preview.html`) já fazia assim, o PNG tem rotação de
+  ~15° contra os 4–6° que o próprio briefing exige, e encaixar uma tela em DOM sobre uma
+  foto em perspectiva exigiria `matrix3d` calibrado à mão. O PNG segue disponível no pacote
+  caso a decisão mude.
+- **Interface do WhatsApp toda no DOM** (status bar, cabeçalho, balões, composer). Cores do
+  app em constante local `WA`, fora dos tokens do site de propósito: o reconhecimento
+  imediato depende de o app parecer o app.
+- **SSR entrega a conversa inteira** e um layout effect a recolhe para o passo 0 antes da
+  primeira pintura. É o que faz a demonstração ser legível sem JavaScript sem piscar o
+  quadro cheio na carga.
+- **O laço pausa** quando a aba some (`visibilitychange`) ou quando o telefone sai da
+  viewport (`useInView`).
+- **Trilha de etapas** encosta à esquerda no desktop e some abaixo de 640px — nas duas
+  posições anteriores ela caía atrás dos botões flutuantes de WhatsApp.
+
+### Botões flutuantes: um só no celular (2026-08-15)
+
+A pilha de dois círculos ocupava 48×104px fixos no canto inferior direito e passava por
+cima do conteúdo — em 390px de largura qualquer bloco centralizado com mais de ~262px
+fica embaixo dela. Pior: no celular os rótulos eram `hidden sm:inline-block`, então eram
+dois círculos coloridos sem nome e ninguém sabia qual era comercial e qual era suporte.
+
+- **Celular:** um botão de 48×48 (área ocupada caiu 54%). Ao tocar, abre os dois canais
+  **com rótulo**; fecha ao tocar fora ou apertar Esc.
+- **Desktop:** sem mudança — os dois canais continuam à vista, cada um com seu rótulo.
+- **Custo:** o Comercial passou de um toque para dois no celular. Em troca, quem precisa
+  de suporte finalmente consegue distinguir os canais. Se a conversão cair, o caminho é
+  fazer o botão fechado linkar direto no Comercial e deixar o Suporte atrás do menu.
+- **`bottom` com `env(safe-area-inset-bottom)`:** o layout usa `viewportFit: cover`,
+  então em iPhone com notch os 24px de `bottom-6` caíam embaixo do indicador de home
+  (34px). Agora é `max(1.5rem, calc(env(safe-area-inset-bottom) + 0.5rem))` — 24px em
+  tela sem recorte, 42px com. Valia para os dois botões antigos também; só apareceu
+  quando o DevTools mostrou o botão único encostando na borda.
+- **`src/lib/whatsapp.ts`:** `WhatsAppButton.tsx` virou `"use client"` por causa do
+  estado de aberto/fechado. Componentes de servidor (`Footer`, `StructuredData`,
+  `/privacidade`) importariam referências de cliente no lugar das strings, então os
+  números e links saíram para esse módulo neutro. `WhatsAppButton.tsx` reexporta tudo
+  para os ~25 componentes de cliente que já importavam de lá.
+
 ---
 
 ## Aprendizados e Padrões
@@ -811,6 +895,11 @@ Variáveis: `LEAD_WEBHOOK_URL` (URL da função) e `LEAD_WEBHOOK_TOKEN` (mesmo v
 - "Está no ar" exige três evidências, todas fora da máquina local: working tree limpo, HEAD publicado no remoto e o deploy ativo em `vercel ls` apontando para esse commit. Em 2026-08-03 uma sessão registrou o hero como publicado tendo verificado só o `localhost`; o trabalho ficou quatro dias parado sem commit
 - Botões e links de header ou de par lado a lado precisam de `whitespace-nowrap`, senão quebram em duas linhas em 768px e em cards estreitos
 - Validação visual: use o build de produção numa porta dedicada (`npx next start -p 3005`). O servidor de desenvolvimento recarrega a página na primeira compilação, o que derruba a captura do MCP do Chrome e esconde os elementos animados por Framer Motion
+- Elemento `fixed` no canto inferior direito cobre conteúdo em telas estreitas: em 390px, qualquer bloco centralizado com mais de ~262px passa por baixo. Não adianta caçar a seção "culpada" — resolve-se encolhendo o que está fixo (foi o que fizemos com os botões de WhatsApp em 2026-08-15)
+- Componente compartilhado que exporta constantes **e** um componente interativo precisa se dividir: com `"use client"` no topo, quem roda no servidor recebe referência de cliente no lugar do valor. Padrão do projeto: constantes num módulo neutro em `src/lib/`, o componente reexporta para os consumidores de cliente
+- Há um overflow horizontal de 14px em larguras ≤768px vindo de um bloco `.group relative flex gap-6 border-b border-card-border py-8` (não é do Hero — reproduz igual com o Hero antigo). `npm run test:responsivo` não pega porque só percorre `/comecar`
+- Para medir contraste no navegador, **não** dá para fazer parse da string de `getComputedStyle().color`: o Tailwind v4 devolve `oklch()` e um parser ingênuo lê como RGB, produzindo razões falsas perto de 1.0. Pinte a cor num canvas 1×1 e leia com `getImageData` — funciona com qualquer sintaxe de cor
+- Três CTAs reprovam contraste AA no Lighthouse (Header, Nichos, Contato) e o do Hero também: branco sobre `#00ab7a` dá 2.95:1. É o estilo de botão primário do site inteiro. O mockup do hero novo resolve com texto **escuro** (`#06120f`) sobre o verde, que dá ~7:1 — decisão de marca pendente
 
 ---
 

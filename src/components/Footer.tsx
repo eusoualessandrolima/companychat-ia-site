@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 import Logo from "./Logo";
-import { whatsappLink } from "./WhatsAppButton";
+import { whatsappLink } from "@/lib/whatsapp";
 
 /* Marca "infinito" da Meta em gradiente azul da marca */
 function MetaLogo({ className }: { className?: string }) {

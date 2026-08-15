@@ -1,92 +1,152 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import {
   ArrowRight,
-  Bot,
+  BatteryFull,
   CalendarCheck,
-  MessageSquare,
-  Target,
-  BellRing,
   Check,
+  CheckCheck,
+  MessageSquare,
+  Mic,
+  MoreVertical,
+  Phone,
+  Plus,
+  Signal,
+  Smile,
+  Target,
+  Wifi,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { useMovimentoReduzido } from "@/hooks/useMovimentoReduzido";
 import { whatsappLink } from "./WhatsAppButton";
+
+/* Layout effect roda antes da pintura no cliente e não existe no servidor.
+   É o que permite entregar a conversa inteira no HTML (legível sem JS) e
+   recolhê-la para o início da cena sem o usuário ver o quadro cheio. */
+const useEfeitoDeLayout = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 /* ─── Roteiro da cena ────────────────────────────────
    Uma única linha do tempo comanda o chat e a trilha de
    fluxo, para os dois contarem a mesma história.        */
 type Passo =
-  | { tipo: "msg"; lado: "user" | "ai"; texto: string; dur: number; fluxo?: number }
+  | { tipo: "msg"; lado: "in" | "out"; texto: string; hora: string; dur: number; etapa?: number }
   | { tipo: "typing"; dur: number }
-  | { tipo: "evento"; texto: string; dur: number; fluxo?: number }
-  | { tipo: "pausa"; dur: number };
+  | { tipo: "espera"; dur: number }
+  | { tipo: "limpar"; dur: number };
 
 const CENA: Passo[] = [
-  { tipo: "msg", lado: "user", texto: "Oi! Quanto custa?", dur: 1000, fluxo: 0 },
-  { tipo: "typing", dur: 900 },
-  { tipo: "msg", lado: "ai", texto: "Depende do tamanho do seu time 😊 Quantas pessoas atendem hoje?", dur: 1700 },
-  { tipo: "msg", lado: "user", texto: "Somos 4 vendedores.", dur: 900, fluxo: 1 },
-  { tipo: "typing", dur: 900 },
-  { tipo: "msg", lado: "ai", texto: "Perfeito. Tenho um horário hoje às 15h, posso reservar?", dur: 1600 },
-  { tipo: "msg", lado: "user", texto: "Pode sim", dur: 800 },
-  { tipo: "typing", dur: 800 },
-  { tipo: "msg", lado: "ai", texto: "Reunião confirmada para hoje às 15h ✅", dur: 1300, fluxo: 2 },
-  { tipo: "evento", texto: "Lead criado no CRM Kanban", dur: 1200 },
-  { tipo: "evento", texto: "Vendedor notificado no WhatsApp", dur: 2200, fluxo: 3 },
-  { tipo: "pausa", dur: 1600 },
+  {
+    tipo: "msg",
+    lado: "in",
+    texto: "Olá, Pedro! 👋 Posso fazer 2 perguntas rápidas para entender sua operação?",
+    hora: "09:41",
+    dur: 900,
+    etapa: 0,
+  },
+  { tipo: "msg", lado: "out", texto: "Claro!", hora: "09:41", dur: 550 },
+  {
+    tipo: "msg",
+    lado: "in",
+    texto: "Quantas pessoas atendem hoje pelo WhatsApp?",
+    hora: "09:41",
+    dur: 700,
+  },
+  { tipo: "msg", lado: "out", texto: "Somos 4 vendedores.", hora: "09:42", dur: 600, etapa: 1 },
+  { tipo: "typing", dur: 1100 },
+  {
+    tipo: "msg",
+    lado: "in",
+    texto:
+      "Perfeito. Dá para centralizar as conversas, qualificar cada lead e distribuir as oportunidades automaticamente. Quer ver na prática?",
+    hora: "09:42",
+    dur: 1000,
+    etapa: 2,
+  },
+  { tipo: "espera", dur: 5500 },
+  { tipo: "limpar", dur: 700 },
 ];
 
-/* Conversa que já estava rolando quando a cena começa: evita o
-   quadro vazio nos primeiros segundos. */
-const HISTORICO = [
-  { lado: "ai" as const,   texto: "Olá! 👋 Sou a IA da CompanyChat. Como posso ajudar?" },
-  { lado: "user" as const, texto: "Vi o site de vocês" },
-];
+/** Último passo com conteúdo: é o que o servidor entrega e o que fica no ar
+ *  quando a pessoa pediu menos movimento. */
+const PASSO_FINAL = CENA.findIndex((p) => p.tipo === "espera") - 1;
 
 const ETAPAS = [
   { icon: MessageSquare, label: "Mensagem recebida" },
-  { icon: Target,        label: "Lead qualificado" },
+  { icon: Target, label: "Lead qualificado" },
   { icon: CalendarCheck, label: "Reunião agendada" },
-  { icon: BellRing,      label: "Time notificado" },
 ] as const;
 
-/** Avança pela CENA em laço. Com movimento reduzido, entrega o
- *  estado final de uma vez, sem timers. */
-function useCena() {
-  const reduzido = useMovimentoReduzido();
-  const [passo, setPasso] = useState(0);
+/* Cores do WhatsApp em dark mode — fora dos tokens do site de propósito:
+   o reconhecimento imediato depende de o app parecer o app. */
+const WA = {
+  tela: "#0b141a",
+  barra: "#202c33",
+  recebida: "#202c33",
+  enviada: "#005c4b",
+  composer: "#111b21",
+  acao: "#00a884",
+  check: "#53bdeb",
+} as const;
 
-  useEffect(() => {
+/** `true` enquanto a aba está à vista. Segura o laço quando a pessoa troca
+ *  de aba: nada de cena rodando sozinha em segundo plano. */
+function useAbaVisivel() {
+  return useSyncExternalStore(
+    (avisar) => {
+      document.addEventListener("visibilitychange", avisar);
+      return () => document.removeEventListener("visibilitychange", avisar);
+    },
+    () => document.visibilityState === "visible",
+    () => true
+  );
+}
+
+/** Avança pela CENA em laço enquanto `ativo`. Pausar não perde o lugar:
+ *  o índice vive numa ref e a cena retoma de onde parou. */
+function useCena(ativo: boolean, reduzido: boolean) {
+  const [passo, setPasso] = useState(PASSO_FINAL);
+  const indice = useRef(PASSO_FINAL);
+
+  useEfeitoDeLayout(() => {
     if (reduzido) return;
-
-    let atual = 0;
-    let timer: ReturnType<typeof setTimeout>;
-
-    const proximo = () => {
-      timer = setTimeout(() => {
-        atual = atual >= CENA.length - 1 ? 0 : atual + 1;
-        setPasso(atual);
-        proximo();
-      }, CENA[atual].dur);
-    };
-
-    proximo();
-    return () => clearTimeout(timer);
+    indice.current = 0;
+    setPasso(0);
   }, [reduzido]);
 
-  return reduzido ? CENA.length - 1 : passo;
+  useEffect(() => {
+    if (reduzido || !ativo) return;
+
+    let timer: ReturnType<typeof setTimeout>;
+    const agendar = () => {
+      timer = setTimeout(() => {
+        indice.current = indice.current >= CENA.length - 1 ? 0 : indice.current + 1;
+        setPasso(indice.current);
+        agendar();
+      }, CENA[indice.current].dur);
+    };
+
+    agendar();
+    return () => clearTimeout(timer);
+  }, [ativo, reduzido]);
+
+  return reduzido ? PASSO_FINAL : passo;
 }
 
 /* ─── Indicador de digitação ─────────────────────────── */
 function TypingDots() {
   return (
-    <div className="flex items-center gap-1 px-4 py-3">
+    <div className="flex items-center gap-1 px-3 py-2.5">
       {[0, 1, 2].map((i) => (
         <span
           key={i}
-          className={`h-2 w-2 rounded-full bg-dark-muted ${
+          className={`h-1.5 w-1.5 rounded-full bg-white/45 ${
             i === 0 ? "animate-typing-1" : i === 1 ? "animate-typing-2" : "animate-typing-3"
           }`}
         />
@@ -95,108 +155,124 @@ function TypingDots() {
   );
 }
 
-/* ─── Chat ao vivo ───────────────────────────────────── */
-function ChatVivo({ passo }: { passo: number }) {
+/* ─── Tela do WhatsApp ───────────────────────────────── */
+function TelaWhatsApp({ passo, montado }: { passo: number; montado: boolean }) {
   const digitando = CENA[passo].tipo === "typing";
-  // Na pausa a conversa desvanece, para o laço recomeçar limpo em vez
-  // de trocar onze mensagens por uma de um quadro para o outro.
-  const encerrando = CENA[passo].tipo === "pausa";
+  // Antes de o laço assumir, o HTML entrega a conversa inteira: sem JS a
+  // demonstração continua legível.
+  const limpando = CENA[passo].tipo === "limpar";
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-dark-border bg-dark-surface shadow-2xl shadow-black/60">
-      {/* Cabeçalho */}
-      <div className="flex items-center gap-3 border-b border-dark-border bg-dark-elevated px-4 py-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/20">
-          <Bot aria-hidden="true" className="h-5 w-5 text-primary" />
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-dark-text">IA CompanyChat</p>
-          <div className="flex items-center gap-1.5">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-dot-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
-            </span>
-            <span className="text-xs text-dark-muted">online 24/7</span>
-          </div>
-        </div>
-        <div className="ml-auto flex items-center gap-1.5">
-          {["bg-red-500/60", "bg-amber-500/60", "bg-green-500/60"].map((c, i) => (
-            <span key={i} className={`h-2.5 w-2.5 rounded-full ${c}`} />
-          ))}
-        </div>
+    <div className="relative overflow-hidden rounded-[34px]" style={{ background: WA.tela }}>
+      {/* Pílula de sensores */}
+      <div className="absolute left-1/2 top-2.5 z-10 h-[22px] w-[78px] -translate-x-1/2 rounded-full bg-[#020303]" />
+
+      {/* Status bar */}
+      <div className="flex items-center justify-between px-5 pb-1.5 pt-3 text-[11px] font-semibold text-white/95">
+        <span>9:41</span>
+        <span className="flex items-center gap-1.5">
+          <Signal aria-hidden="true" className="h-3 w-3" />
+          <Wifi aria-hidden="true" className="h-3 w-3" />
+          <BatteryFull aria-hidden="true" className="h-3.5 w-3.5" />
+        </span>
       </div>
 
-      {/* Conversa: altura fixa, mensagens antigas saem por cima com fade */}
+      {/* Cabeçalho da conversa */}
       <div
-        className={`flex h-[300px] flex-col justify-end gap-2 overflow-hidden px-4 py-4 transition-opacity duration-700 [mask-image:linear-gradient(to_bottom,transparent_0%,black_14%)] ${
-          encerrando ? "opacity-0" : "opacity-100"
-        }`}
+        className="grid grid-cols-[34px_1fr_auto] items-center gap-2.5 px-3 py-2.5"
+        style={{ background: WA.barra }}
       >
-        {HISTORICO.map((h, i) => (
-          <div key={`h${i}`} className={`flex ${h.lado === "user" ? "justify-end" : "justify-start"}`}>
-            <div
-              className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
-                h.lado === "user"
-                  ? "rounded-tr-sm bg-primary text-white"
-                  : "rounded-tl-sm bg-dark-elevated text-dark-text"
-              }`}
-            >
-              {h.texto}
-            </div>
-          </div>
-        ))}
+        <span className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-gradient-to-br from-primary to-[#006f57] text-sm font-semibold text-white">
+          C
+        </span>
+        <span className="min-w-0">
+          <span className="block truncate text-[13px] font-semibold text-white">
+            CompanyChat IA
+          </span>
+          <span className="block text-[11px] text-[#8696a0]">online agora</span>
+        </span>
+        <span className="flex items-center gap-3 text-[#aebac1]">
+          <Phone aria-hidden="true" className="h-4 w-4" />
+          <MoreVertical aria-hidden="true" className="h-4 w-4" />
+        </span>
+      </div>
 
-        {CENA.slice(0, passo + 1).map((p, i) => {
-          if (p.tipo === "evento") {
-            return (
-              <div key={i} className="flex justify-center" style={{ animation: "message-in 0.4s cubic-bezier(0.16,1,0.3,1) both" }}>
-                <div className="flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5">
-                  <Check aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-primary" />
-                  <span className="text-xs font-medium text-dark-text">{p.texto}</span>
-                </div>
-              </div>
-            );
-          }
+      {/* Conversa: altura fixa, o excedente desvanece no topo. Em telas
+          baixas o quadro encolhe para o hero não empurrar a trilha até os
+          botões flutuantes de WhatsApp. */}
+      <div
+        className={`flex h-[372px] flex-col justify-end gap-1.5 overflow-hidden px-2.5 py-3 transition-opacity duration-500 [mask-image:linear-gradient(to_bottom,transparent_0%,black_12%)] [@media(max-height:780px)]:h-[296px] ${
+          limpando ? "opacity-0" : "opacity-100"
+        }`}
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, rgba(255,255,255,0.045) 1px, transparent 1px)",
+          backgroundSize: "18px 18px",
+        }}
+      >
+        <span className="mx-auto rounded-md bg-[#182229] px-2 py-1 text-[10px] font-medium tracking-wide text-[#8696a0]">
+          HOJE
+        </span>
 
+        {CENA.map((p, i) => {
           if (p.tipo !== "msg") return null;
+          if (montado && i > passo) return null;
 
-          const doCliente = p.lado === "user";
+          const enviada = p.lado === "out";
           return (
             <div
               key={i}
-              className={`flex ${doCliente ? "justify-end" : "justify-start"}`}
-              style={{ animation: "message-in 0.35s cubic-bezier(0.16,1,0.3,1) both" }}
+              className={`max-w-[84%] rounded-lg px-2.5 pb-1.5 pt-2 text-[13px] leading-[1.38] text-white/95 shadow-sm shadow-black/20 ${
+                enviada ? "self-end" : "self-start"
+              }`}
+              style={{
+                background: enviada ? WA.enviada : WA.recebida,
+                animation: montado ? "message-in 0.4s cubic-bezier(0.16,1,0.3,1) both" : undefined,
+              }}
             >
-              <div
-                className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
-                  doCliente
-                    ? "rounded-tr-sm bg-primary text-white"
-                    : "rounded-tl-sm bg-dark-elevated text-dark-text"
-                }`}
-              >
-                {p.texto}
-              </div>
+              {p.texto}
+              {/* /70 e não /50 como no WhatsApp real: abaixo disso o horário
+                  fica sob 4.5:1 e reprova em AA. */}
+              <span className="float-right ml-2 mt-1 flex items-center gap-0.5 text-[10px] text-white/70">
+                {p.hora}
+                {enviada && (
+                  <CheckCheck
+                    aria-hidden="true"
+                    className="h-3 w-3"
+                    style={{ color: WA.check }}
+                  />
+                )}
+              </span>
             </div>
           );
         })}
 
         {digitando && (
-          <div className="flex justify-start">
-            <div className="rounded-2xl rounded-tl-sm bg-dark-elevated">
-              <TypingDots />
-            </div>
+          <div className="self-start rounded-lg" style={{ background: WA.recebida }}>
+            <TypingDots />
           </div>
         )}
       </div>
 
-      {/* Campo de mensagem (decorativo) */}
-      <div className="flex items-center gap-2 border-t border-dark-border bg-dark-elevated px-4 py-3">
-        <div className="flex-1 rounded-full bg-dark-surface px-4 py-2 text-xs text-dark-muted">
-          Digite uma mensagem…
-        </div>
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
-          <ArrowRight aria-hidden="true" className="h-4 w-4 text-white" />
-        </div>
+      {/* Composer (decorativo) */}
+      <div
+        className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-2.5 pb-3 pt-2"
+        style={{ background: WA.composer }}
+      >
+        <Plus aria-hidden="true" className="h-5 w-5 text-[#8696a0]" />
+        <span
+          className="flex items-center justify-between rounded-full px-3 py-2 text-[12px] text-[#8696a0]"
+          style={{ background: WA.barra }}
+        >
+          Mensagem
+          <Smile aria-hidden="true" className="h-4 w-4" />
+        </span>
+        <span
+          className="flex h-8 w-8 items-center justify-center rounded-full"
+          style={{ background: WA.acao }}
+        >
+          <Mic aria-hidden="true" className="h-4 w-4 text-white" />
+        </span>
       </div>
     </div>
   );
@@ -208,11 +284,14 @@ function TrilhaFluxo({ passo }: { passo: number }) {
   let ativa = -1;
   for (let i = 0; i <= passo; i++) {
     const p = CENA[i];
-    if ("fluxo" in p && p.fluxo !== undefined) ativa = p.fluxo;
+    if (p.tipo === "msg" && p.etapa !== undefined) ativa = p.etapa;
   }
 
   return (
-    <ol className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+    /* Os botões flutuantes de WhatsApp ocupam o canto inferior direito fixo:
+       no celular a trilha some (a conversa já conta a história) e no desktop
+       ela encosta à esquerda da coluna, longe deles. */
+    <ol className="mt-5 hidden w-full flex-wrap justify-center gap-2 sm:flex lg:-translate-x-6 lg:justify-start">
       {ETAPAS.map((etapa, i) => {
         const concluida = i < ativa;
         const atual = i === ativa;
@@ -221,7 +300,7 @@ function TrilhaFluxo({ passo }: { passo: number }) {
         return (
           <li
             key={etapa.label}
-            className={`flex items-center gap-2 rounded-xl border px-2.5 py-2 transition-all duration-500 ${
+            className={`flex items-center gap-1.5 rounded-xl border px-2.5 py-2 transition-all duration-500 ${
               atual
                 ? "border-primary/50 bg-primary/10 shadow-lg shadow-primary/10"
                 : concluida
@@ -232,12 +311,14 @@ function TrilhaFluxo({ passo }: { passo: number }) {
             <Icone
               aria-hidden="true"
               className={`h-3.5 w-3.5 shrink-0 transition-colors duration-500 ${
-                atual || concluida ? "text-primary" : "text-dark-muted/50"
+                atual || concluida ? "text-primary" : "text-dark-muted/80"
               }`}
             />
             <span
-              className={`text-[11px] font-medium leading-tight transition-colors duration-500 ${
-                atual ? "text-dark-text" : concluida ? "text-dark-muted" : "text-dark-muted/50"
+              /* A etapa ainda não alcançada fica apagada, mas não abaixo de
+                 4.5:1 — o estado é decoração, o rótulo é informação. */
+              className={`whitespace-nowrap text-[11px] font-medium leading-tight transition-colors duration-500 ${
+                atual ? "text-dark-text" : concluida ? "text-dark-muted" : "text-dark-muted/80"
               }`}
             >
               {etapa.label}
@@ -251,14 +332,60 @@ function TrilhaFluxo({ passo }: { passo: number }) {
 
 /* Mantém o relógio da cena isolado aqui: o resto do hero não
    re-renderiza a cada passo. */
-function PainelVivo() {
-  const passo = useCena();
+function Smartphone() {
+  const reduzido = useMovimentoReduzido();
+  const abaVisivel = useAbaVisivel();
+  const referencia = useRef<HTMLElement>(null);
+  const emVista = useInView(referencia, { amount: 0.3 });
+
+  const [montado, setMontado] = useState(false);
+  useEfeitoDeLayout(() => setMontado(!reduzido), [reduzido]);
+
+  const passo = useCena(emVista && abaVisivel, reduzido);
 
   return (
-    <>
-      <ChatVivo passo={passo} />
+    <figure
+      ref={referencia}
+      className="relative m-0 flex w-full flex-col items-center"
+      aria-label="Demonstração: a IA da CompanyChat atende, qualifica o lead e agenda a reunião pelo WhatsApp"
+    >
+      {/* Halo verde atrás do aparelho */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[480px] w-full max-w-[420px] -translate-x-1/2 -translate-y-1/2 blur-[10px]"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(0,220,163,0.22), rgba(0,220,163,0) 67%)",
+        }}
+      />
+
+      <motion.div
+        initial={reduzido ? false : { opacity: 0, y: 26, rotateY: -10, rotateZ: 1 }}
+        animate={
+          reduzido || emVista
+            ? { opacity: 1, y: 0, rotateY: -5, rotateZ: 1 }
+            : { opacity: 0, y: 26, rotateY: -10, rotateZ: 1 }
+        }
+        transition={{ duration: 0.65, ease: [0.2, 0.8, 0.2, 1] }}
+        style={{
+          transformPerspective: 950,
+          background:
+            "linear-gradient(110deg, #51605d 0%, #161b1c 12%, #050708 48%, #505b59 91%, #151919 100%)",
+          boxShadow:
+            "0 38px 80px rgba(0,0,0,0.5), -12px 8px 35px rgba(0,205,154,0.14), inset 0 0 0 1px rgba(255,255,255,0.34)",
+        }}
+        className="w-[min(322px,82vw)] rounded-[42px] p-[8px]"
+      >
+        <TelaWhatsApp passo={passo} montado={montado} />
+      </motion.div>
+
+      <figcaption className="sr-only">
+        Simulação da conversa: a IA faz duas perguntas, o cliente responde que o time tem
+        quatro vendedores e a plataforma qualifica o lead e distribui a oportunidade.
+      </figcaption>
+
       <TrilhaFluxo passo={passo} />
-    </>
+    </figure>
   );
 }
 
@@ -328,21 +455,44 @@ export default function Hero() {
               Plataforma com IA integrada
             </div>
 
-            <h1
-              aria-label="Não somos apenas um CRM."
-              className="text-[clamp(40px,4.4vw,56px)] font-bold leading-[1.03] tracking-[-0.03em] text-dark-text"
-            >
+            <h1 className="text-[clamp(40px,4.4vw,56px)] font-bold leading-[1.03] tracking-[-0.03em] text-dark-text">
               Não somos apenas um CRM.
             </h1>
 
-            <p className="mt-4 text-[clamp(18px,1.8vw,20px)] font-medium leading-snug text-dark-muted">
-              Quem usa CompanyChat não acompanha o mercado.
-            </p>
-            <p className="mt-1.5 text-[clamp(30px,3.2vw,40px)] font-bold leading-[1.05] tracking-[-0.02em] text-gradient-primary">
-              Inova ele.
+            <p className="mt-4 max-w-xl text-[clamp(19px,2vw,24px)] font-medium leading-snug text-dark-text/90">
+              Somos a inteligência que transforma conversas em crescimento.
             </p>
 
-            <p className="mt-6 max-w-lg text-[17px] leading-relaxed text-dark-muted">
+            <p className="mt-3 text-[clamp(16px,1.7vw,19px)] leading-relaxed text-dark-muted">
+              Quem usa a CompanyChat não acompanha o mercado.{" "}
+              <span className="relative inline-block whitespace-nowrap font-bold text-transparent">
+                <span
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #00ab7a 0%, #4ee0b5 55%, #00c896 100%)",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                  }}
+                >
+                  Inova ele.
+                </span>
+                {/* Traço luminoso: desenha uma vez, quando a seção entra na tela */}
+                <motion.span
+                  aria-hidden="true"
+                  className="absolute -bottom-1 left-0 h-[2px] w-full origin-left rounded-full"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, transparent, #00dba6, transparent)",
+                  }}
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true, amount: 0.6 }}
+                  transition={{ duration: 0.8, delay: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
+                />
+              </span>
+            </p>
+
+            <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-dark-muted/85">
               IA, automações com regras de negócio inteligentes, BI interno, mensageria
               conectada e decisões em tempo real, tudo fluindo em um sistema criado para
               escalar com você.
@@ -376,16 +526,15 @@ export default function Hero() {
           </motion.div>
 
           {/* ── Direita: produto em funcionamento ── */}
+          {/* pb fora do desktop: numa coluna só o telefone termina no canto
+              inferior, exatamente onde ficam os botões flutuantes de WhatsApp. */}
           <motion.div
             initial={{ opacity: 0, x: 32 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="flex justify-center lg:justify-end"
+            className="flex justify-center pb-20 lg:pb-0 lg:justify-end"
           >
-            <div className="relative w-full max-w-[380px] lg:max-w-[420px]">
-              <div className="absolute inset-0 -z-10 scale-105 rounded-3xl bg-primary/10 blur-3xl" />
-              <PainelVivo />
-            </div>
+            <Smartphone />
           </motion.div>
         </div>
       </div>

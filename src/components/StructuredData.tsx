@@ -1,4 +1,4 @@
-import { WHATSAPP_NUMBER } from "./WhatsAppButton";
+import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.companychatia.com.br";

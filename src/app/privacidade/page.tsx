@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import Footer from "@/components/Footer";
-import { WHATSAPP_NUMBER } from "@/components/WhatsAppButton";
+import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
 
 /* Política de privacidade exigida pelas LPs de captura: elas coletam nome,
    telefone e segmento, e a revisão de anúncios da Meta checa a página de
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 };
 
 const ATUALIZADO_EM = "14 de agosto de 2026";
+const EMAIL_CONTATO = "contato@companychatia.com.br";
 
 function Secao({
   titulo,
@@ -38,6 +39,7 @@ function Secao({
 
 export default function PrivacidadePage() {
   const whatsapp = `https://wa.me/${WHATSAPP_NUMBER}`;
+  const email = `mailto:${EMAIL_CONTATO}`;
 
   return (
     <>
@@ -78,8 +80,16 @@ export default function PrivacidadePage() {
             tratados.
           </p>
           <p>
-            Para qualquer assunto relacionado a esta política, fale conosco pelo
-            WhatsApp{" "}
+            Para qualquer assunto relacionado a esta política, inclusive falar
+            com o nosso encarregado pelo tratamento de dados pessoais, escreva
+            para{" "}
+            <a
+              href={email}
+              className="text-primary underline underline-offset-4"
+            >
+              {EMAIL_CONTATO}
+            </a>{" "}
+            ou fale conosco pelo WhatsApp{" "}
             <a
               href={whatsapp}
               target="_blank"
@@ -227,7 +237,14 @@ export default function PrivacidadePage() {
             </li>
           </ul>
           <p>
-            Para exercer qualquer um deles, basta nos chamar no{" "}
+            Para exercer qualquer um deles, escreva para{" "}
+            <a
+              href={email}
+              className="text-primary underline underline-offset-4"
+            >
+              {EMAIL_CONTATO}
+            </a>{" "}
+            ou nos chame no{" "}
             <a
               href={whatsapp}
               target="_blank"
