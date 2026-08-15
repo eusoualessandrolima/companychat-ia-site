@@ -133,7 +133,7 @@ export default function ChatMock({ contato, canal, mensagens }: Props) {
                   <div
                     className={`max-w-[86%] rounded-2xl px-3.5 py-2.5 ${
                       daIa
-                        ? "rounded-tr-sm bg-primary text-white"
+                        ? "rounded-tr-sm bg-primary text-on-primary"
                         : "rounded-tl-sm bg-dark-elevated text-dark-text"
                     }`}
                   >
@@ -182,7 +182,7 @@ export default function ChatMock({ contato, canal, mensagens }: Props) {
                   className={`max-w-[86%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
                     doCliente
                       ? "rounded-tl-sm bg-dark-elevated text-dark-text"
-                      : "rounded-tr-sm bg-primary text-white"
+                      : "rounded-tr-sm bg-primary text-on-primary"
                   }`}
                 >
                   {m.texto}

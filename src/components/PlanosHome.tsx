@@ -50,7 +50,7 @@ export default function PlanosHome() {
               }`}
             >
               {plano.badge && (
-                <span className="absolute -top-3 right-8 rounded-full bg-primary px-3.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-lg shadow-primary/30">
+                <span className="absolute -top-3 right-8 rounded-full bg-primary px-3.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-on-primary shadow-lg shadow-primary/30">
                   {plano.badge}
                 </span>
               )}
@@ -86,7 +86,7 @@ export default function PlanosHome() {
                       href={whatsappLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 py-3.5 font-semibold text-white shadow-lg shadow-primary/30 transition-all hover:bg-primary-dark"
+                      className="flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 py-3.5 font-semibold text-on-primary shadow-lg shadow-primary/30 transition-all hover:bg-primary-dark"
                     >
                       {plano.cta}
                     </a>

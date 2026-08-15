@@ -68,8 +68,8 @@ const colunas: Coluna[] = [
 ];
 
 const slim = [
-  { nome: "Oportunidade Ganha", cor: "bg-primary", count: 1 },
-  { nome: "Oportunidade Perdida", cor: "bg-red-500", count: 0 },
+  { nome: "Oportunidade Ganha", cor: "bg-primary text-on-primary", count: 1 },
+  { nome: "Oportunidade Perdida", cor: "bg-red-500 text-white", count: 0 },
 ];
 
 const pilares: { icon: LucideIcon; titulo: string; desc: string }[] = [
@@ -193,7 +193,7 @@ export default function CrmKanban() {
             {slim.map((s) => (
               <div
                 key={s.nome}
-                className={`flex w-11 shrink-0 flex-col items-center justify-between rounded-lg ${s.cor} py-3 text-white`}
+                className={`flex w-11 shrink-0 flex-col items-center justify-between rounded-lg ${s.cor} py-3`}
               >
                 <span className="rounded-full bg-white/25 px-1.5 text-xs font-semibold">{s.count}</span>
                 <span className="[writing-mode:vertical-rl] rotate-180 text-xs font-semibold tracking-wide">
@@ -238,7 +238,7 @@ export default function CrmKanban() {
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center justify-center gap-2.5 rounded-full bg-primary px-9 py-4 font-semibold text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
+              className="group flex items-center justify-center gap-2.5 rounded-full bg-primary px-9 py-4 font-semibold text-on-primary shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
             >
               Quero o CRM Kanban
               <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

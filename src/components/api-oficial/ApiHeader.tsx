@@ -48,7 +48,7 @@ export default function ApiHeader() {
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="whitespace-nowrap rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25"
+            className="whitespace-nowrap rounded-full bg-primary px-5 py-2 text-sm font-semibold text-on-primary transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25"
           >
             Fale Conosco
           </a>

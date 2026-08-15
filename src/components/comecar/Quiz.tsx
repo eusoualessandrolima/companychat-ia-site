@@ -302,7 +302,7 @@ function Capa({ aoComecar }: { aoComecar: () => void }) {
         type="button"
         onClick={aoComecar}
         whileTap={{ scale: 0.98 }}
-        className="animate-cta-pulse mt-8 flex w-full items-center justify-center gap-2.5 rounded-full bg-primary px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-primary-dark"
+        className="animate-cta-pulse mt-8 flex w-full items-center justify-center gap-2.5 rounded-full bg-primary px-8 py-4 text-lg font-semibold text-on-primary transition-colors hover:bg-primary-dark"
       >
         Começar agora
         <ArrowRight aria-hidden="true" className="h-5 w-5 shrink-0" />
@@ -711,7 +711,7 @@ export default function Quiz() {
                         type="submit"
                         /* px reduzido no mobile: o rótulo é longo e a 320px
                            quebrava em duas linhas com a seta desalinhada. */
-                        className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-4 text-[15px] font-semibold leading-snug text-white shadow-lg shadow-primary/25 transition-colors hover:bg-primary-dark sm:gap-2.5 sm:px-8 sm:text-base"
+                        className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-4 text-[15px] font-semibold leading-snug text-on-primary shadow-lg shadow-primary/25 transition-colors hover:bg-primary-dark sm:gap-2.5 sm:px-8 sm:text-base"
                       >
                         Continuar para as perguntas
                         <ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0" />

@@ -7,6 +7,10 @@
   --color-primary: #00ab7a;
   --color-primary-light: #e6f9f2;
   --color-primary-dark: #008c63;
+  /* Texto sobre o verde da marca. Branco dava 2,95:1 e reprovava em AA; este
+     quase-preto dá 6,45:1 sobre `primary` e 4,95:1 sobre `primary-dark` (o
+     hover), sem mexer no verde. É o mesmo par do mockup da identidade v2. */
+  --color-on-primary: #06120f;
   --color-primary-glow: rgba(0, 171, 122, 0.2);
   --color-section: #f4f4f5;
   --color-card: #ffffff;

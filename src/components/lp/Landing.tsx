@@ -90,7 +90,7 @@ function CTAPrincipal({
     <a
       href="#oferta"
       onClick={aoClicar}
-      className="animate-cta-pulse inline-flex items-center justify-center gap-2.5 rounded-full bg-primary px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-primary-dark"
+      className="animate-cta-pulse inline-flex items-center justify-center gap-2.5 rounded-full bg-primary px-8 py-4 text-lg font-semibold text-on-primary transition-colors hover:bg-primary-dark"
     >
       {rotulo}
       <ArrowRight aria-hidden="true" className="h-5 w-5 shrink-0" />
@@ -148,7 +148,7 @@ export default function Landing({ nicho }: { nicho: Nicho }) {
         <a
           href="#oferta"
           onClick={aoClicarCTA}
-          className="inline-flex min-h-11 items-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
+          className="inline-flex min-h-11 items-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-colors hover:bg-primary-dark"
         >
           Testar a IA
         </a>
@@ -444,7 +444,7 @@ export default function Landing({ nicho }: { nicho: Nicho }) {
                   <h3 className="flex flex-wrap items-center gap-x-2.5 gap-y-2 text-lg font-bold">
                     <Bot aria-hidden="true" className="h-5 w-5 shrink-0 text-primary" />
                     <span className="min-w-0">Com a CompanyChat</span>
-                    <span className="ml-auto rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">
+                    <span className="ml-auto rounded-full bg-primary px-3 py-1 text-xs font-semibold text-on-primary">
                       Recomendado
                     </span>
                   </h3>

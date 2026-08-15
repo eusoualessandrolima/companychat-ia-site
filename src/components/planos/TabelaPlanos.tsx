@@ -68,7 +68,7 @@ export default function TabelaPlanos() {
               }`}
             >
               {plano.badge && (
-                <span className="absolute -top-3 right-8 rounded-full bg-primary px-3.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-lg shadow-primary/30">
+                <span className="absolute -top-3 right-8 rounded-full bg-primary px-3.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-on-primary shadow-lg shadow-primary/30">
                   {plano.badge}
                 </span>
               )}
@@ -125,7 +125,7 @@ export default function TabelaPlanos() {
                       href={whatsappLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex w-full items-center justify-center gap-2.5 rounded-full bg-primary px-8 py-4 font-semibold text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
+                      className="group flex w-full items-center justify-center gap-2.5 rounded-full bg-primary px-8 py-4 font-semibold text-on-primary shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
                     >
                       {plano.cta}
                       <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

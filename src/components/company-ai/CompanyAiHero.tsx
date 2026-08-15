@@ -102,7 +102,7 @@ export default function CompanyAiHero() {
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-primary px-8 py-3.5 font-semibold tracking-[-0.01em] text-white transition-colors duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:bg-primary-dark sm:w-auto"
+                className="flex w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-primary px-8 py-3.5 font-semibold tracking-[-0.01em] text-on-primary transition-colors duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:bg-primary-dark sm:w-auto"
               >
                 <MessageCircle aria-hidden="true" className="h-4 w-4" />
                 Falar sobre o meu projeto

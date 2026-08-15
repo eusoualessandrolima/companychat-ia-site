@@ -50,7 +50,7 @@ export default function CompanyAi() {
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/company-ai"
-                className="group flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-primary px-7 py-3.5 font-semibold tracking-[-0.01em] text-white transition-colors duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:bg-primary-dark"
+                className="group flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-primary px-7 py-3.5 font-semibold tracking-[-0.01em] text-on-primary transition-colors duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:bg-primary-dark"
               >
                 Conhecer a Company AI
                 <ArrowRight

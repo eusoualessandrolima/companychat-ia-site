@@ -301,7 +301,7 @@ export default function Nichos() {
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary-glow transition-all hover:bg-primary-dark hover:shadow-xl"
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-on-primary shadow-lg shadow-primary-glow transition-all hover:bg-primary-dark hover:shadow-xl"
           >
             <WhatsAppIcon className="h-4 w-4" />
             Não achei meu segmento

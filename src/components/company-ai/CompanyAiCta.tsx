@@ -41,7 +41,7 @@ export default function CompanyAiCta() {
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-primary px-9 py-3.5 font-semibold tracking-[-0.01em] text-white transition-colors duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:bg-primary-dark"
+            className="group flex items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-primary px-9 py-3.5 font-semibold tracking-[-0.01em] text-on-primary transition-colors duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:bg-primary-dark"
           >
             <MessageCircle aria-hidden="true" className="h-4 w-4" />
             Falar sobre o meu projeto

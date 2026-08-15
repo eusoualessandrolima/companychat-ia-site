@@ -74,7 +74,7 @@ export default function ApiHero() {
           <div className="cta-glow-wrap">
             <a
               href="#calculadora"
-              className="group flex items-center justify-center gap-2.5 rounded-full bg-primary px-9 py-4 font-semibold text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
+              className="group flex items-center justify-center gap-2.5 rounded-full bg-primary px-9 py-4 font-semibold text-on-primary shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
             >
               <Calculator aria-hidden="true" className="h-4 w-4" />
               Calcular meu custo

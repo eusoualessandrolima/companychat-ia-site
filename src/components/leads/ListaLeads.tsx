@@ -146,6 +146,10 @@ export default function ListaLeads({ leads }: { leads: Lead[] }) {
               />
               Atualizar
             </button>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages --
+                `/api/leads/csv` é um Route Handler que devolve o arquivo para
+                download, não uma página. `<Link>` faria navegação no cliente e
+                o download nunca aconteceria. */}
             <a
               href="/api/leads/csv"
               className="flex items-center gap-2 rounded-full border border-dark-border px-4 py-2 text-sm font-medium text-dark-text transition-colors hover:border-primary/50 hover:text-primary"

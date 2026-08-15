@@ -81,7 +81,7 @@ export default function FormSenha() {
         <button
           type="submit"
           disabled={entrando || senha.length === 0}
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-white transition-colors hover:bg-primary-dark disabled:opacity-50"
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-on-primary transition-colors hover:bg-primary-dark disabled:opacity-50"
         >
           {entrando ? (
             <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" />

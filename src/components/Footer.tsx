@@ -70,7 +70,7 @@ export default function Footer() {
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/30"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/30"
             >
               Fale Conosco
             </a>
@@ -79,9 +79,9 @@ export default function Footer() {
           {/* Links */}
           <div className="grid grid-cols-3 gap-8 lg:col-span-3">
             <div>
-              <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-dark-muted">
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-dark-muted">
                 Produto
-              </h4>
+              </h3>
               <ul className="space-y-3">
                 {links.produto.map((l) => (
                   <li key={l.href}>
@@ -94,9 +94,9 @@ export default function Footer() {
             </div>
 
             <div>
-              <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-dark-muted">
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-dark-muted">
                 Empresa
-              </h4>
+              </h3>
               <ul className="space-y-3">
                 {links.empresa.map((l) => (
                   <li key={l.href}>
@@ -114,9 +114,9 @@ export default function Footer() {
             </div>
 
             <div>
-              <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-dark-muted">
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-dark-muted">
                 Recursos
-              </h4>
+              </h3>
               <ul className="space-y-3">
                 {links.recursos.map((l) => (
                   <li key={l.href}>
