@@ -1,7 +1,20 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
+/* O card social usava o nome em texto ao lado de um ponto verde — um logotipo
+   recriado, o que o manual da marca proíbe. Aqui entra o vetor oficial: o
+   Satori aceita SVG por data URI, e a imagem é gerada no build, então ler o
+   arquivo do disco não custa nada em runtime. */
+const LOGO = `data:image/svg+xml;base64,${readFileSync(
+  join(process.cwd(), "public/brand/companychat-logo-dark.svg")
+).toString("base64")}`;
+
+const LOGO_LARGURA = 340;
+const LOGO_ALTURA = Math.round((LOGO_LARGURA * 72) / 500);
+
 export const alt =
-  "CompanyChat IA: não somos apenas um CRM. Quem usa CompanyChat não acompanha o mercado, inova ele.";
+  "CompanyChat: não somos apenas um CRM. Quem usa CompanyChat não acompanha o mercado, inova ele.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -21,25 +34,14 @@ export default function OpengraphImage() {
             "radial-gradient(circle at 20% 0%, rgba(0,171,122,0.25) 0%, transparent 50%), radial-gradient(circle at 90% 100%, rgba(59,130,246,0.15) 0%, transparent 50%)",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "16px",
-            marginBottom: "48px",
-          }}
-        >
-          <div
-            style={{
-              width: "20px",
-              height: "20px",
-              borderRadius: "50%",
-              backgroundColor: "#00ab7a",
-            }}
+        <div style={{ display: "flex", marginBottom: "48px" }}>
+          {/* Satori só renderiza imagem por <img>; next/image não vale aqui. */}
+          <img
+            src={LOGO}
+            alt="CompanyChat"
+            width={LOGO_LARGURA}
+            height={LOGO_ALTURA}
           />
-          <div style={{ fontSize: "36px", fontWeight: 700, color: "#fafafa" }}>
-            CompanyChat IA
-          </div>
         </div>
         <div
           style={{

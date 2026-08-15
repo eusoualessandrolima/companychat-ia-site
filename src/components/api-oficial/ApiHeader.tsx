@@ -33,7 +33,7 @@ export default function ApiHeader() {
           <span className="hidden text-sm sm:inline">Voltar ao site</span>
         </Link>
 
-        <Link href="/" aria-label="CompanyChat IA">
+        <Link href="/" aria-label="CompanyChat, início">
           <Logo dark />
         </Link>
 

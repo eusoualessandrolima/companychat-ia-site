@@ -41,7 +41,7 @@ function formatarData(iso: string) {
 function linkWhatsApp(lead: Lead) {
   if (!lead.telefone_e164) return null;
   const texto = encodeURIComponent(
-    `Olá${lead.nome ? `, ${lead.nome.split(" ")[0]}` : ""}! Aqui é da CompanyChat IA. Vi que você começou o teste no nosso site.`
+    `Olá${lead.nome ? `, ${lead.nome.split(" ")[0]}` : ""}! Aqui é da CompanyChat. Vi que você começou o teste no nosso site.`
   );
   return `https://wa.me/${lead.telefone_e164}?text=${texto}`;
 }

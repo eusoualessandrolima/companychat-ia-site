@@ -8,9 +8,9 @@ import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
    telefone e segmento, e a revisão de anúncios da Meta checa a página de
    destino. O link vive no formulário e nos rodapés. */
 export const metadata: Metadata = {
-  title: "Política de Privacidade | CompanyChat IA",
+  title: "Política de Privacidade | CompanyChat",
   description:
-    "Como a CompanyChat IA coleta, usa, compartilha e protege os dados pessoais informados no site, e como exercer os seus direitos previstos na LGPD.",
+    "Como a CompanyChat coleta, usa, compartilha e protege os dados pessoais informados no site, e como exercer os seus direitos previstos na LGPD.",
   alternates: { canonical: "/privacidade" },
   robots: { index: true, follow: true },
 };
@@ -66,7 +66,7 @@ export default function PrivacidadePage() {
         </p>
 
         <p className="mt-8 leading-relaxed text-dark-muted">
-          Esta política explica quais dados pessoais a CompanyChat IA coleta
+          Esta política explica quais dados pessoais a CompanyChat coleta
           neste site, para que eles são usados, com quem são compartilhados e
           como você pode exercer os seus direitos. Ela segue a Lei Geral de
           Proteção de Dados Pessoais (Lei nº 13.709/2018).

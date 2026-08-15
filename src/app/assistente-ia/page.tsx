@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "Assistente de IA para WhatsApp | CompanyChat IA",
+  title: "Assistente de IA para WhatsApp | CompanyChat",
   description:
     "Um atendente de IA treinado no seu negócio: ouve áudios, lê documentos, agenda, cobra, move o lead no CRM e chama seu time quando o caso pede. No ar em até 7 dias, no seu WhatsApp.",
   keywords: [
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
       "Ouve áudio, lê documento, agenda, cobra e passa para o seu time quando precisa. Treinado com o material do seu negócio e no ar em até 7 dias.",
     type: "article",
     locale: "pt_BR",
-    siteName: "CompanyChat IA",
+    siteName: "CompanyChat",
   },
 };
 

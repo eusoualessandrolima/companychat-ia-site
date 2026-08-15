@@ -13,11 +13,11 @@ const WHATSAPP_SUPORTE =
   process.env.NEXT_PUBLIC_WHATSAPP_SUPORTE ?? WHATSAPP_NUMBER;
 
 const WHATSAPP_MESSAGE = encodeURIComponent(
-  "Olá! Gostaria de saber mais sobre os serviços da CompanyChat IA."
+  "Olá! Gostaria de saber mais sobre os serviços da CompanyChat."
 );
 
 const MENSAGEM_SUPORTE = encodeURIComponent(
-  "Olá! Já sou cliente da CompanyChat IA e preciso de suporte."
+  "Olá! Já sou cliente da CompanyChat e preciso de suporte."
 );
 
 export const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`;

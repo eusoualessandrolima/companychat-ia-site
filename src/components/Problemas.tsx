@@ -53,7 +53,7 @@ export default function Problemas() {
             na sua empresa?
           </h2>
           <p className="mt-4 text-white/55">
-            Se você se identificou com algum desses pontos, a CompanyChat IA é para você.
+            Se você se identificou com algum desses pontos, a CompanyChat é para você.
           </p>
         </motion.div>
 

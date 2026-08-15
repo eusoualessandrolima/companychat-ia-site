@@ -45,7 +45,7 @@
 | FAQ | `FAQ.tsx` | Perguntas frequentes |
 | Contato | `Contato.tsx` | Formulário/CTA de contato |
 | Footer | `Footer.tsx` | Rodapé |
-| Logo | `Logo.tsx` | Componente de logo |
+| Logo | `Logo.tsx` | Wordmark oficial em SVG (`public/brand/`), 145px no mobile e 160px no desktop. Não montar a marca com texto — ver `docs/marca/MANUAL-DA-MARCA.md` |
 | WhatsAppButton | `WhatsAppButton.tsx` | Botão flutuante do WhatsApp (`"use client"`). No desktop mostra Comercial e Suporte; no celular vira um botão só que abre os dois rotulados. Números e links moram em `src/lib/whatsapp.ts` |
 | CountUp | `CountUp.tsx` | Contador animado compartilhado (usado em Hero e Sobre) |
 
@@ -857,6 +857,31 @@ Onde divergimos de propósito:
   viewport (`useInView`).
 - **Trilha de etapas** encosta à esquerda no desktop e some abaixo de 640px — nas duas
   posições anteriores ela caía atrás dos botões flutuantes de WhatsApp.
+
+### Identidade v2: a marca pública virou "CompanyChat" (2026-08-15)
+
+Pacote oficial em `~/Desktop/CompanyChat-IA-Novo-Hero/09-IDENTIDADE-OFICIAL-EXTRABOLD`
+(idêntico a `~/Documents/Codex/2026-08-15/.../companychat-identidade-oficial-v2`).
+
+- **O logotipo é um SVG, não texto.** `Logo.tsx` montava a marca com dois `span` mais
+  uma cápsula `IA`; agora serve `public/brand/companychat-logo-{dark,light}.svg`
+  (Manrope ExtraBold em curvas, 500 × 72). O manual proíbe recriar a marca em
+  HTML/CSS e proíbe inverter cores por filtro — daí dois arquivos em vez de um.
+  O componente é usado em 9 lugares, então a troca cobriu header, footer, ApiHeader,
+  privacidade, login do painel, lista de leads, LPs e quiz de uma vez.
+- **`<img>` e não `next/image`:** é SVG de dimensão fixa, não há o que otimizar. O
+  `eslint-disable` no topo do componente registra o porquê.
+- **Nome público:** `CompanyChat IA` → `CompanyChat` em 42 arquivos. Preservadas as
+  duas ocorrências de `CompanyChat IA Ltda` (razão social, em `Footer.tsx` e na
+  política de privacidade) e todas as referências descritivas a IA (`Assistente IA`,
+  `IA integrada`, o produto `Company AI`).
+- **O card social recriava o logotipo:** `opengraph-image.tsx` desenhava o nome em
+  texto ao lado de um ponto verde. Agora embute o SVG oficial via data URI — o Satori
+  aceita, e a imagem é gerada no build.
+- **Favicon auditado, não trocado:** `app/icon.svg` é um quadrado verde com a letra
+  `C`. Não contém `IA`, então ficou como está — o manual proíbe inventar símbolo.
+- **`public/` deixou de ser vazio.** O `Dockerfile` já fazia `COPY /app/public ./public`,
+  então os SVGs chegam à produção mesmo com `output: standalone`.
 
 ### Botões flutuantes: um só no celular (2026-08-15)
 

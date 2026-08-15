@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.companychatia.com.br"
   ),
-  title: "Automação de WhatsApp com IA em Goiânia | CompanyChat IA",
+  title: "Automação de WhatsApp com IA em Goiânia | CompanyChat",
   description:
     "Automação de atendimento no WhatsApp com IA em Goiânia e todo o Brasil. Assistente 24/7, API Oficial, disparo em massa e CRM. Fale conosco pelo WhatsApp.",
   alternates: { canonical: "/" },
@@ -49,14 +49,14 @@ export const metadata: Metadata = {
     "Goiás",
     "CompanyChat",
   ],
-  authors: [{ name: "CompanyChat IA" }],
+  authors: [{ name: "CompanyChat" }],
   openGraph: {
-    title: "Automação de WhatsApp com IA em Goiânia | CompanyChat IA",
+    title: "Automação de WhatsApp com IA em Goiânia | CompanyChat",
     description:
       "Assistente IA 24/7, API Oficial, disparo em massa e CRM no WhatsApp. Atendemos Goiânia e todo o Brasil, 100% online.",
     type: "website",
     locale: "pt_BR",
-    siteName: "CompanyChat IA",
+    siteName: "CompanyChat",
   },
   robots: {
     index: true,

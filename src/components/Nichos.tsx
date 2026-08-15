@@ -128,7 +128,7 @@ const nichos = [
 /** Abre o WhatsApp já dizendo de qual segmento o lead veio — poupa a primeira pergunta. */
 function linkDoSegmento(titulo: string) {
   const texto = encodeURIComponent(
-    `Olá! Atuo no segmento de ${titulo} e gostaria de saber como a CompanyChat IA pode ajudar.`
+    `Olá! Atuo no segmento de ${titulo} e gostaria de saber como a CompanyChat pode ajudar.`
   );
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${texto}`;
 }
@@ -222,7 +222,7 @@ export default function Nichos() {
           </h2>
           <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-text-secondary">
             Cada área tem desafios próprios de atendimento, vendas e relacionamento.
-            Com a CompanyChat IA, sua empresa organiza o WhatsApp, automatiza processos
+            Com a CompanyChat, sua empresa organiza o WhatsApp, automatiza processos
             e adapta o assistente ao seu fluxo para entregar um atendimento mais ágil,
             organizado e eficiente.
           </p>

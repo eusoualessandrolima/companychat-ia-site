@@ -30,7 +30,7 @@ export const empresas: LPConteudo = {
     inicio: "Pare de perder clientes",
     destaque: "no WhatsApp",
     descricao:
-      "A CompanyChat IA responde em segundos, qualifica o cliente, agenda e acompanha cada conversa, 24 horas por dia, inclusive quando a sua empresa está fechada.",
+      "A CompanyChat responde em segundos, qualifica o cliente, agenda e acompanha cada conversa, 24 horas por dia, inclusive quando a sua empresa está fechada.",
     cta: "Quero ver a IA atendendo",
   },
 
@@ -156,7 +156,7 @@ export const empresas: LPConteudo = {
         icone: Sparkles,
         titulo: "A IA atendendo de verdade",
         descricao:
-          "O WhatsApp oficial da CompanyChat IA é atendido pela mesma IA que você vai contratar. É a demonstração mais honesta que existe.",
+          "O WhatsApp oficial da CompanyChat é atendido pela mesma IA que você vai contratar. É a demonstração mais honesta que existe.",
         artefato: "Teste ao vivo no fim desta página",
       },
     ],

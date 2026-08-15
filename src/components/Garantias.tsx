@@ -64,7 +64,7 @@ export default function Garantias() {
         >
           <h2 className="text-3xl font-bold md:text-4xl">
             O que você pode esperar da{" "}
-            <span className="text-primary">CompanyChat IA</span>
+            <span className="text-primary">CompanyChat</span>
           </h2>
         </motion.div>
 

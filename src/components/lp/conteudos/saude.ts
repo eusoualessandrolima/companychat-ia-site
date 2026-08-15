@@ -29,7 +29,7 @@ export const saude: LPConteudo = {
     inicio: "Pare de perder pacientes",
     destaque: "no WhatsApp",
     descricao:
-      "A CompanyChat IA responde em segundos, qualifica o paciente, agenda e confirma consultas, 24 horas por dia, inclusive quando a sua clínica está fechada.",
+      "A CompanyChat responde em segundos, qualifica o paciente, agenda e confirma consultas, 24 horas por dia, inclusive quando a sua clínica está fechada.",
     cta: "Quero ver a IA atendendo",
   },
 
@@ -155,7 +155,7 @@ export const saude: LPConteudo = {
         icone: Sparkles,
         titulo: "A IA atendendo de verdade",
         descricao:
-          "O WhatsApp oficial da CompanyChat IA é atendido pela mesma IA que você vai contratar. É a demonstração mais honesta que existe.",
+          "O WhatsApp oficial da CompanyChat é atendido pela mesma IA que você vai contratar. É a demonstração mais honesta que existe.",
         artefato: "Teste ao vivo no fim desta página",
       },
     ],

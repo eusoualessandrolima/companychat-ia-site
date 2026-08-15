@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "API Oficial do WhatsApp: Como Funciona e Quanto Custa | CompanyChat IA",
+  title: "API Oficial do WhatsApp: Como Funciona e Quanto Custa | CompanyChat",
   description:
     "Entenda a API Oficial do WhatsApp: a janela de 24 horas, as categorias de mensagem (utilidade, autenticação, marketing e serviço) e uma calculadora para estimar seu custo mensal.",
   keywords: [
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
       "Guia simples sobre a janela de 24h, as categorias de mensagem e uma calculadora de custo mensal da API Oficial do WhatsApp.",
     type: "article",
     locale: "pt_BR",
-    siteName: "CompanyChat IA",
+    siteName: "CompanyChat",
   },
 };
 

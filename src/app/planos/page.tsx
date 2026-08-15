@@ -9,11 +9,11 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "Planos e Preços | CompanyChat IA",
+  title: "Planos e Preços | CompanyChat",
   description:
-    "CompanyChat IA Pro por R$ 497 por mês: assistente de IA, CRM Kanban, atendentes ilimitados e implantação inclusa, no ar em até 7 dias. Plano sob medida para operações com várias unidades.",
+    "CompanyChat Pro por R$ 497 por mês: assistente de IA, CRM Kanban, atendentes ilimitados e implantação inclusa, no ar em até 7 dias. Plano sob medida para operações com várias unidades.",
   keywords: [
-    "planos CompanyChat IA",
+    "planos CompanyChat",
     "preço assistente de IA WhatsApp",
     "quanto custa chatbot WhatsApp",
     "plataforma de atendimento WhatsApp preço",
@@ -22,12 +22,12 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/planos" },
   openGraph: {
-    title: "Planos e preços da CompanyChat IA",
+    title: "Planos e preços da CompanyChat",
     description:
       "Uma mensalidade com assistente de IA, CRM Kanban, atendentes ilimitados e implantação inclusa. Comece a atender em até 7 dias.",
     type: "article",
     locale: "pt_BR",
-    siteName: "CompanyChat IA",
+    siteName: "CompanyChat",
   },
 };
 

@@ -187,7 +187,7 @@ function TelaWhatsApp({ passo, montado }: { passo: number; montado: boolean }) {
         </span>
         <span className="min-w-0">
           <span className="block truncate text-[13px] font-semibold text-white">
-            CompanyChat IA
+            CompanyChat
           </span>
           <span className="block text-[11px] text-[#8696a0]">online agora</span>
         </span>

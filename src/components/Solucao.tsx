@@ -50,7 +50,7 @@ export default function Solucao() {
             transition={{ duration: 0.5 }}
             className="rounded-3xl border border-card-border bg-card/60 p-8"
           >
-            <h3 className="text-xl font-bold text-text-secondary">Sem a CompanyChat IA</h3>
+            <h3 className="text-xl font-bold text-text-secondary">Sem a CompanyChat</h3>
             <ul className="mt-6 space-y-4">
               {sem.map((item) => (
                 <li key={item} className="flex items-start gap-3">
@@ -76,7 +76,7 @@ export default function Solucao() {
             <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-primary via-accent-blue to-accent-purple" />
 
             <h3
-              aria-label="Com a CompanyChat IA"
+              aria-label="Com a CompanyChat"
               className="flex items-center gap-2.5 text-xl font-bold text-foreground"
             >
               <span
@@ -85,7 +85,7 @@ export default function Solucao() {
               >
                 C
               </span>
-              Com a CompanyChat IA
+              Com a CompanyChat
             </h3>
             <ul className="mt-6 space-y-4">
               {com.map((item) => (

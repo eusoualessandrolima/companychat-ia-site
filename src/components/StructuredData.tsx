@@ -13,8 +13,8 @@ export default function StructuredData() {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "@id": `${SITE_URL}/#organization`,
-    name: "CompanyChat IA",
-    alternateName: "CompanyChat IA - Inteligência e performance de negócios",
+    name: "CompanyChat",
+    alternateName: "CompanyChat - Inteligência e performance de negócios",
     description:
       "Automação de atendimento no WhatsApp com IA em Goiânia e em todo o Brasil. Assistente 24/7, API Oficial, disparo em massa e CRM integrados ao WhatsApp.",
     url: SITE_URL,

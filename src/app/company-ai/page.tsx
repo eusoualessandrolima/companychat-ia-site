@@ -10,9 +10,9 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "Company AI: soluções de IA sob medida | CompanyChat IA",
+  title: "Company AI: soluções de IA sob medida | CompanyChat",
   description:
-    "A frente de projetos sob medida da CompanyChat IA. Consultoria em IA, atendente no WhatsApp, sistema personalizado, CRM e automação construídos para o processo da sua empresa.",
+    "A frente de projetos sob medida da CompanyChat. Consultoria em IA, atendente no WhatsApp, sistema personalizado, CRM e automação construídos para o processo da sua empresa.",
   keywords: [
     "consultoria em inteligência artificial",
     "consultoria em IA para empresas",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
       "Você descreve o problema que se repete todo dia na sua empresa e a gente desenvolve a solução: atendente no WhatsApp, sistema, CRM ou automação.",
     type: "article",
     locale: "pt_BR",
-    siteName: "CompanyChat IA",
+    siteName: "CompanyChat",
   },
 };
 

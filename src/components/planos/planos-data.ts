@@ -27,7 +27,7 @@ export type Plano = {
 export const planos: Plano[] = [
   {
     id: "pro",
-    nome: "CompanyChat IA Pro",
+    nome: "CompanyChat Pro",
     chamada: "Para quem já atende no WhatsApp e não quer mais perder cliente por demora na resposta.",
     preco: "R$ 497",
     periodo: "/mês",

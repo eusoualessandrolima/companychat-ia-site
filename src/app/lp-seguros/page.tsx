@@ -6,7 +6,7 @@ import Landing from "@/components/lp/Landing";
 /* LP de anúncio para corretoras e corretores de seguros. Como as demais
    LPs: fora do menu, fora do sitemap e noindex. */
 export const metadata: Metadata = {
-  title: "IA que atende e cota no WhatsApp da sua corretora | CompanyChat IA",
+  title: "IA que atende e cota no WhatsApp da sua corretora | CompanyChat",
   description:
     "Para corretoras de seguros: a IA responde em segundos, coleta os dados da cotação, acompanha renovações e atende o segurado 24 horas por dia.",
   keywords: [
@@ -15,16 +15,16 @@ export const metadata: Metadata = {
     "cotação de seguros no WhatsApp",
   ],
   openGraph: {
-    title: "IA que atende e cota no WhatsApp da sua corretora | CompanyChat IA",
+    title: "IA que atende e cota no WhatsApp da sua corretora | CompanyChat",
     description:
       "A IA responde em segundos, coleta os dados da cotação, acompanha renovações e atende o segurado 24 horas por dia.",
     type: "website",
     locale: "pt_BR",
-    siteName: "CompanyChat IA",
+    siteName: "CompanyChat",
   },
   twitter: {
     card: "summary_large_image",
-    title: "IA que atende e cota no WhatsApp da sua corretora | CompanyChat IA",
+    title: "IA que atende e cota no WhatsApp da sua corretora | CompanyChat",
     description:
       "A IA responde em segundos, coleta os dados da cotação, acompanha renovações e atende o segurado 24 horas por dia.",
   },

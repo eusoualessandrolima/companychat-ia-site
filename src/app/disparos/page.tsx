@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "Disparo em Massa no WhatsApp com API Oficial | CompanyChat IA",
+  title: "Disparo em Massa no WhatsApp com API Oficial | CompanyChat",
   description:
     "Ferramenta de disparo em massa no WhatsApp via API Oficial: campanhas de marketing com templates aprovados, disparos ao vivo, relatórios de entrega e leitura e integração com CRM. Sem o risco de bloqueio das APIs não oficiais.",
   keywords: [
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
       "Campanhas de marketing em escala com templates aprovados, relatórios em tempo real e integração com CRM. Tudo via API Oficial da Meta.",
     type: "article",
     locale: "pt_BR",
-    siteName: "CompanyChat IA",
+    siteName: "CompanyChat",
   },
 };
 

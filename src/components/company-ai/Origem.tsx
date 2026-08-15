@@ -67,7 +67,7 @@ export default function Origem() {
               <figcaption className="mt-6 text-[15px] tracking-[-0.011em] text-dark-muted">
                 <span className="font-semibold text-dark-text">Alessandro Lima</span>
                 <span className="mx-2 opacity-40">|</span>
-                fundador da CompanyChat IA
+                fundador da CompanyChat
               </figcaption>
             </figure>
           </motion.div>

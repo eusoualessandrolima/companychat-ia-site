@@ -29,7 +29,7 @@ export const advogados: LPConteudo = {
     inicio: "Pare de perder clientes",
     destaque: "no WhatsApp",
     descricao:
-      "A CompanyChat IA responde na hora, entende o caso, agenda a consulta e acompanha cada contato, 24 horas por dia, inclusive no fim de semana em que a urgência aparece.",
+      "A CompanyChat responde na hora, entende o caso, agenda a consulta e acompanha cada contato, 24 horas por dia, inclusive no fim de semana em que a urgência aparece.",
     cta: "Quero ver a IA atendendo",
   },
 
@@ -157,7 +157,7 @@ export const advogados: LPConteudo = {
         icone: Sparkles,
         titulo: "A IA atendendo de verdade",
         descricao:
-          "O WhatsApp oficial da CompanyChat IA é atendido pela mesma IA que você vai contratar. É a demonstração mais honesta que existe.",
+          "O WhatsApp oficial da CompanyChat é atendido pela mesma IA que você vai contratar. É a demonstração mais honesta que existe.",
         artefato: "Teste ao vivo no fim desta página",
       },
     ],

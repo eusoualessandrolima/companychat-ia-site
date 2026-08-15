@@ -6,7 +6,7 @@ import FormSenha from "@/components/leads/FormSenha";
 import ListaLeads from "@/components/leads/ListaLeads";
 
 export const metadata: Metadata = {
-  title: "Painel de leads | CompanyChat IA",
+  title: "Painel de leads | CompanyChat",
   robots: { index: false, follow: false },
 };
 

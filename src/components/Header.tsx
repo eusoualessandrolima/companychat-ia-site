@@ -44,7 +44,7 @@ export default function Header() {
               : "mt-0 h-16 max-w-6xl rounded-full border border-transparent bg-transparent px-0"
           }`}
         >
-          <Link href="/" aria-label="CompanyChat IA, início">
+          <Link href="/" aria-label="CompanyChat, início">
             <Logo dark />
           </Link>
 

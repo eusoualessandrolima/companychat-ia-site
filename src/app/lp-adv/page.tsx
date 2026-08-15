@@ -6,7 +6,7 @@ import Landing from "@/components/lp/Landing";
 /* LP de anúncio para advogados e escritórios de advocacia. Como as demais
    LPs: fora do menu, fora do sitemap e noindex. */
 export const metadata: Metadata = {
-  title: "IA que atende o WhatsApp do seu escritório | CompanyChat IA",
+  title: "IA que atende o WhatsApp do seu escritório | CompanyChat",
   description:
     "Para advogados e escritórios: a IA responde na hora, qualifica o caso, agenda a consulta e confirma na véspera, 24 horas por dia, sem dar orientação jurídica.",
   keywords: [
@@ -15,16 +15,16 @@ export const metadata: Metadata = {
     "agendamento de consultas jurídicas",
   ],
   openGraph: {
-    title: "IA que atende o WhatsApp do seu escritório | CompanyChat IA",
+    title: "IA que atende o WhatsApp do seu escritório | CompanyChat",
     description:
       "A IA responde na hora, qualifica o caso, agenda a consulta e confirma na véspera, 24 horas por dia.",
     type: "website",
     locale: "pt_BR",
-    siteName: "CompanyChat IA",
+    siteName: "CompanyChat",
   },
   twitter: {
     card: "summary_large_image",
-    title: "IA que atende o WhatsApp do seu escritório | CompanyChat IA",
+    title: "IA que atende o WhatsApp do seu escritório | CompanyChat",
     description:
       "A IA responde na hora, qualifica o caso, agenda a consulta e confirma na véspera, 24 horas por dia.",
   },

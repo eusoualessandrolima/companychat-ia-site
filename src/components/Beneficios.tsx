@@ -130,7 +130,7 @@ export default function Beneficios() {
           </div>
           <div className="flex items-center gap-2 text-sm font-semibold text-primary">
             <span className="h-2 w-2 rounded-full bg-primary" />
-            CompanyChat IA
+            CompanyChat
           </div>
         </div>
 

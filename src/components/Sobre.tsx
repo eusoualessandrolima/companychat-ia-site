@@ -33,7 +33,7 @@ export default function Sobre() {
             transition={{ duration: 0.5 }}
           >
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-              Sobre a <span className="text-primary">CompanyChat IA</span>
+              Sobre a <span className="text-primary">CompanyChat</span>
             </h2>
             <p className="mt-6 leading-relaxed text-text-secondary">
               A CompanyChat nasceu para impulsionar empresas a alcançarem seu potencial máximo,

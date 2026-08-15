@@ -24,7 +24,7 @@ const portes = [
     ],
     cta: "Começar agora",
     href: linkComContexto(
-      "Olá! Tenho uma empresa pequena e quero saber como a CompanyChat IA pode ajudar."
+      "Olá! Tenho uma empresa pequena e quero saber como a CompanyChat pode ajudar."
     ),
   },
   {
@@ -40,7 +40,7 @@ const portes = [
     ],
     cta: "Escalar meu time",
     href: linkComContexto(
-      "Olá! Minha operação está crescendo e quero entender o plano sob medida da CompanyChat IA."
+      "Olá! Minha operação está crescendo e quero entender o plano sob medida da CompanyChat."
     ),
   },
   {
@@ -85,7 +85,7 @@ export default function PorteEmpresa() {
           className="text-center"
         >
           <span className="text-xs font-semibold tracking-[0.16em] text-primary uppercase">
-            Para quem é a CompanyChat IA
+            Para quem é a CompanyChat
           </span>
           <h2 className="mx-auto mt-5 max-w-2xl text-3xl font-bold leading-tight text-dark-text md:text-4xl">
             A solução certa para qualquer tamanho de empresa

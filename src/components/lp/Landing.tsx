@@ -443,7 +443,7 @@ export default function Landing({ nicho }: { nicho: Nicho }) {
                 <div className="glow-border h-full rounded-2xl bg-dark-elevated p-7">
                   <h3 className="flex flex-wrap items-center gap-x-2.5 gap-y-2 text-lg font-bold">
                     <Bot aria-hidden="true" className="h-5 w-5 shrink-0 text-primary" />
-                    <span className="min-w-0">Com a CompanyChat IA</span>
+                    <span className="min-w-0">Com a CompanyChat</span>
                     <span className="ml-auto rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">
                       Recomendado
                     </span>
@@ -573,7 +573,7 @@ export default function Landing({ nicho }: { nicho: Nicho }) {
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-[clamp(1rem,4vw,2rem)] text-center">
           <Logo dark />
           <p className="text-sm text-dark-muted">
-            © {new Date().getFullYear()} CompanyChat IA. Todos os direitos
+            © {new Date().getFullYear()} CompanyChat. Todos os direitos
             reservados.
           </p>
           <a

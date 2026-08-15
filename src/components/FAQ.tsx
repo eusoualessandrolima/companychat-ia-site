@@ -24,7 +24,7 @@ const faqs = [
   {
     pergunta: "Quanto custa?",
     resposta:
-      "O plano CompanyChat IA Pro custa R$ 497 por mês e já inclui o assistente de IA, o CRM com visão Kanban, atendentes ilimitados e toda a implantação, sem taxa de setup. Para operações com várias unidades ou mais de um número, montamos um plano sob medida.",
+      "O plano CompanyChat Pro custa R$ 497 por mês e já inclui o assistente de IA, o CRM com visão Kanban, atendentes ilimitados e toda a implantação, sem taxa de setup. Para operações com várias unidades ou mais de um número, montamos um plano sob medida.",
     href: "/planos",
     linkLabel: "Ver planos e preços",
   },

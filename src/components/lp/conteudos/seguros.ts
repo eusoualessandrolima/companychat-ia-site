@@ -29,7 +29,7 @@ export const seguros: LPConteudo = {
     inicio: "Pare de perder cotações",
     destaque: "no WhatsApp",
     descricao:
-      "A CompanyChat IA responde em segundos, coleta os dados da cotação, acompanha renovações e atende o seu cliente 24 horas por dia, inclusive na hora em que ele mais precisa de você.",
+      "A CompanyChat responde em segundos, coleta os dados da cotação, acompanha renovações e atende o seu cliente 24 horas por dia, inclusive na hora em que ele mais precisa de você.",
     cta: "Quero ver a IA atendendo",
   },
 
@@ -157,7 +157,7 @@ export const seguros: LPConteudo = {
         icone: Sparkles,
         titulo: "A IA atendendo de verdade",
         descricao:
-          "O WhatsApp oficial da CompanyChat IA é atendido pela mesma IA que você vai contratar. É a demonstração mais honesta que existe.",
+          "O WhatsApp oficial da CompanyChat é atendido pela mesma IA que você vai contratar. É a demonstração mais honesta que existe.",
         artefato: "Teste ao vivo no fim desta página",
       },
     ],
