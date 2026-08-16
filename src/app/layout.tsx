@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Outfit, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import StructuredData from "@/components/StructuredData";
+import { envOu } from "@/lib/env";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -26,7 +27,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.companychatia.com.br"
+    envOu(process.env.NEXT_PUBLIC_SITE_URL, "https://www.companychatia.com.br")
   ),
   title: "Automação de WhatsApp com IA em Goiânia | CompanyChat",
   description:

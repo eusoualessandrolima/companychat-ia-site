@@ -1,7 +1,8 @@
 import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
+import { envOu } from "@/lib/env";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.companychatia.com.br";
+  envOu(process.env.NEXT_PUBLIC_SITE_URL, "https://www.companychatia.com.br");
 
 /**
  * Dados estruturados (JSON-LD) que dizem ao Google que negócio é este,

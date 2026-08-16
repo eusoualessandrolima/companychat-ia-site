@@ -2,10 +2,11 @@
 
 import { motion } from "framer-motion";
 import { Quote, Youtube, Wrench } from "lucide-react";
+import { envOu } from "@/lib/env";
 
 /** Canal onde o conteúdo é publicado. Configurável para não ficar preso no código. */
 export const youtubeLink =
-  process.env.NEXT_PUBLIC_YOUTUBE_URL ?? "https://www.youtube.com/@eusoualessandrolima1";
+  envOu(process.env.NEXT_PUBLIC_YOUTUBE_URL, "https://www.youtube.com/@eusoualessandrolima1");
 
 const suave = [0.4, 0, 0.2, 1] as const;
 

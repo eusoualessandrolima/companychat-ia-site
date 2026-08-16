@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
+import { envOu } from "@/lib/env";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.companychatia.com.br";
+const BASE_URL = envOu(process.env.NEXT_PUBLIC_SITE_URL, "https://www.companychatia.com.br");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
