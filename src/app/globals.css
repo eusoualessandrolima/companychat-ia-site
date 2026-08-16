@@ -39,6 +39,21 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Onze blocos entram deslizando na horizontal (`initial={{ x: 28 }}` e
+   parentes, em Sobre, Solucao, Beneficios, Problemas e ComoFunciona). Enquanto
+   não entram na viewport ficam parados fora da margem e esticam o documento:
+   em telas de até 1024px isso dava 14px de rolagem lateral na home.
+
+   O corte fica na seção, não em `html` nem em `body`: na raiz o overflow é
+   propagado para a viewport e o Chrome continua rolando — testado nos dois.
+
+   `clip` e não `hidden` porque `hidden` viraria contêiner de rolagem e
+   quebraria o `position: sticky` de ComoFunciona e da calculadora da API
+   Oficial. `clip` corta sem criar scrollport, e não mexe no eixo vertical. */
+section {
+  overflow-x: clip;
+}
+
 html {
   scroll-behavior: smooth;
 }
