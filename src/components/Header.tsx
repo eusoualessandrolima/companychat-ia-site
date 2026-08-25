@@ -5,7 +5,9 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Logo from "./Logo";
-import { whatsappLink, loginLink } from "./WhatsAppButton";
+import CtaTesteGratis from "./CtaTesteGratis";
+import { CTA_LABEL_CURTO } from "@/lib/cta";
+import { loginLink } from "./WhatsAppButton";
 
 const navLinks = [
   { href: "/assistente-ia", label: "Assistente IA" },
@@ -67,14 +69,12 @@ export default function Header() {
               Fazer Login
             </a>
 
-            <a
-              href={whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
+            <CtaTesteGratis
+              local="header"
               className="whitespace-nowrap rounded-full bg-primary px-5 py-2 text-sm font-semibold text-on-primary transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25"
             >
-              Fale Conosco
-            </a>
+              {CTA_LABEL_CURTO}
+            </CtaTesteGratis>
           </nav>
 
           {/* Mobile toggle */}
@@ -109,14 +109,13 @@ export default function Header() {
             >
               Fazer Login
             </a>
-            <a
-              href={whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
+            <CtaTesteGratis
+              local="header-mobile"
+              onClick={() => setOpen(false)}
               className="rounded-full bg-primary px-5 py-3 text-center font-semibold text-on-primary"
             >
-              Fale Conosco
-            </a>
+              {CTA_LABEL_CURTO}
+            </CtaTesteGratis>
           </nav>
         )}
       </header>

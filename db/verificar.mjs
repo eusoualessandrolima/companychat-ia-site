@@ -65,6 +65,20 @@ try {
     ok("Tabela leads_site já existe");
   }
 
+  /* O DDL do funil de teste grátis é todo `if not exists`, então rodar de novo
+     é inofensivo e garante índice novo depois de uma alteração no arquivo. */
+  const { rows: funil } = await pool.query(
+    "select to_regclass('public.teste_gratis_leads') is not null as tem"
+  );
+  await pool.query(
+    readFileSync(new URL("./teste_gratis.sql", import.meta.url), "utf8")
+  );
+  ok(
+    funil[0].tem
+      ? "Tabelas do funil de teste grátis já existiam (DDL reaplicado)"
+      : "Tabelas do funil de teste grátis criadas agora"
+  );
+
   await pool.query(
     `insert into leads_site (id, nome, empresa, telefone, telefone_e164, etapa, origem)
      values ($1, 'Lead de teste', 'Verificação', '(62) 90000-0000', '5562900000000', 1, $2)`,

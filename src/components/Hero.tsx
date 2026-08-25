@@ -25,7 +25,8 @@ import {
   useSyncExternalStore,
 } from "react";
 import { useMovimentoReduzido } from "@/hooks/useMovimentoReduzido";
-import { whatsappLink } from "./WhatsAppButton";
+import CtaTesteGratis from "./CtaTesteGratis";
+import { CTA_LABEL_LONGO } from "@/lib/cta";
 
 /* Layout effect roda antes da pintura no cliente e não existe no servidor.
    É o que permite entregar a conversa inteira no HTML (legível sem JS) e
@@ -505,15 +506,13 @@ export default function Hero() {
               className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center"
             >
               <div className="cta-glow-wrap">
-                <a
-                  href={whatsappLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <CtaTesteGratis
+                  local="hero"
                   className="group relative flex items-center justify-center gap-2.5 rounded-full bg-primary px-9 py-4 font-semibold text-on-primary shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
                 >
-                  Fale com um Especialista
+                  {CTA_LABEL_LONGO}
                   <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </a>
+                </CtaTesteGratis>
               </div>
 
               <a

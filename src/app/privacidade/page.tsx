@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const ATUALIZADO_EM = "14 de agosto de 2026";
+const ATUALIZADO_EM = "25 de agosto de 2026";
 const EMAIL_CONTATO = "contato@companychatia.com.br";
 
 function Secao({
@@ -107,9 +107,25 @@ export default function PrivacidadePage() {
             <strong className="text-dark-text">
               Dados que você informa nos formulários:
             </strong>{" "}
-            nome, nome da empresa ou clínica, número de WhatsApp e o segmento de
-            atuação escolhido. Em alguns formulários também perguntamos sobre o
-            tamanho da equipe e o volume de mensagens recebidas.
+            nome, e-mail, nome da empresa ou clínica, endereço do site, número de
+            WhatsApp e o segmento de atuação escolhido. Em alguns formulários
+            também perguntamos sobre o tamanho da equipe e o volume de mensagens
+            recebidas.
+          </p>
+          <p>
+            <strong className="text-dark-text">
+              Registro do consentimento:
+            </strong>{" "}
+            quando você marca a autorização para receber o nosso contato pelo
+            WhatsApp, guardamos a data, a hora e a versão do texto que você
+            aceitou.
+          </p>
+          <p>
+            <strong className="text-dark-text">
+              Registro do atendimento pelo WhatsApp:
+            </strong>{" "}
+            as mensagens que enviamos e as suas respostas, além da confirmação de
+            entrega e de leitura fornecida pelo WhatsApp.
           </p>
           <p>
             <strong className="text-dark-text">
@@ -117,8 +133,8 @@ export default function PrivacidadePage() {
             </strong>{" "}
             a página em que você estava, o site de origem e os parâmetros de
             campanha presentes no endereço (como <code>utm_source</code>,{" "}
-            <code>utm_campaign</code> e <code>fbclid</code>), que nos indicam por
-            qual anúncio você chegou.
+            <code>utm_campaign</code>, <code>gclid</code>, <code>fbclid</code> e{" "}
+            <code>msclkid</code>), que nos indicam por qual anúncio você chegou.
           </p>
           <p>
             <strong className="text-dark-text">Não solicitamos</strong> dados de
@@ -143,8 +159,18 @@ export default function PrivacidadePage() {
               Entender qual anúncio ou canal trouxe cada contato, para medir e
               melhorar as nossas campanhas.
             </li>
+            <li>
+              Enviar, quando você solicita um teste e autoriza o contato, a
+              mensagem de WhatsApp sobre essa solicitação e conduzir o
+              atendimento que vem depois dela.
+            </li>
             <li>Cumprir obrigações legais ou regulatórias aplicáveis.</li>
           </ul>
+          <p>
+            A autorização dada nesse formulário vale para o contato sobre a sua
+            solicitação de teste. Ela não é usada para incluir você em campanhas
+            ou disparos genéricos.
+          </p>
           <p>
             As bases legais são o seu{" "}
             <strong className="text-dark-text">consentimento</strong>, dado ao
@@ -254,6 +280,12 @@ export default function PrivacidadePage() {
               WhatsApp +55 64 9305-4630
             </a>
             . Respondemos em até 15 dias.
+          </p>
+          <p>
+            Para interromper o contato pelo WhatsApp, basta responder à conversa
+            pedindo para parar, ou tocar em &quot;Não tenho interesse&quot; na
+            mensagem que enviamos. O registro é imediato e nenhuma automação
+            volta a procurar você.
           </p>
         </Secao>
 

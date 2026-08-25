@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Saída compilada dos testes de unidade: espelho de src/lib, já checado lá.
+    ".testes-build/**",
   ]),
 ]);
 

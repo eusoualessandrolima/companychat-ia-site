@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { whatsappLink } from "./WhatsAppButton";
+import CtaTesteGratis from "./CtaTesteGratis";
+import { CTA_LABEL_LONGO } from "@/lib/cta";
 
 const PASSOS = [
   {
@@ -64,15 +65,13 @@ export default function ComoFunciona() {
               Sem complexidade técnica. Nossa equipe cuida de todo o processo, da configuração à integração, e você começa a converter clientes ainda na primeira semana.
             </p>
 
-            <a
-              href={whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
+            <CtaTesteGratis
+              local="como-funciona"
               className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 font-semibold text-on-primary shadow-lg shadow-primary/25 transition-all hover:bg-primary-dark hover:shadow-xl hover:shadow-primary/35"
             >
-              Começar Agora
+              {CTA_LABEL_LONGO}
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
-            </a>
+            </CtaTesteGratis>
 
           </motion.div>
 

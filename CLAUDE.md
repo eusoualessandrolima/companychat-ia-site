@@ -52,8 +52,13 @@ mudança no código. Um hook em `.claude/hooks/avisar-base-jade.sh` avisa automa
 arquivo de conteúdo comercial é editado.
 
 Arquivos que alimentam a base: `components/planos/planos-data.ts`, `components/api-oficial/pricing.ts`,
-os cinco blocos de FAQ, `Capacidades.tsx`, `Recursos.tsx`, `NossasSolucoes.tsx`, `Categorias.tsx` e
-os componentes de `components/company-ai/` (incluindo `company-ai-data.ts`).
+os cinco blocos de FAQ, `Capacidades.tsx`, `Recursos.tsx`, `NossasSolucoes.tsx`, `Categorias.tsx`,
+os componentes de `components/company-ai/` (incluindo `company-ai-data.ts`) e a página
+`app/teste-gratis/page.tsx` com `components/teste-gratis/`.
+
+**O teste grátis é solicitação, não liberação de conta.** A página promete contato pelo
+WhatsApp e diz duas vezes que o envio não cria nem libera acesso. A Jade precisa dizer o
+mesmo: prometer conta liberada na conversa é vender uma coisa e entregar outra.
 
 Como atualizar (ferramentas MCP `fazer-ai`, tenant `companychat-ia`):
 
@@ -184,7 +189,15 @@ companychat-ia-site/
 ## Comandos úteis
 
 ```bash
-npm run dev      # Servidor de desenvolvimento (localhost:3000)
-npm run build    # Build de produção
-npm run lint     # Verificação ESLint
+npm run dev               # Servidor de desenvolvimento (localhost:3000)
+npm run build             # Build de produção
+npm run lint              # Verificação ESLint
+npm test                  # Testes de unidade do funil (node:test, sem banco e sem rede)
+npm run test:teste-gratis # Navegação dos CTAs, formulário e responsividade (Playwright)
+npm run test:responsivo   # Responsividade do quiz /comecar (Playwright)
+npm run db:verificar      # Cria e confere as tabelas no Postgres
 ```
+
+Os testes de navegador precisam do build de produção numa porta dedicada
+(`npx next start -p 3005` + `BASE_URL=http://localhost:3005`). O servidor de
+desenvolvimento recompila na primeira visita e derruba a medição.

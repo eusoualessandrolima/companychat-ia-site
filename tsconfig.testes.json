@@ -1,0 +1,28 @@
+/* Compila só as regras do funil (`src/lib/`) para CommonJS em `.testes-build/`,
+   que é o que os testes de `tests/unidade/` carregam.
+
+   Por que compilar em vez de rodar o TypeScript direto: o Node executa `.ts`
+   nativamente, mas exige a extensão no import, e os módulos do projeto
+   importam sem extensão (`./telefone`), como o bundler do Next espera. Emitir
+   CommonJS resolve sem tocar em nenhum arquivo de produção e sem instalar
+   dependência de teste. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "outDir": ".testes-build",
+    "rootDir": "src",
+    "incremental": false,
+    "declaration": false,
+    "sourceMap": false,
+    "types": ["node"]
+  },
+  /* `conteudo.ts` entra porque a copy do funil é regra de negócio, não
+     decoração: é ela que decide se a página promete prazo. O resto de
+     `src/components` fica de fora (JSX não é testado aqui). */
+  "include": ["src/lib/**/*.ts", "src/components/teste-gratis/conteudo.ts"],
+  "exclude": ["node_modules"]
+}

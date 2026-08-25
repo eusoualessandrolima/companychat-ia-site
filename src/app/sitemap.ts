@@ -11,6 +11,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: `${BASE_URL}/teste-gratis`,
+      changeFrequency: "monthly",
+      priority: 0.95,
+    },
+    {
       url: `${BASE_URL}/planos`,
       changeFrequency: "monthly",
       priority: 0.9,

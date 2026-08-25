@@ -174,6 +174,28 @@ Mesmo padrão visual das outras páginas internas e reaproveita `ApiHeader`, `No
 | calculo | `calculo.ts` | Fórmulas, formatadores e preços; consome `api-oficial/pricing.ts` |
 | perguntas | `perguntas.ts` | Passos, textos de ajuda, copy dos cenários e linhas da tabela |
 
+### Funil de teste grátis — rota `/teste-gratis`
+
+Caminho comercial principal do site. Detalhes de operação em `docs/funil-teste-gratis.md`.
+
+| Arquivo | Descrição |
+|---------|-----------|
+| `src/app/teste-gratis/page.tsx` | Landing: hero, as quatro etapas do que acontece depois do envio e o formulário |
+| `src/components/teste-gratis/Formulario.tsx` | Formulário completo, com consentimento, honeypot, estados e eventos |
+| `src/components/teste-gratis/conteudo.ts` | Segmentos e garantias |
+| `src/lib/cta.ts` | Destino e rótulos dos CTAs comerciais (fonte única) |
+| `src/components/CtaTesteGratis.tsx` | Botão compartilhado dos CTAs, dispara `free_trial_cta_clicked` |
+| `src/lib/analytics.ts` | Eventos do navegador e primeira URL da visita |
+| `src/lib/postgres.ts` | Pool do Postgres, compartilhada com `leads.ts` |
+| `src/lib/rate-limit.ts` | Limite por IP, em memória |
+| `src/lib/teste-gratis/*` | Config, telefone, validação, consentimento, captação, repositório, fila, adapter de WhatsApp, webhook, intenção, IA e assinatura |
+| `src/app/api/teste-gratis/route.ts` | Captação |
+| `src/app/api/teste-gratis/worker/route.ts` | Gatilho da fila (cron) |
+| `src/app/api/whatsapp/webhook/route.ts` | Webhook do provedor |
+| `instrumentation.ts` | Tique interno opcional da fila |
+| `db/teste_gratis.sql` | DDL das três tabelas |
+| `tests/unidade/` + `tests/teste-gratis.mjs` + `tests/banco-teste-gratis.mjs` | Testes |
+
 ---
 
 ## Skills Ativas
@@ -907,6 +929,225 @@ dois círculos coloridos sem nome e ninguém sabia qual era comercial e qual era
   números e links saíram para esse módulo neutro. `WhatsAppButton.tsx` reexporta tudo
   para os ~25 componentes de cliente que já importavam de lá.
 
+### 2026-08-25 — Funil de teste grátis (`/teste-gratis`) substitui o caminho comercial
+
+O caminho comercial principal deixou de ser "abrir o WhatsApp direto" e passou a ser
+formulário → lead no banco → mensagem de template agendada → resposta → IA assume.
+Documentação completa em **`docs/funil-teste-gratis.md`**; aqui ficam só as decisões.
+
+**⚠️ Tensão com a decisão de 2026-08-05, assumida pelo dono.** Naquela sessão "teste
+gratuitamente" foi recusado por não existir trial em `planos-data.ts` e a Jade não
+sustentar a promessa. O funil novo foi pedido explicitamente, e a copy resolve a
+tensão sem criar oferta: a página diz, em dois lugares, que o envio **registra a
+solicitação e não cria nem libera conta automaticamente**. **A base de conhecimento da
+Jade precisa ser atualizada** com esse enquadramento antes de o funil ir ao ar, ou ela
+vai divergir do site como já aconteceu com a implantação (ver `CLAUDE.md`).
+
+**CTAs redirecionados** (via `src/lib/cta.ts` + `CtaTesteGratis.tsx`, fonte única):
+Header (desktop e mobile), Hero, `ApiHeader` (todas as páginas internas), `Contato`,
+CTA do Footer e os CTAs finais de `/assistente-ia`, `/api-oficial`, `/disparos` e
+`/planos`. Rótulos: "Teste grátis" em barra, "Quero testar grátis" em botão de bloco.
+
+**Deixados no WhatsApp de propósito:** botões flutuantes de Comercial e Suporte (são o
+caminho humano direto, que o próprio fluxo da IA exige), cards de `Nichos` e
+`PorteEmpresa` (levam mensagem pré-preenchida com o segmento, que qualifica melhor
+que o formulário), cards de plano em `PlanosHome`/`TabelaPlanos` (contexto de plano
+específico), `CompanyAiCta` (projetos sob medida não são o mesmo funil) e o link de
+WhatsApp do Footer. "Fazer Login" não foi tocado.
+
+**Banco:** três tabelas em `db/teste_gratis.sql`, no mesmo Postgres do quiz.
+`teste_gratis_leads` (cadastro, consentimento com versão, atribuição, estado),
+`teste_gratis_jobs` (o agendamento) e `teste_gratis_eventos` (auditoria, analytics de
+servidor e deduplicação do webhook). A pool saiu de `leads.ts` para `src/lib/postgres.ts`,
+compartilhada pelos dois funis.
+
+**Agendamento sem fila nova.** O projeto não tem Redis, BullMQ nem cron interno, e o
+site roda como container único no Coolify. O job é uma linha no Postgres reivindicada
+com `for update skip locked`; o gatilho é o cron chamando `/api/teste-gratis/worker`.
+`TESTE_GRATIS_WORKER_INTERNO=true` liga um tique dentro do processo
+(`instrumentation.ts`) para o funil funcionar antes de o cron existir. Nada de
+`setTimeout` dentro de rota: morreria no primeiro redeploy.
+
+**Três camadas de idempotência, todas no banco:**
+- índice único `(lead_id, tipo)` em `teste_gratis_jobs` — um lead nunca tem dois disparos;
+- consulta de solicitação recente por telefone **ou** e-mail dentro de 24h;
+- índice único parcial em `teste_gratis_eventos.chave` — reentrega do provedor vira
+  `on conflict do nothing`, e o `rowCount` diz se o evento é inédito.
+
+**Armadilha do `wa_id` brasileiro.** A Meta devolve o `wa_id` quase sempre **sem** o
+nono dígito (`556293054630` para `+5562993054630`). Comparar as strings cruas faz o
+webhook não achar o lead e a conversa nunca chegar na IA. `variantesE164()` gera as
+duas grafias e a busca usa `= any($1)`.
+
+**Envio isolado num adapter** (`whatsapp-provedor.ts`), porque o site não tinha
+integração de envio nenhuma: só link `wa.me`. Duas implementações, escolhidas por
+variável: Cloud API da Meta e webhook para um automatizador existente. Sem credencial,
+o provedor é `nenhum` e a fila registra falha em vez de fingir que enviou.
+
+**A IA não mora aqui.** O webhook entrega o dossiê em `IA_HANDOFF_URL` e só depois de o
+lead responder. O dossiê carrega `jaRespondido` para o agente não repetir o que o
+formulário já perguntou.
+
+**Opt-out vence consentimento novo.** Quem pediu para parar e preenche o formulário de
+novo tem o lead gravado com status `opt_out` e **nenhum** disparo; destravar é decisão
+de gente. O lead ainda chega ao CRM pelo `LEAD_WEBHOOK_URL` que o quiz já usava.
+
+**Analytics sem ferramenta nova:** eventos de navegador saem no Pixel do Meta como
+`trackCustom` (mais `dataLayer` se houver contêiner de tags); eventos de servidor vivem
+em `teste_gratis_eventos`. `user_agent` **não** é gravado: não faz parte da arquitetura
+atual e seria dado pessoal a mais sem uso definido.
+
+**Testes:** `npm run test:unidade` (55 casos, sem banco e sem rede, com `node --test`
+sobre `src/lib` compilado para CommonJS em `.testes-build/` — ver `tsconfig.testes.json`)
+e `npm run test:teste-gratis` (Playwright: navegação dos 6 CTAs, formulário e 10
+viewports). `npm run test:banco` exige `TESTE_GRATIS_DB=1` e uma URL de banco de teste;
+**não foi executado** nesta sessão por não haver Postgres local.
+
+### 2026-08-25 — Funil pronto para homologação (mesma sessão, segunda rodada)
+
+**`free_trial_cta_clicked` deixou de se perder na home.** O Pixel só é montado nas
+páginas que declaram `<MetaPixel />`, e carregá-lo no site inteiro só para medir um
+clique ampliaria o rastreamento de todas as páginas, o que é decisão do dono e não
+efeito colateral de métrica. Solução: o evento disparado onde não há Pixel fica numa
+fila no `sessionStorage` (teto de 10) e é entregue ao chegar em `/teste-gratis`, que já
+carrega o Pixel, marcado com `adiado: true`. Componente `EventosPendentes` faz o
+descarregamento. Verificado no navegador: `fbq` ausente na home, presente no funil, e
+a chamada `trackCustom free_trial_cta_clicked {local:"header", adiado:true}` chegando
+na fila do `fbq` com o `sessionStorage` limpo depois.
+
+**`npm run test:responsivo` voltou ao verde sem afrouxar o critério.** A falha era real:
+o link "Política de Privacidade" dentro do consentimento do quiz tinha alvo de toque de
+15px (35px quando quebrava em duas linhas), contra os 44px que o teste exige. Corrigido
+com `py-4` no próprio `<a>`: preenchimento vertical em caixa **inline** não entra no
+cálculo da linha, então a área de toque vai a 47px sem mover nada. Medido antes e depois
+em 390, 768 e 1440: parágrafo, cartão e `scrollHeight` do documento idênticos ao pixel.
+O mesmo padrão existe nas LPs de nicho (`lp/FormularioLead.tsx`), fora do alcance de
+qualquer teste hoje; não mexido para não misturar escopo.
+
+**Auditoria de CTA fechada.** Passaram a apontar para `/teste-gratis`, com o `local` indo
+para `origem.utm_content`: `ComoFunciona`, `CrmKanban`, calculadora de `/api-oficial`,
+heros de `/assistente-ia` e `/disparos`, e os cartões de plano de `PlanosHome` e
+`TabelaPlanos` (`local="plano-{id}"`, então o contexto do plano sobrevive). Continuam no
+WhatsApp, com motivo: `Nichos` e `PorteEmpresa` (mensagem pré-preenchida qualifica mais
+que o formulário), `CompanyAiCta`/`CompanyAiHero` (oferta diferente), link secundário do
+`Contato` e do próprio formulário (caminho humano, exigido pelo fluxo da IA), quiz e LPs
+(funis próprios de tráfego pago), `ModalLead` da calculadora (carrega os números da
+simulação), `StructuredData` e `/privacidade` (canal institucional). Login e botões
+flutuantes intocados. O teste de navegação cobre 13 CTAs no funil e 3 canais preservados.
+
+⚠️ **Risco assumido nos cartões de plano:** quem está em `/planos` pronto para comprar
+agora passa por formulário e espera alguns minutos, em vez de cair direto no WhatsApp.
+Se a conversão de `/planos` cair, é o primeiro lugar a reverter.
+
+**Documentos de ativação criados:** `docs/ativacao-teste-gratis.md` (template com os três
+payloads, envs com `[PREENCHER_NO_COOLIFY]`, URL do webhook, cron do Coolify, contrato do
+`IA_HANDOFF_URL`, comandos da migration e roteiro de homologação em 16 passos) e
+`docs/jade-teste-gratis.md` (conteúdo pronto para a base da Jade). **A base da Jade não
+foi alterada:** o MCP `fazer-ai` não está conectado nesta sessão e a base é produção.
+
+### 2026-08-25 — Homologação contra Postgres real: dois bugs que só apareceriam em produção
+
+Rodado contra um Postgres 16 exclusivo de homologação (container efêmero, nunca o banco
+de produção). Os testes de unidade estavam todos verdes e não pegariam nenhum dos dois.
+
+**1. `on conflict (chave)` era SQL inválido para um índice parcial.** O índice de
+`teste_gratis_eventos` é `unique (chave) where chave is not null`; o Postgres só o usa na
+inferência do conflito se o predicado aparecer também no `on conflict`. Sem ele, **todo**
+insert de evento estourava. Como `registrarEvento` engole a exceção e devolve `true`, o
+efeito seria mudo e caro: nenhum evento gravado, nenhuma trilha de auditoria e, pior, a
+deduplicação do webhook desligada — cada reentrega da Meta seria processada como resposta
+nova, e a IA seria acordada de novo a cada uma. Corrigido para
+`on conflict (chave) where chave is not null do nothing`.
+
+O log do catch agora começa com `TRILHA DE EVENTOS indisponível`, para o alarme ser
+procurável. O `return true` continua de propósito: sem gravação não dá para saber se o
+evento é repetido, e processar duas vezes é menos grave do que engolir a primeira.
+
+**Causa raiz do bug ter passado:** o teste de banco tinha SQL próprio, parecido com o do
+repositório. Testava a cópia. Reescrito para chamar as **funções reais** de
+`src/lib/teste-gratis` (34 verificações), então divergência assim não passa mais.
+
+**2. O limite por IP era contornável com um cabeçalho.** `ipDaRequisicao` lia o
+**primeiro** item de `x-forwarded-for`. O Traefik *acrescenta* o IP real ao que o cliente
+mandou, então o primeiro item é justamente o valor forjado: bastava variar o cabeçalho a
+cada tentativa para nunca fechar o balde. Corrigido para preferir `x-real-ip` e, na
+ausência dele, ler o **último** item da cadeia. Coberto por teste que reprova a leitura do
+primeiro item. Pressupõe que só o Traefik fala com a aplicação, que é o caso no Coolify;
+expor a porta 3000 direto devolveria o problema.
+
+**Ensaio ponta a ponta sem a Meta:** `tests/homologacao-funil.mjs` (`npm run
+test:homologacao`) sobe um provedor de envio e um endpoint de IA falsos, assina os
+eventos como a Meta assina e percorre 64 verificações. Resultado: 64/64. Confirmado
+também que nem o log do site nem a trilha de eventos carregam telefone, e-mail ou
+segredo: no caminho de erro o destino aparece como `*********7777`.
+
+**Não executado por falta de acesso:** publicar em homologação, aprovar o template no
+WhatsApp Manager, apontar o webhook real e aplicar `docs/jade-teste-gratis.md` na base.
+
+### 2026-08-25 — Contingência do payload dos botões deixou de ser bloqueio
+
+O plano de ativação previa: "se o WhatsApp Manager não expuser o campo de payload,
+pare e ajuste `intencao.ts`". Verificando o código, o `payload` desconhecido já caía
+na leitura de texto livre e os três textos dos botões acertavam por coincidência das
+listas `RECUSA`/`ADIAMENTO`/`ACEITE`. Coincidência não é garantia: bastava alguém
+editar uma dessas listas para o opt-out por botão quebrar em silêncio.
+
+Tornado explícito com o mapa `TEXTO_DOS_BOTOES` em `intencao.ts`, consultado tanto
+para o `payload` quanto para o texto. Comportamento idêntico ao anterior, agora
+protegido por 4 casos de unidade e por um cenário ponta a ponta ("sem payload") que
+prova o opt-out chegando pelo texto visível.
+
+**Efeito prático:** o template pode ser submetido na Meta dos dois jeitos, e a
+aprovação deixa de depender de a interface expor o campo de payload. O que não pode
+mudar é o **texto** dos botões, que agora é contrato: mexer nele exige atualizar
+`TEXTO_DOS_BOTOES` junto.
+
+### 2026-08-25 — Modo somente captação e a chave `FREE_TRIAL_WHATSAPP_ENABLED`
+
+O template foi criado na Meta pela Graph API (id `1421557873209367`, `pt_BR`, enviado
+como `UTILITY` com `allow_category_change=true`) e está **PENDING**. Billing não
+confirmado, e o token usado na criação foi exposto em texto puro: **comprometido, não
+reutilizar**. O funil precisava de um estado intermediário publicável, e ele não existia.
+
+**Chave geral criada, nascendo desligada.** `FREE_TRIAL_WHATSAPP_ENABLED` só liga com o
+valor exato `true`; ausente, vazia ou qualquer outra coisa significa não enviar. Um
+interruptor que protege disparo para cliente não pode depender de alguém lembrar de
+desligá-lo.
+
+**A trava é dupla, de propósito:**
+- na **captação**, nenhum job é criado (evento `free_trial_captacao_sem_envio`);
+- na **fila**, nenhum job é reivindicado (`resumo.envioDesligado = true`).
+
+Barrar na captação é o que impede que ligar a chave depois dispare de uma vez a fila
+inteira de quem se cadastrou enquanto ela estava desligada. Barrar na fila sem
+reivindicar é o que permite desligar no meio de um incidente sem consumir tentativa de
+ninguém.
+
+**A copy acompanha o estado.** `conteudo.ts` tem duas versões e a página, que é
+componente de servidor, escolhe uma: com envio promete "em alguns minutos"; sem envio
+promete o canal e o assunto, nunca o prazo. Teste garante que a versão sem envio não
+contém "minutos", "imediat", "em breve" nem "assim que". Sem isso a publicação em modo
+captação viraria a mesma armadilha de site prometendo o que o sistema não entrega.
+
+**Erro 131042 (billing) entrou como permanente.** É recuperável, mas só depois de alguém
+arrumar o pagamento no Business Manager, o que não acontece em minutos. Sem isso cada
+lead gastaria cinco tentativas com backoff enquanto a conta está bloqueada.
+
+**Dois defeitos encontrados nesta rodada:**
+1. `copyDoFunil` devolvia uma função (`sucessoDetalhe(whatsapp)`) passada como prop de
+   servidor para cliente. Função não atravessa a fronteira RSC e o **build quebrou** —
+   `tsc` e `lint` passaram. Virou string com `{whatsapp}` e um `detalheDoSucesso` no
+   cliente. Lição: mudança em prop de fronteira exige `npm run build`, não só `tsc`.
+2. A própria auditoria vazava o nome completo do lead: `mascarar(nome, 0)` caía em
+   `slice(-0)`, que devolve a string inteira.
+
+**`npm run auditoria`** (`tests/auditoria-pos-deploy.mjs`) é a verificação pós-deploy:
+somente leitura, pode rodar contra produção, confere que a página não promete prazo, que
+os CTAs levam ao funil, que o caminho humano continua no ar, que o worker recusa chamada
+sem token e responde `envioDesligado`, que nenhum job nasceu, que nenhum evento de envio
+existe e que o lead enviado à mão foi gravado inteiro. Saída mascara nome, e-mail e
+telefone. Validado: 25/25.
+
 ---
 
 ## Aprendizados e Padrões
@@ -929,6 +1170,32 @@ dois círculos coloridos sem nome e ninguém sabia qual era comercial e qual era
 ---
 
 ## Próximos Passos
+
+### Funil de teste grátis (bloqueantes para o funil ir ao ar)
+
+- [ ] Rodar `npm run db:verificar` contra o Postgres de produção para criar as três
+      tabelas de `db/teste_gratis.sql`
+- [ ] Submeter o template `companychat_teste_gratis_recebido_v1` no WhatsApp Manager,
+      com os três botões e os `payload` exatos de `docs/funil-teste-gratis.md`
+- [ ] Cadastrar no Coolify as credenciais do provedor de envio (Cloud API ou webhook),
+      `WHATSAPP_APP_SECRET`, `WHATSAPP_WEBHOOK_VERIFY_TOKEN` e `TESTE_GRATIS_WORKER_TOKEN`
+- [ ] Apontar o webhook do WhatsApp para `/api/whatsapp/webhook` e assinar os campos
+      `messages` (mensagens e status)
+- [ ] Criar a Scheduled Task no Coolify chamando `/api/teste-gratis/worker` a cada minuto
+      (ou ligar `TESTE_GRATIS_WORKER_INTERNO=true` como paliativo)
+- [ ] Configurar `IA_HANDOFF_URL` e ajustar o agente para o roteiro e as regras da seção
+      "A conversa da IA" em `docs/funil-teste-gratis.md`
+- [ ] **Aplicar `docs/jade-teste-gratis.md` na base da Jade** (documento novo + complemento
+      do documento 6), antes de o funil receber tráfego. Conteúdo pronto; falta autorização
+      e o MCP `fazer-ai` conectado
+- [ ] Rodar `TESTE_GRATIS_DB=1 npm run test:banco` quando existir banco de homologação
+- [ ] Seguir `docs/ativacao-teste-gratis.md` na ordem da seção 8
+- [x] ~~`free_trial_cta_clicked` na home não chegava ao Meta~~ → resolvido com a fila de
+      eventos adiados, sem carregar o Pixel no site inteiro
+- [ ] Avaliar aplicar o mesmo ajuste de alvo de toque do link de privacidade nas LPs de
+      nicho (`lp/FormularioLead.tsx`), que têm o mesmo padrão e nenhum teste cobrindo
+
+### Anteriores
 
 - [ ] **Bloqueante para o anúncio:** criar o Postgres no Coolify, rodar `db/leads_site.sql` e cadastrar `DATABASE_URL` no Vercel (passo a passo em `db/README.md`). Sem isso o quiz funciona mas nenhum lead é salvo
 - [ ] Cadastrar `PAINEL_LEADS_SENHA` no Vercel para liberar `/leads`

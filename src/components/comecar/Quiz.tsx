@@ -723,11 +723,17 @@ export default function Quiz() {
                           Ao continuar, você concorda que os seus dados sejam
                           usados para personalizar a experiência e para a nossa
                           equipe entrar em contato. Saiba mais na{" "}
+                          {/* `py-4` num elemento em linha aumenta só a área de
+                              toque: preenchimento vertical em caixa inline não
+                              entra no cálculo da linha, então o texto, o
+                              sublinhado e a altura do cartão ficam idênticos.
+                              É o que leva o alvo de 15px para 47px, acima dos
+                              44px mínimos, sem mexer no visual. */}
                           <a
                             href="/privacidade"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="underline underline-offset-2 hover:text-foreground"
+                            className="py-4 underline underline-offset-2 hover:text-foreground"
                           >
                             Política de Privacidade
                           </a>

@@ -8,7 +8,14 @@
     "start": "next start",
     "lint": "eslint",
     "db:verificar": "node db/verificar.mjs",
-    "test:responsivo": "node tests/responsivo.mjs"
+    "test": "npm run test:unidade",
+    "test:unidade": "tsc -p tsconfig.testes.json && node --test \"tests/unidade/*.test.mjs\"",
+    "test:responsivo": "node tests/responsivo.mjs",
+    "test:teste-gratis": "node tests/teste-gratis.mjs",
+    "test:banco": "tsc -p tsconfig.testes.json && node tests/banco-teste-gratis.mjs",
+    "test:homologacao": "node tests/homologacao-funil.mjs",
+    "auditoria": "node tests/auditoria-pos-deploy.mjs",
+    "status:template": "node tests/status-template.mjs"
   },
   "dependencies": {
     "@types/pg": "^8.20.4",

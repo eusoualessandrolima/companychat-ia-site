@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import CtaTesteGratis from "./CtaTesteGratis";
+import { CTA_LABEL_LONGO } from "@/lib/cta";
 import { whatsappLink, WhatsAppIcon } from "./WhatsAppButton";
 
 export default function Contato() {
@@ -22,22 +25,41 @@ export default function Contato() {
             Entre em contato e descubra como a IA pode revolucionar sua empresa.
           </p>
           <p className="mx-auto mt-3 max-w-md text-text-secondary">
-            Fale diretamente com um especialista. Resposta rápida e sem compromisso.
+            Deixe os seus dados e o nosso assistente chama você no WhatsApp em
+            alguns minutos para entender a sua operação.
           </p>
 
           <div className="mt-10 flex justify-center">
+            <div className="cta-glow-wrap">
+              <CtaTesteGratis
+                local="contato-home"
+                className="group flex items-center gap-2.5 rounded-full bg-primary px-9 py-4 text-lg font-semibold text-on-primary shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark"
+              >
+                {CTA_LABEL_LONGO}
+                <ArrowRight
+                  aria-hidden="true"
+                  className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                />
+              </CtaTesteGratis>
+            </div>
+          </div>
+
+          {/* O caminho direto para gente continua aberto: quem já sabe o que
+              quer não deveria passar por formulário para conversar. */}
+          <p className="mt-6 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-text-secondary">
+            Prefere falar agora?
             <a
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="animate-breath-glow flex items-center gap-2.5 rounded-full bg-[#25D366] px-9 py-4 text-lg font-semibold text-white transition-transform hover:scale-[1.03] hover:bg-[#20bd5a]"
+              className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"
             >
-              <WhatsAppIcon className="h-5 w-5" />
+              <WhatsAppIcon className="h-4 w-4" />
               Chamar no WhatsApp
             </a>
-          </div>
+          </p>
 
-          <p className="mt-6 text-sm text-text-secondary">
+          <p className="mt-3 text-sm text-text-secondary">
             Prefere ver os valores antes?{" "}
             <Link href="/planos" className="font-semibold text-primary hover:underline">
               Conheça os planos

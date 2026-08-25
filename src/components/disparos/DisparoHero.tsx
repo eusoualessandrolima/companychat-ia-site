@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Rocket, Send, ShieldCheck } from "lucide-react";
-import { whatsappLink } from "../WhatsAppButton";
+import CtaTesteGratis from "../CtaTesteGratis";
 
 const metrics = [
   { label: "Enviadas hoje", valor: "12.480", cor: "text-primary" },
@@ -82,15 +82,13 @@ export default function DisparoHero() {
             className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row lg:flex-col lg:items-start xl:flex-row lg:justify-start"
           >
             <div className="cta-glow-wrap w-full sm:w-auto">
-              <a
-                href={whatsappLink}
-                target="_blank"
-                rel="noopener noreferrer"
+              <CtaTesteGratis
+                local="hero-disparos"
                 className="group flex w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-primary px-8 py-4 font-semibold text-on-primary shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40 sm:w-auto"
               >
                 <Send aria-hidden="true" className="h-4 w-4" />
                 Quero disparar em massa
-              </a>
+              </CtaTesteGratis>
             </div>
             <a
               href="#recursos"

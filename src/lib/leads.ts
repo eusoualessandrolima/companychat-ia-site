@@ -1,10 +1,11 @@
-import { Pool } from "pg";
+import { bancoConfigurado, pool } from "./postgres";
 
 /* Acesso aos leads no Postgres (instância própria no Coolify).
    Sem `DATABASE_URL` o site funciona normalmente e o quiz não trava:
-   as funções apenas não gravam nem listam. */
+   as funções apenas não gravam nem listam. A pool mora em `postgres.ts`,
+   compartilhada com o funil de teste grátis. */
 
-const URL_BANCO = process.env.DATABASE_URL;
+export { bancoConfigurado };
 
 export type Lead = {
   id: string;
@@ -22,41 +23,6 @@ export type Lead = {
   criado_em: string;
   atualizado_em: string;
 };
-
-export function bancoConfigurado() {
-  return Boolean(URL_BANCO);
-}
-
-/* Uma pool por processo, guardada no escopo global: em desenvolvimento o
-   Next recarrega os módulos a cada edição e abriria uma pool nova a cada
-   vez, estourando o limite de conexões do Postgres. */
-const global_ = globalThis as typeof globalThis & { poolLeads?: Pool };
-
-function pool() {
-  if (!URL_BANCO) return null;
-
-  if (!global_.poolLeads) {
-    global_.poolLeads = new Pool({
-      connectionString: URL_BANCO,
-      // Banco em VPS própria costuma usar certificado autoassinado; a
-      // conexão continua criptografada, só não valida a cadeia.
-      ssl: URL_BANCO.includes("sslmode=disable")
-        ? false
-        : { rejectUnauthorized: false },
-      // O site roda em funções serverless: poucas conexões por instância.
-      max: 3,
-      idleTimeoutMillis: 30_000,
-      connectionTimeoutMillis: 8_000,
-    });
-
-    // Sem este ouvinte, um erro de conexão ociosa derruba o processo.
-    global_.poolLeads.on("error", (erro) => {
-      console.error("Erro na pool do Postgres:", erro);
-    });
-  }
-
-  return global_.poolLeads;
-}
 
 /** Grava ou atualiza o lead. Chamado a cada etapa do quiz, então a linha
  *  existe desde o primeiro envio e o abandono no meio fica registrado. */

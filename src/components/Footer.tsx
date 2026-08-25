@@ -1,5 +1,7 @@
 import { MapPin } from "lucide-react";
 import Logo from "./Logo";
+import CtaTesteGratis from "./CtaTesteGratis";
+import { CTA_LABEL_CURTO, CTA_TESTE_GRATIS } from "@/lib/cta";
 import { whatsappLink } from "@/lib/whatsapp";
 
 /* Marca "infinito" da Meta em gradiente azul da marca */
@@ -25,6 +27,7 @@ function MetaLogo({ className }: { className?: string }) {
 
 const links = {
   produto: [
+    { href: CTA_TESTE_GRATIS, label: "Teste grátis" },
     { href: "/planos",      label: "Planos e preços" },
     { href: "/#servicos",   label: "Serviços" },
     { href: "/#beneficios", label: "Benefícios" },
@@ -66,14 +69,12 @@ export default function Footer() {
             </p>
 
             {/* CTA */}
-            <a
-              href={whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
+            <CtaTesteGratis
+              local="footer"
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/30"
             >
-              Fale Conosco
-            </a>
+              {CTA_LABEL_CURTO}
+            </CtaTesteGratis>
           </div>
 
           {/* Links */}

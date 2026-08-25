@@ -13,7 +13,7 @@ import {
   ArrowRight,
   type LucideIcon,
 } from "lucide-react";
-import { whatsappLink } from "./WhatsAppButton";
+import CtaTesteGratis from "./CtaTesteGratis";
 
 type Card = {
   nome: string;
@@ -234,15 +234,13 @@ export default function CrmKanban() {
 
         <div className="mt-14 flex justify-center">
           <div className="cta-glow-wrap">
-            <a
-              href={whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
+            <CtaTesteGratis
+              local="crm-kanban"
               className="group flex items-center justify-center gap-2.5 rounded-full bg-primary px-9 py-4 font-semibold text-on-primary shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
             >
               Quero o CRM Kanban
               <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </a>
+            </CtaTesteGratis>
           </div>
         </div>
       </div>

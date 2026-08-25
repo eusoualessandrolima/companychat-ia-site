@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+# Saída CommonJS de `npm run test:unidade` (ver tsconfig.testes.json)
+/.testes-build
 
 # next.js
 /.next/

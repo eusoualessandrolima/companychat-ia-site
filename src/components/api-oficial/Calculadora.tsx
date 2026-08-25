@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calculator, ChevronDown, Gift, RotateCcw, Sparkles } from "lucide-react";
 import { categorias, brl, type CategoriaId } from "./pricing";
-import { whatsappLink } from "../WhatsAppButton";
+import CtaTesteGratis from "../CtaTesteGratis";
 
 type Registro = Record<CategoriaId, number>;
 
@@ -289,14 +289,12 @@ export default function Calculadora() {
                 </div>
               </div>
 
-              <a
-                href={whatsappLink}
-                target="_blank"
-                rel="noopener noreferrer"
+              <CtaTesteGratis
+                local="calculadora-api"
                 className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-on-primary transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/30"
               >
                 Quero implementar com a CompanyChat
-              </a>
+              </CtaTesteGratis>
               <p className="mt-3 text-center text-[11px] leading-relaxed text-dark-muted">
                 Estimativa baseada em valores aproximados da Meta. O custo real depende do
                 volume e das categorias efetivamente enviadas.

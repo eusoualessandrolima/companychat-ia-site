@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Check, ArrowRight, Sparkles } from "lucide-react";
-import { whatsappLink } from "../WhatsAppButton";
+import CtaTesteGratis from "../CtaTesteGratis";
 import { planos } from "./planos-data";
 
 export default function TabelaPlanos() {
@@ -121,25 +121,21 @@ export default function TabelaPlanos() {
               <div className="mt-9">
                 {plano.destaque ? (
                   <div className="cta-glow-wrap">
-                    <a
-                      href={whatsappLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <CtaTesteGratis
+                      local={`plano-${plano.id}`}
                       className="group flex w-full items-center justify-center gap-2.5 rounded-full bg-primary px-8 py-4 font-semibold text-on-primary shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40"
                     >
                       {plano.cta}
                       <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                    </a>
+                    </CtaTesteGratis>
                   </div>
                 ) : (
-                  <a
-                    href={whatsappLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <CtaTesteGratis
+                    local={`plano-${plano.id}`}
                     className="flex w-full items-center justify-center gap-2.5 rounded-full border border-dark-border bg-dark-elevated px-8 py-4 font-semibold text-dark-text transition-all hover:border-primary/40 hover:text-primary"
                   >
                     {plano.cta}
-                  </a>
+                  </CtaTesteGratis>
                 )}
                 <p className="mt-4 text-center text-xs text-dark-muted">{plano.rodape}</p>
               </div>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Check, ArrowRight, Calculator } from "lucide-react";
-import { whatsappLink } from "./WhatsAppButton";
+import CtaTesteGratis from "./CtaTesteGratis";
 import { planos } from "./planos/planos-data";
 
 /** Resumo dos planos na home. O detalhamento completo vive em /planos. */
@@ -82,24 +82,20 @@ export default function PlanosHome() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 {plano.destaque ? (
                   <div className="cta-glow-wrap w-full">
-                    <a
-                      href={whatsappLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <CtaTesteGratis
+                      local={`plano-${plano.id}-home`}
                       className="flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 py-3.5 font-semibold text-on-primary shadow-lg shadow-primary/30 transition-all hover:bg-primary-dark"
                     >
                       {plano.cta}
-                    </a>
+                    </CtaTesteGratis>
                   </div>
                 ) : (
-                  <a
-                    href={whatsappLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <CtaTesteGratis
+                    local={`plano-${plano.id}-home`}
                     className="flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-full border border-dark-border bg-dark-elevated px-6 py-3.5 font-semibold text-dark-text transition-all hover:border-primary/40 hover:text-primary"
                   >
                     {plano.cta}
-                  </a>
+                  </CtaTesteGratis>
                 )}
 
                 <Link

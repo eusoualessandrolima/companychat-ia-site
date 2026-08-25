@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Logo from "../Logo";
-import { whatsappLink, loginLink } from "../WhatsAppButton";
+import CtaTesteGratis from "../CtaTesteGratis";
+import { CTA_LABEL_CURTO } from "@/lib/cta";
+import { loginLink } from "../WhatsAppButton";
 
 export default function ApiHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -44,14 +46,12 @@ export default function ApiHeader() {
           >
             Fazer Login
           </a>
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
+          <CtaTesteGratis
+            local="header-interno"
             className="whitespace-nowrap rounded-full bg-primary px-5 py-2 text-sm font-semibold text-on-primary transition-all hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25"
           >
-            Fale Conosco
-          </a>
+            {CTA_LABEL_CURTO}
+          </CtaTesteGratis>
         </div>
       </div>
     </header>

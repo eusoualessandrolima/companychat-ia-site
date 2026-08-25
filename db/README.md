@@ -1,7 +1,15 @@
-# Banco dos leads do quiz
+# Banco dos leads
 
-Os leads capturados em `/comecar` ficam num Postgres próprio, na VPS com Coolify.
-O site continua na Vercel e conecta pela internet.
+Os leads capturados em `/comecar` e no funil de `/teste-gratis` ficam num Postgres
+próprio, na VPS com Coolify, no mesmo banco e com a mesma `DATABASE_URL`.
+
+| Arquivo | Tabelas | De quem |
+|---|---|---|
+| `leads_site.sql` | `leads_site` | quiz `/comecar` e LPs de nicho |
+| `teste_gratis.sql` | `teste_gratis_leads`, `teste_gratis_jobs`, `teste_gratis_eventos` | funil de teste grátis |
+
+O `npm run db:verificar` aplica os dois. O DDL do funil é todo `if not exists`,
+então rodar de novo é inofensivo e serve para publicar índice novo.
 
 ## Por que não Supabase
 
@@ -28,10 +36,11 @@ npm run db:verificar -- "postgresql://postgres:SENHA@SEU_HOST:PORTA/companychat?
 
 Com a `DATABASE_URL` já no `.env.local`, basta `npm run db:verificar`.
 
-Se preferir criar a tabela na mão:
+Se preferir criar as tabelas na mão:
 
 ```bash
 psql "postgresql://postgres:SENHA@SEU_HOST:PORTA/companychat" -f db/leads_site.sql
+psql "postgresql://postgres:SENHA@SEU_HOST:PORTA/companychat" -f db/teste_gratis.sql
 ```
 
 ## Variável de ambiente
@@ -44,6 +53,11 @@ DATABASE_URL=postgresql://postgres:SENHA@SEU_HOST:PORTA/companychat?sslmode=requ
 
 Sem essa variável o quiz continua funcionando e o lead segue para o WhatsApp,
 mas nada é gravado e o painel `/leads` avisa que o banco não está configurado.
+
+No funil de teste grátis a ausência da variável tem um custo maior: a página
+continua respondendo e mostra a confirmação, mas o lead não é persistido e o
+follow-up não é agendado, porque o agendamento **é** a linha no banco. O log do
+container registra `DATABASE_URL ausente, solicitação não persistida`.
 
 ## Segurança
 
