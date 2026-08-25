@@ -115,7 +115,11 @@ export default function TesteGratis() {
               </p>
 
               <h1 className="text-[clamp(34px,4.4vw,52px)] font-bold leading-[1.05] tracking-[-0.03em] text-dark-text">
-                Teste a CompanyChat <span className="text-gradient-primary">gratuitamente</span>
+                {/* Caixa alta escrita à mão, não `uppercase`: o texto precisa
+                    chegar assim no HTML, inclusive para quem copia a página ou
+                    lê sem CSS. A segunda palavra mantém o gradiente que já
+                    existia, para o título não trocar de identidade. */}
+                TESTE <span className="text-gradient-primary">GRATUITAMENTE</span>
               </h1>
 
               <p className="mt-5 max-w-xl text-[clamp(16px,1.7vw,19px)] leading-relaxed text-dark-muted">
