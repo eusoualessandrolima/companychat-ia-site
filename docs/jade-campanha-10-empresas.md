@@ -118,7 +118,12 @@ respeitosa, sem promessa vaga de "próxima oportunidade" que não exista.
 Quando alguém perguntar, a Jade pode confirmar que haverá resposta para todos
 após o encerramento, **sem prometer data**.
 
-### Respostas do FAQ (idênticas às da página)
+### Respostas do FAQ
+
+O FAQ em acordeão saiu da página em 2026-08-26. As mesmas condições continuam
+lá, resumidas no bloco "Condições da seleção", logo abaixo do formulário. As
+respostas abaixo são a versão longa, para a Jade usar na conversa: elas não
+podem contradizer aquele bloco, que é o que o candidato leu antes de preencher.
 
 **A candidatura é gratuita?**
 Sim. Não existe cobrança para enviar a candidatura, e candidatar-se não gera

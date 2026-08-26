@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Check, X } from "lucide-react";
+import { ArrowRight, Check, Info, X } from "lucide-react";
 import Logo from "@/components/Logo";
 import { WHATSAPP_NUMBER, WhatsAppIcon } from "@/components/WhatsAppButton";
 import { evento, urlInicial } from "@/lib/analytics";
@@ -11,6 +11,7 @@ import {
   ANCORA_FORMULARIO,
   CAMPANHA_ENCERRADA,
   capacidades,
+  condicoes,
   ctaFinal,
   encerramento,
   entrega,
@@ -375,6 +376,34 @@ export default function Campanha() {
             <Revelar>
               {CAMPANHA_ENCERRADA ? <Encerrada /> : <FormularioCandidatura />}
             </Revelar>
+
+            {/* As condições ficam logo abaixo do formulário, e não numa seção
+                própria: é aqui que a pessoa decide se preenche, e é aqui que
+                ela precisa saber prazo, escopo e o que acontece depois. */}
+            {!CAMPANHA_ENCERRADA && (
+              <Revelar atraso={0.1}>
+                <div className="mt-8 rounded-2xl border border-dark-border bg-dark-base/40 p-6 sm:p-7">
+                  <h3 className="flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.16em] text-primary">
+                    <Info aria-hidden="true" className="h-4 w-4 shrink-0" />
+                    {condicoes.titulo}
+                  </h3>
+                  <ul className="mt-5 space-y-3">
+                    {condicoes.itens.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-3 text-[15px] leading-relaxed text-dark-muted"
+                      >
+                        <span
+                          aria-hidden="true"
+                          className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-primary/70"
+                        />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Revelar>
+            )}
           </div>
         </section>
 

@@ -209,6 +209,28 @@ export const perfil = {
     "Esta seleção não é indicada para quem procura apenas um número de WhatsApp gratuito ou não possui uma operação real para testar.",
 };
 
+/* As condições que valem para quem se candidata.
+ *
+ * Estavam no FAQ, que saiu da página. Sem elas, a pessoa preenchia dez campos
+ * sem saber por quanto tempo a inscrição fica aberta, o que exatamente é
+ * gratuito nem o que acontece depois. Voltam aqui em lista curta, ao lado do
+ * formulário, que é onde a decisão acontece, e não em acordeão.
+ *
+ * Mesmo texto das respostas que a Jade dá no WhatsApp
+ * (`docs/jade-campanha-10-empresas.md`): se um mudar, o outro muda junto. */
+export const condicoes = {
+  titulo: "Condições da seleção",
+  itens: [
+    "A candidatura é gratuita e não gera compromisso.",
+    "As inscrições ficam abertas por 30 dias após a publicação, ou até as 10 empresas serem selecionadas.",
+    "A seleção não é automática: analisamos o perfil, a demanda de atendimento e a disponibilidade para participar do projeto.",
+    "O que é gratuito: a implantação de um fluxo principal de automação, com diagnóstico, configuração do assistente, integração disponível, organização no CRM e acompanhamento inicial.",
+    "Automações, integrações ou fluxos adicionais são avaliados separadamente, com escopo e valor apresentados antes de qualquer execução.",
+    "A participação não cria contratação automática. O período inicial são os 30 primeiros dias após a ativação da operação, e continuar depois é opcional, com as condições apresentadas previamente.",
+    "Todas as candidaturas recebem retorno pelo WhatsApp ou e-mail informados, selecionadas ou não.",
+  ],
+};
+
 export const formulario = {
   titulo: "Candidate sua empresa",
   subtitulo:
