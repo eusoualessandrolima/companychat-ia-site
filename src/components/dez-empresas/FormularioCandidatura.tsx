@@ -782,14 +782,23 @@ export default function FormularioCandidatura() {
         )}
       </div>
 
-      <p className="mt-4 flex items-start justify-center gap-2 text-xs leading-relaxed text-dark-muted">
-        <ShieldCheck aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-        <span className="min-w-0">{formulario.seguranca}</span>
-      </p>
-      <p className="mt-2 flex items-start justify-center gap-2 text-xs leading-relaxed text-dark-muted">
-        <Lock aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-        <span className="min-w-0">{formulario.microcopy}</span>
-      </p>
+      {/* As duas linhas partem da mesma coluna. Com `justify-center`, a que
+          quebrava em duas linhas ficava alinhada à esquerda e a curta ficava
+          centralizada — dois alinhamentos diferentes no mesmo bloco. */}
+      <ul className="mt-5 space-y-2 border-t border-dark-border pt-4">
+        {[
+          { icone: ShieldCheck, texto: formulario.seguranca },
+          { icone: Lock, texto: formulario.microcopy },
+        ].map(({ icone: Icone, texto }) => (
+          <li
+            key={texto}
+            className="flex items-start gap-2 text-xs leading-relaxed text-dark-muted"
+          >
+            <Icone aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+            <span className="min-w-0">{texto}</span>
+          </li>
+        ))}
+      </ul>
     </form>
   );
 }
