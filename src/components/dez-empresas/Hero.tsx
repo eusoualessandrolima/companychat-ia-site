@@ -1,7 +1,7 @@
-import { Check, Sparkles } from "lucide-react";
+import { Check } from "lucide-react";
 import CtaAncora from "./CtaAncora";
 import ConversaMock from "./ConversaMock";
-import { etiquetasHero, hero } from "./conteudo";
+import { hero } from "./conteudo";
 
 /* Hero da campanha.
  *
@@ -53,22 +53,10 @@ export default function Hero() {
             <span className="block">{hero.titulo.linha3}</span>
           </h1>
 
-          {/* A oferta em superfície própria: é a informação que decide a
-              candidatura, e diluída no meio do parágrafo ela sumia. */}
-          <p className="borda-destaque mt-7 flex w-fit items-center gap-3 rounded-2xl bg-dark-elevated/80 px-5 py-3.5 max-[380px]:mt-5 max-[380px]:px-4">
-            <Sparkles
-              aria-hidden="true"
-              className="h-5 w-5 shrink-0 text-primary"
-            />
-            <span className="text-[clamp(0.9375rem,1.5vw,1.0625rem)] leading-snug">
-              <strong className="font-bold text-dark-text">
-                {hero.oferta.principal}
-              </strong>{" "}
-              <span className="text-dark-muted">{hero.oferta.complemento}</span>
-            </span>
-          </p>
-
-          <p className="mt-6 max-w-2xl text-[clamp(1rem,1.5vw,1.1875rem)] leading-relaxed text-dark-muted max-[380px]:mt-4 max-[380px]:text-[0.9375rem] max-[380px]:leading-[1.5]">
+          {/* A faixa da oferta saiu em 26/08/2026, a pedido do dono. A
+              gratuidade continua dita no subtítulo e tem a seção de valor
+              inteira logo abaixo do hero. */}
+          <p className="mt-7 max-w-2xl text-[clamp(1rem,1.5vw,1.1875rem)] leading-relaxed text-dark-muted max-[380px]:mt-5 max-[380px]:text-[0.9375rem] max-[380px]:leading-[1.5]">
             {hero.subtitulo}
           </p>
 
@@ -101,52 +89,13 @@ export default function Hero() {
             aria-hidden="true"
             className="fio-conexao absolute left-0 right-0 top-1/2 hidden h-px lg:block"
           />
-          {/* Wrapper na largura exata do mock.
-              As etiquetas se posicionam por este contêiner, e não pela coluna
-              inteira: ancoradas na coluna, elas ficavam a até 100px do telefone
-              em telas largas e a etiqueta de 160px acabava por cima dos balões
-              da conversa — cobrindo justamente o conteúdo que a composição
-              existe para mostrar. */}
-          {/* `lg:mr-20` desloca o telefone para dentro da coluna e abre a
-              faixa que as etiquetas da direita ocupam. Sem ela, o mock encosta
-              na margem do contêiner e as duas etiquetas daquele lado saíam da
-              viewport — onde o `overflow-x-clip` do root as cortava pela
-              metade ("Reunião agend…"). */}
-          <div className="relative mx-auto w-full max-w-[19rem] sm:max-w-[21rem] lg:mr-20">
-            <ConversaMock />
-
-            {/* Etiquetas de resultado ao redor do mock.
-                Quatro, não oito: o telefone precisa continuar sendo o objeto
-                principal. Só aparecem de `sm` para cima — em coluna estreita
-                elas cobririam a conversa, que é o conteúdo real. */}
-            <ul
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 hidden sm:block"
-            >
-              {etiquetasHero.map((etiqueta, i) => (
-                <li
-                  key={etiqueta.texto}
-                  className={`cartao-flutuante animate-badge-float-${i + 1} absolute flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-[13px] font-semibold text-dark-text ${POSICOES[i]}`}
-                >
-                  <etiqueta.icone className="h-3.5 w-3.5 shrink-0 text-primary" />
-                  {etiqueta.texto}
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* O aparelho traz as próprias etapas embaixo, como no mockup da
+              marca. As etiquetas soltas ao redor dele saíram: ancoradas na
+              coluna, acabavam por cima dos balões em telas largas e eram
+              cortadas pelo `overflow-x-clip` do outro lado. */}
+          <ConversaMock />
         </div>
       </div>
     </section>
   );
 }
-
-/* Posições fixas, uma por etiqueta. Cada uma é ancorada numa borda do telefone
-   e empurrada para **fora** dele com `translate`, de modo que só a ponta da
-   etiqueta encoste no aparelho — nenhuma passa por cima dos balões.
-   Fora do componente para não recriar o array a cada render. */
-const POSICOES = [
-  "left-0 top-[12%] -translate-x-[78%]",
-  "right-0 top-[34%] translate-x-[62%]",
-  "left-0 bottom-[28%] -translate-x-[92%]",
-  "right-0 bottom-[8%] translate-x-[58%]",
-] as const;
