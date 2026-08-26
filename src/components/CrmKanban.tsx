@@ -67,9 +67,13 @@ const colunas: Coluna[] = [
   },
 ];
 
+/* `accent-error` (#C73546, o vermelho semântico do guia) e não o `red-500` do
+   Tailwind: o vermelho padrão dá 3,82:1 com texto branco, abaixo dos 4,5:1 que
+   estes 12 px pedem. O tom do guia dá 5,22:1 — e é o mesmo vermelho que o
+   resto do sistema usa para erro. */
 const slim = [
   { nome: "Oportunidade Ganha", cor: "bg-primary text-on-primary", count: 1 },
-  { nome: "Oportunidade Perdida", cor: "bg-red-500 text-white", count: 0 },
+  { nome: "Oportunidade Perdida", cor: "bg-accent-error text-white", count: 0 },
 ];
 
 const pilares: { icon: LucideIcon; titulo: string; desc: string }[] = [

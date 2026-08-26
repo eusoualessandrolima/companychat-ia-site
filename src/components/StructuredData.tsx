@@ -21,7 +21,10 @@ export default function StructuredData() {
     url: SITE_URL,
     telephone: `+${WHATSAPP_NUMBER}`,
     image: `${SITE_URL}/opengraph-image`,
-    logo: `${SITE_URL}/icon.svg`,
+    /* O PNG oficial de 512 e não o `/icon.svg`: o Google pede dimensões
+       conhecidas para o logo do painel de conhecimento, e o Next serve o
+       `icon.svg` numa URL com hash que muda a cada build. */
+    logo: `${SITE_URL}/icons/android-chrome-512x512.png`,
     priceRange: "$$",
     currenciesAccepted: "BRL",
     address: {

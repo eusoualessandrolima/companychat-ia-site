@@ -24,6 +24,10 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  /* Mesma cor do `theme_color` do manifest e do fundo do favicon: sem isso o
+     Chrome no Android pinta a barra de endereço de branco e o topo escuro do
+     site aparece com uma faixa clara acima dele. */
+  themeColor: "#071011",
 };
 
 export const metadata: Metadata = {

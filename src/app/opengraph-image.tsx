@@ -7,11 +7,14 @@ import { ImageResponse } from "next/og";
    Satori aceita SVG por data URI, e a imagem é gerada no build, então ler o
    arquivo do disco não custa nada em runtime. */
 const LOGO = `data:image/svg+xml;base64,${readFileSync(
-  join(process.cwd(), "public/brand/companychat-logo-dark.svg")
+  join(process.cwd(), "public/brand/companychat-logo-balao-destaque-dark.svg")
 ).toString("base64")}`;
 
-const LOGO_LARGURA = 340;
-const LOGO_ALTURA = Math.round((LOGO_LARGURA * 72) / 500);
+/* 386 e não os 340 de quando o card usava só o wordmark: o nome ocupa 500 das
+   568 unidades da assinatura completa, e o card foi desenhado com o nome nesse
+   tamanho. */
+const LOGO_LARGURA = 386;
+const LOGO_ALTURA = Math.round((LOGO_LARGURA * 72) / 568);
 
 export const alt =
   "CompanyChat: não somos apenas um CRM. Quem usa CompanyChat não acompanha o mercado, inova ele.";

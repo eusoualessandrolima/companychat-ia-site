@@ -45,7 +45,7 @@
 | FAQ | `FAQ.tsx` | Perguntas frequentes |
 | Contato | `Contato.tsx` | Formulário/CTA de contato |
 | Footer | `Footer.tsx` | Rodapé |
-| Logo | `Logo.tsx` | Wordmark oficial em SVG (`public/brand/`), 145px no mobile e 160px no desktop. Não montar a marca com texto — ver `docs/marca/MANUAL-DA-MARCA.md` |
+| Logo | `Logo.tsx` | Assinatura oficial v3 em SVG (`public/brand/`): símbolo do balão + wordmark, 165px no mobile e 182px no desktop. Exporta também `Simbolo` (símbolo isolado, para avatar e selo). Não montar a marca com texto — ver `docs/marca/MANUAL-DA-MARCA.md` |
 | WhatsAppButton | `WhatsAppButton.tsx` | Botão flutuante do WhatsApp (`"use client"`). No desktop mostra Comercial e Suporte; no celular vira um botão só que abre os dois rotulados. Números e links moram em `src/lib/whatsapp.ts` |
 | CountUp | `CountUp.tsx` | Contador animado compartilhado (usado em Hero e Sobre) |
 
@@ -1267,6 +1267,77 @@ de receber lead real, cadastrar um S3 e agendar backup diário do `leads-site`.
 `free_trial_captacao_sem_envio > 0`, que só existe depois do primeiro lead. Zero ali
 significa "ninguém se cadastrou ainda", não "captação quebrada". A verificação passou para
 dentro do bloco que só roda quando há lead.
+
+### 2026-08-26 — Identidade v3: a marca ganhou símbolo, e com ele o favicon
+
+Origem: `Marketing/Logomarca/Modelo v3` no Google Drive. O wordmark não mudou (os dois
+arquivos entregues são byte a byte iguais aos que já estavam em `public/brand/`); o que
+mudou é que **agora existe um símbolo aprovado** — o "balão em destaque", um balão de
+conversa à frente de um quadrado arredondado. A v2 proibia símbolo explicitamente, e era
+por causa dessa proibição que o site não tinha favicon de verdade.
+
+- **A assinatura principal passou a ser símbolo + wordmark** (`568 × 72`). `Logo.tsx`
+  aponta para `companychat-logo-balao-destaque-{dark,light}.svg`. A largura subiu de
+  145/160 para 165/182 px: o wordmark ocupa 500 das 568 unidades, então essa é a
+  compensação exata para o nome continuar do mesmo tamanho óptico do header publicado.
+- **O favicon é o símbolo na variante `dark-green`** (balão `#00C896` sobre `#075F4C`,
+  em quadrado `#071011`). Os arquivos vieram prontos e não foram regerados. Entraram
+  pelas convenções do App Router — `src/app/favicon.ico`, `icon.svg`, `apple-icon.png` —
+  para o Next emitir as tags `<link>` sozinho, sem metatag manual.
+- **Manifest virou rota** (`src/app/manifest.ts`) em vez de arquivo estático, pelo mesmo
+  motivo: o Next injeta o `<link rel="manifest">`. `theme_color`, `background_color` e o
+  `themeColor` do `layout.tsx` são todos `#071011`, igual ao fundo do ícone.
+- **Ícones não são `maskable`.** O balão chega perto da borda do quadrado e a máscara
+  circular do Android cortaria a ponta da cauda.
+- **O `logo` do JSON-LD passou a apontar para o PNG de 512** e não para `/icon.svg`: o
+  Google quer dimensões conhecidas, e o Next serve o `icon.svg` numa URL com hash que
+  muda a cada build.
+- **O "C" desenhado no mock do Hero saiu.** A foto de perfil da conversa era uma inicial
+  em círculo com gradiente — marca recriada, o que o manual proíbe. Agora usa o símbolo
+  oficial, que é exatamente o que o cliente vê no WhatsApp de verdade.
+- **`/privacidade` estava com a variante escura sobre fundo claro.** No arquivo escuro o
+  balão e a palavra `Company` são `#F5F7F6`; sumiam por completo. Passou a usar `<Logo />`.
+  Uma varredura das 16 rotas (30 ocorrências da marca) confirmou que era o único caso.
+
+### 2026-08-26 — A marca invisível na `/privacidade` era a ponta de um bug maior
+
+Trocar a variante do logo revelou que **a política de privacidade inteira estava
+ilegível em produção**. A página usa o fundo claro do `body`, mas carregava os tokens de
+modo escuro de uma versão anterior: `text-dark-text` é `#F5F7F6` sobre `#F5F7F6` — o
+texto simplesmente não existia na tela. `text-dark-muted` dava 1,4:1.
+
+Pesava mais do que parece: é a página que a revisão de anúncios da Meta abre, e o link
+vive em todos os formulários de captura.
+
+- **Convertida para os tokens claros:** `text-foreground` nos títulos e nos `<strong>`,
+  `text-text-secondary` no corpo (6,49:1), `border-card-border` na borda do cabeçalho.
+  O card escuro do fim da página ficou como estava — ali os tokens `dark-*` são os certos,
+  e o comentário no arquivo já dizia isso.
+- **`hover:text-primary` virou `hover:text-primary-text`** no link "Voltar ao site": o
+  verde vivo dá 2,16:1 sobre fundo claro, e um hover não pode piorar a leitura.
+
+**Varredura de contraste nas 16 rotas** (pixel real medido, não cor computada) para
+garantir que não havia outro caso da mesma família. Achou mais um:
+
+- **CRM Kanban, coluna "Oportunidade Perdida":** branco sobre `bg-red-500` do Tailwind =
+  3,82:1, abaixo dos 4,5:1 que os 12 px pedem. Passou a `bg-accent-error` (`#C73546`, o
+  vermelho semântico do guia) = 5,22:1. Foi o único resto da migração de paleta que ainda
+  usava cor crua do Tailwind num par que reprovava.
+- **Estados de erro dos formulários** medidos à parte, porque só existem depois de uma
+  submissão inválida e nenhuma varredura de página os alcança: de 4,52:1 a 8,49:1, todos
+  passam. Os das LPs passam raspando — se o vermelho mudar, medir de novo.
+
+**Sobre a ferramenta de auditoria:** medir cor computada em vez de pixel dá falso positivo
+em massa. Elemento `fixed` tem ancestral no DOM que não é o que está atrás dele na tela;
+`transition-colors` anima a cor de teste; `whileInView` do Framer Motion re-dispara ao
+rolar até o elemento. O que funcionou: `reducedMotion: "reduce"` no contexto do Playwright
+(o site tem `MotionConfig reducedMotion="user"`, então tudo chega no estado final),
+transições desligadas por CSS, cor transparente aplicada ao elemento **e aos filhos**, e
+`scrollIntoView` antes de medir. Mesmo assim, `<strong>` inline que quebra em duas linhas
+devolve um `boundingBox` que cobre o parágrafo inteiro e a amostra cai no texto do pai —
+o único "achado" restante em `/calculadora` é esse artefato, conferido a olho.
+
+---
 
 ---
 

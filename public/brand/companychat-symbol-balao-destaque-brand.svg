@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="40 32 440 460" role="img" aria-labelledby="title desc">
+  <title id="title">CompanyChat - símbolo com balão em destaque para fundo brand</title>
+  <desc id="desc">Um balão grande em primeiro plano cobre parcialmente um quadrado arredondado verde e suave posicionado atrás.</desc>
+  <rect x="154" y="55" width="300" height="255" rx="38" fill="#A9F3DC"/>
+  <path d="M100 143H327C347 143 363 159 363 179V362C363 382 347 398 327 398H151L82 467C74 475 63 469 63 458V179C63 159 79 143 100 143Z" fill="#FFFFFF"/>
+</svg>

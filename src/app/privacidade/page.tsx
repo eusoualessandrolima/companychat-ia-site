@@ -6,7 +6,13 @@ import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
 
 /* Política de privacidade exigida pelas LPs de captura: elas coletam nome,
    telefone e segmento, e a revisão de anúncios da Meta checa a página de
-   destino. O link vive no formulário e nos rodapés. */
+   destino. O link vive no formulário e nos rodapés.
+
+   A página é **clara** — usa o fundo do `body`, sem envelope escuro. Até
+   2026-08-26 ela carregava os tokens de modo escuro herdados de uma versão
+   anterior, e o texto saía #F5F7F6 sobre #F5F7F6: a política inteira estava
+   invisível em produção. Ao editar aqui, use `foreground` / `text-secondary` /
+   `card-border`; os tokens `dark-*` só valem dentro do card escuro do fim. */
 export const metadata: Metadata = {
   title: "Política de Privacidade | CompanyChat",
   description:
@@ -27,10 +33,10 @@ function Secao({
 }) {
   return (
     <section className="mt-10">
-      <h2 className="text-xl font-bold tracking-[-0.01em] text-dark-text sm:text-2xl">
+      <h2 className="text-xl font-bold tracking-[-0.01em] text-foreground sm:text-2xl">
         {titulo}
       </h2>
-      <div className="mt-3 space-y-3 leading-relaxed text-dark-muted">
+      <div className="mt-3 space-y-3 leading-relaxed text-text-secondary">
         {children}
       </div>
     </section>
@@ -43,14 +49,19 @@ export default function PrivacidadePage() {
 
   return (
     <>
-      <header className="border-b border-dark-border">
+      <header className="border-b border-card-border">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-[clamp(1rem,4vw,2rem)] py-5">
+          {/* Variante clara, não a escura: esta página roda sobre o fundo claro
+              do `body`, e no arquivo escuro o balão e a palavra `Company` são
+              #F5F7F6 — sumiam por completo. */}
           <Link href="/" aria-label="Ir para a página inicial">
-            <Logo dark />
+            <Logo />
           </Link>
           <Link
             href="/"
-            className="text-sm text-dark-muted transition-colors hover:text-primary"
+            /* `primary-text` e não `primary`: o verde vivo dá 2,16:1 sobre o
+               fundo claro, e um estado de hover não pode piorar a leitura. */
+            className="text-sm text-text-secondary transition-colors hover:text-primary-text"
           >
             Voltar ao site
           </Link>
@@ -58,14 +69,14 @@ export default function PrivacidadePage() {
       </header>
 
       <main id="conteudo" tabIndex={-1} className="mx-auto max-w-3xl px-[clamp(1rem,4vw,2rem)] py-12 sm:py-16">
-        <h1 className="text-3xl font-bold tracking-[-0.02em] text-dark-text sm:text-4xl">
+        <h1 className="text-3xl font-bold tracking-[-0.02em] text-foreground sm:text-4xl">
           Política de Privacidade
         </h1>
-        <p className="mt-3 text-sm text-dark-muted">
+        <p className="mt-3 text-sm text-text-secondary">
           Última atualização: {ATUALIZADO_EM}
         </p>
 
-        <p className="mt-8 leading-relaxed text-dark-muted">
+        <p className="mt-8 leading-relaxed text-text-secondary">
           Esta política explica quais dados pessoais a CompanyChat coleta
           neste site, para que eles são usados, com quem são compartilhados e
           como você pode exercer os seus direitos. Ela segue a Lei Geral de
@@ -74,7 +85,7 @@ export default function PrivacidadePage() {
 
         <Secao titulo="1. Quem é o controlador dos dados">
           <p>
-            <strong className="text-dark-text">CompanyChat IA Ltda</strong>,
+            <strong className="text-foreground">CompanyChat IA Ltda</strong>,
             inscrita no CNPJ 36.076.441/0001-14, com sede em Goiânia, Goiás, é a
             responsável por decidir como e por que os seus dados pessoais são
             tratados.
@@ -104,7 +115,7 @@ export default function PrivacidadePage() {
 
         <Secao titulo="2. Quais dados coletamos">
           <p>
-            <strong className="text-dark-text">
+            <strong className="text-foreground">
               Dados que você informa nos formulários:
             </strong>{" "}
             nome, e-mail, nome da empresa ou clínica, endereço do site, número de
@@ -113,7 +124,7 @@ export default function PrivacidadePage() {
             recebidas.
           </p>
           <p>
-            <strong className="text-dark-text">
+            <strong className="text-foreground">
               Registro do consentimento:
             </strong>{" "}
             quando você marca a autorização para receber o nosso contato pelo
@@ -121,14 +132,14 @@ export default function PrivacidadePage() {
             aceitou.
           </p>
           <p>
-            <strong className="text-dark-text">
+            <strong className="text-foreground">
               Registro do atendimento pelo WhatsApp:
             </strong>{" "}
             as mensagens que enviamos e as suas respostas, além da confirmação de
             entrega e de leitura fornecida pelo WhatsApp.
           </p>
           <p>
-            <strong className="text-dark-text">
+            <strong className="text-foreground">
               Dados coletados automaticamente:
             </strong>{" "}
             a página em que você estava, o site de origem e os parâmetros de
@@ -137,7 +148,7 @@ export default function PrivacidadePage() {
             <code>msclkid</code>), que nos indicam por qual anúncio você chegou.
           </p>
           <p>
-            <strong className="text-dark-text">Não solicitamos</strong> dados de
+            <strong className="text-foreground">Não solicitamos</strong> dados de
             saúde, dados de pacientes, documentos, dados bancários ou qualquer
             outra informação sensível pelos formulários deste site. Pedimos que
             você também não os envie.
@@ -173,13 +184,13 @@ export default function PrivacidadePage() {
           </p>
           <p>
             As bases legais são o seu{" "}
-            <strong className="text-dark-text">consentimento</strong>, dado ao
+            <strong className="text-foreground">consentimento</strong>, dado ao
             enviar o formulário, os{" "}
-            <strong className="text-dark-text">
+            <strong className="text-foreground">
               procedimentos preliminares relacionados a um contrato
             </strong>{" "}
             que você demonstrou interesse em celebrar e o nosso{" "}
-            <strong className="text-dark-text">legítimo interesse</strong> em
+            <strong className="text-foreground">legítimo interesse</strong> em
             medir e aprimorar a divulgação dos nossos serviços.
           </p>
         </Secao>
@@ -214,19 +225,19 @@ export default function PrivacidadePage() {
           </p>
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              <strong className="text-dark-text">Meta Platforms</strong> — para
+              <strong className="text-foreground">Meta Platforms</strong>: para
               mensuração de campanhas e envio de mensagens pela API Oficial do
               WhatsApp.
             </li>
             <li>
-              <strong className="text-dark-text">
+              <strong className="text-foreground">
                 Provedores de infraestrutura
-              </strong>{" "}
-              — hospedagem do site, banco de dados e plataforma de atendimento,
+              </strong>
+              : hospedagem do site, banco de dados e plataforma de atendimento,
               que armazenam os dados em nosso nome e sob nossas instruções.
             </li>
             <li>
-              <strong className="text-dark-text">Autoridades públicas</strong> —
+              <strong className="text-foreground">Autoridades públicas</strong>:
               quando houver obrigação legal ou ordem judicial.
             </li>
           </ul>
@@ -307,6 +318,8 @@ export default function PrivacidadePage() {
         </Secao>
 
         <div className="mt-12 rounded-2xl border border-dark-border bg-dark-surface p-6">
+          {/* Único bloco escuro da página: aqui os tokens de modo escuro são os
+              corretos, e é por isso que ele não acompanha a conversão do resto. */}
           <p className="text-sm leading-relaxed text-dark-muted">
             Ficou com alguma dúvida sobre o uso dos seus dados?{" "}
             <a

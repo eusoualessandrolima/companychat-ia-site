@@ -26,6 +26,7 @@ import {
 } from "react";
 import { useMovimentoReduzido } from "@/hooks/useMovimentoReduzido";
 import CtaTesteGratis from "./CtaTesteGratis";
+import { Simbolo } from "./Logo";
 import { CTA_LABEL_LONGO } from "@/lib/cta";
 
 /* Layout effect roda antes da pintura no cliente e não existe no servidor.
@@ -183,8 +184,10 @@ function TelaWhatsApp({ passo, montado }: { passo: number; montado: boolean }) {
         className="grid grid-cols-[34px_1fr_auto] items-center gap-2.5 px-3 py-2.5"
         style={{ background: WA.barra }}
       >
-        <span className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-gradient-to-br from-primary to-[#006f57] text-sm font-semibold text-white">
-          C
+        {/* A foto de perfil que o cliente vê no WhatsApp: o símbolo oficial da
+            marca sobre o escuro, não a inicial desenhada que ficava aqui. */}
+        <span className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-dark-base">
+          <Simbolo className="h-[19px] w-auto" />
         </span>
         <span className="min-w-0">
           <span className="block truncate text-[13px] font-semibold text-white">
