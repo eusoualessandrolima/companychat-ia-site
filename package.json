@@ -12,6 +12,7 @@
     "test:unidade": "tsc -p tsconfig.testes.json && node --test \"tests/unidade/*.test.mjs\"",
     "test:responsivo": "node tests/responsivo.mjs",
     "test:teste-gratis": "node tests/teste-gratis.mjs",
+    "test:campanha10": "node tests/campanha-10-empresas.mjs",
     "test:banco": "tsc -p tsconfig.testes.json && node tests/banco-teste-gratis.mjs",
     "test:homologacao": "node tests/homologacao-funil.mjs",
     "auditoria": "node tests/auditoria-pos-deploy.mjs",
