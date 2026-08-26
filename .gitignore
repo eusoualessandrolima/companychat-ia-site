@@ -41,3 +41,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# memória de runtime dos agentes AIOX — cada máquina gera a sua
+.claude/agent-memory/
