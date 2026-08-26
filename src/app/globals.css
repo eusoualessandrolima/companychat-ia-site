@@ -257,6 +257,89 @@ body::before {
    VISUAL UTILITIES
    ===================================================== */
 
+/* =====================================================
+   HEADLINE DA CAMPANHA /10-empresas
+   ===================================================== */
+
+/* Degradê vivo na linha "10 assistentes de IA.".
+ *
+ * Regras que a composição precisa respeitar, e por quê:
+ *
+ * 1. O texto tem de estar legível no primeiro paint. Nada de `opacity: 0` nem
+ *    de animação de entrada: este é o elemento de LCP da página, e escondê-lo
+ *    até o JS hidratar foi justamente o que custou 5,2 s antes.
+ * 2. Só a posição do degradê se move. Nada de `background-size`, `transform`
+ *    ou `font-size` na animação — qualquer um deles reflui o texto e produz
+ *    layout shift.
+ * 3. O brilho vem de `drop-shadow`, que segue o recorte das letras. Um
+ *    pseudo-elemento borrado atrás faria o mesmo efeito custando um nó a mais
+ *    e arriscando deslocamento.
+ */
+@keyframes headline-brilho {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+.headline-gradiente {
+  /* Verde da marca → turquesa → ciano → azul, e de volta, para o laço fechar
+     sem emenda visível. */
+  background-image: linear-gradient(
+    100deg,
+    #00ab7a 0%,
+    #00d4a0 22%,
+    #22d3ee 46%,
+    #3b82f6 68%,
+    #00d4a0 86%,
+    #00ab7a 100%
+  );
+  background-size: 150% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  /* Brilho discreto atrás das letras: o suficiente para a linha "acender" no
+     fundo escuro, longe de néon. */
+  filter: drop-shadow(0 0 26px rgba(0, 212, 160, 0.18));
+  animation: headline-brilho 7s ease-in-out infinite;
+}
+
+/* Fallback: sem recorte de fundo no texto, o `color: transparent` deixaria a
+   linha invisível. Aqui ela volta a ser texto sólido na cor da marca. */
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .headline-gradiente {
+    background-image: none;
+    color: #00d4a0;
+    -webkit-text-fill-color: #00d4a0;
+    filter: none;
+  }
+}
+
+/* Quem pediu menos movimento fica com o mesmo degradê, parado. */
+@media (prefers-reduced-motion: reduce) {
+  .headline-gradiente {
+    animation: none;
+    background-position: 30% 50%;
+  }
+}
+
+/* Botão principal da campanha: mesmo verde da marca, em degradê para o
+   turquesa. O texto continua sendo o quase-preto `on-primary`, que dá 6,45:1
+   sobre o verde e mais ainda sobre o turquesa, que é mais claro. */
+.botao-marca {
+  background-image: linear-gradient(135deg, #00ab7a 0%, #00c78f 55%, #00d4a0 100%);
+  box-shadow: 0 10px 30px rgba(0, 171, 122, 0.28), 0 0 0 0 rgba(0, 212, 160, 0.4);
+  transition: box-shadow 0.25s ease, filter 0.25s ease;
+}
+.botao-marca:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 14px 38px rgba(0, 171, 122, 0.36), 0 0 0 6px rgba(0, 212, 160, 0.12);
+}
+.botao-marca:active {
+  filter: brightness(0.97);
+  box-shadow: 0 6px 18px rgba(0, 171, 122, 0.3);
+}
+
 /* Gradient text */
 .text-gradient-primary {
   background: linear-gradient(135deg, #00ab7a 0%, #00d4a0 45%, #3b82f6 100%);
