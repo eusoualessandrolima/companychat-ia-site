@@ -170,13 +170,28 @@ const navegador = await chromium.launch();
   await pagina.waitForTimeout(900);
   relatar(await pagina.locator("#candidatura form").isVisible(), "o CTA leva ao formulário");
 
-  await pagina.locator('button[type="submit"]').click();
-  await pagina.waitForTimeout(400);
+  /* Etapa 1 vazia. A conta de `[role="alert"]` mudou de ">= 5" para "== 1" em
+     26/08/2026, e a mudança é intencional: oito regiões vivas disparando ao
+     mesmo tempo deixavam o anúncio do leitor de tela truncado. Agora é um
+     resumo só, e as mensagens por campo continuam existindo — sem `alert`. */
+  await avancarEtapa(pagina);
+  /* Escopado ao formulário de propósito: o Next injeta um
+     `<next-route-announcer role="alert">` vazio no `<body>`, e contar
+     `[role="alert"]` na página inteira sempre incluiria ele. */
   relatar(
-    (await pagina.locator('[role="alert"]').count()) >= 5,
-    "o envio vazio mostra o erro em cada campo"
+    (await pagina.locator('#candidatura [role="alert"]').count()) === 1,
+    "o avanço vazio mostra um resumo único de erros"
+  );
+  relatar(
+    (await pagina.locator("#erro-c10-nome").count()) === 1 &&
+      (await pagina.locator("#erro-c10-empresa").count()) === 1,
+    "cada campo da etapa mostra o próprio erro"
   );
   relatar(envios.length === 0, "formulário inválido não chama a API");
+  relatar(
+    await pagina.locator("#c10-problema").isHidden(),
+    "a etapa 2 fica fora do alcance enquanto a 1 não passa"
+  );
 
   await pagina.fill("#c10-telefone", "62999998888");
   const telefone = await pagina.inputValue("#c10-telefone");
@@ -193,6 +208,37 @@ const navegador = await chromium.launch();
     `e-mail, cidade e motivo fora do formulário${removidos.length ? `: ainda existem ${removidos}` : ""}`
   );
 
+  /* Etapa 1 completa: dá para avançar. */
+  await pagina.fill("#c10-nome", "Ana Souza");
+  await pagina.fill("#c10-empresa", "Empresa Modelo");
+  await avancarEtapa(pagina);
+  relatar(
+    await pagina.locator("#c10-problema").isVisible(),
+    "com a etapa 1 preenchida, a etapa 2 aparece"
+  );
+
+  /* Regressão de um bug que a suíte não pegava: enquanto o botão principal
+     alternava entre `type="button"` (avançar) e `type="submit"` (enviar), o
+     React reaproveitava o mesmo nó e trocava só o atributo — então o mesmo
+     clique que avançava a etapa disparava o envio logo depois, e a etapa 2
+     nascia com os cinco campos já marcados em vermelho. Ninguém tinha errado
+     nada ainda. */
+  relatar(
+    (await pagina.locator("#candidatura p[id^=erro-]").count()) === 0,
+    "a etapa 2 começa limpa, sem erro em campo que ninguém preencheu"
+  );
+
+  /* Voltar não pode custar o que já foi digitado — as duas etapas ficam
+     montadas justamente por isso. */
+  await pagina.getByRole("button", { name: "Voltar" }).click();
+  await pagina.waitForTimeout(250);
+  relatar(
+    (await pagina.inputValue("#c10-nome")) === "Ana Souza" &&
+      (await pagina.inputValue("#c10-telefone")) === "(62) 99999-8888",
+    "voltar uma etapa preserva o que já tinha sido preenchido"
+  );
+  await avancarEtapa(pagina);
+
   await pagina.fill("#c10-problema", "curto");
   await pagina.locator('button[type="submit"]').click();
   await pagina.waitForTimeout(300);
@@ -201,8 +247,6 @@ const navegador = await chromium.launch();
     "descrição curta demais do problema é recusada"
   );
 
-  await pagina.fill("#c10-nome", "Ana Souza");
-  await pagina.fill("#c10-empresa", "Empresa Modelo");
   await pagina.selectOption("#c10-segmento", "E-commerce");
   await pagina.selectOption("#c10-volume", "De 201 a 500");
   await pagina.fill("#c10-problema", "Demoramos horas para responder e perdemos orçamento.");
@@ -236,6 +280,16 @@ const navegador = await chromium.launch();
     origem.segmento === "E-commerce" && origem.objetivo === "Qualificar leads",
     `segmento e objetivo preservados: ${origem.segmento} / ${origem.objetivo}`
   );
+  /* Prova do consentimento. A política publicada promete guardar "a data, a
+     hora e a versão do texto que você aceitou" — até 26/08/2026 o checkbox era
+     validado só no navegador e nunca saía dele. */
+  relatar(
+    envio.consentimento === true &&
+      Boolean(envio.consentimentoVersao) &&
+      Boolean(envio.consentimentoEm),
+    `consentimento enviado com versão e data (v${envio.consentimentoVersao} em ${envio.consentimentoEm})`
+  );
+
   /* Campo removido não pode voltar como string vazia: o CRM leria a chave como
      resposta em branco, e o painel renderizaria um rótulo sem conteúdo. */
   relatar(
@@ -275,14 +329,7 @@ const navegador = await chromium.launch();
 
   await pagina.goto(`${BASE}${ROTA}`, { waitUntil: "networkidle" });
   await pagina.locator("#candidatura").scrollIntoViewIfNeeded();
-  await pagina.fill("#c10-nome", "Ana Souza");
-  await pagina.fill("#c10-empresa", "Empresa Modelo");
-  await pagina.fill("#c10-telefone", "62999998888");
-  await pagina.selectOption("#c10-segmento", "E-commerce");
-  await pagina.selectOption("#c10-volume", "De 201 a 500");
-  await pagina.fill("#c10-problema", "Demoramos horas para responder e perdemos orçamento.");
-  await pagina.selectOption("#c10-objetivo", "Qualificar leads");
-  await pagina.check("#c10-consentimento");
+  await preencherCandidatura(pagina);
   await pagina.locator('button[type="submit"]').click();
   await pagina.waitForTimeout(1200);
 
@@ -303,12 +350,44 @@ const navegador = await chromium.launch();
 /* Mesmo critério de `tests/teste-gratis.mjs`: controles do formulário, não
    links dentro de texto corrido — a WCAG 2.5.8 dispensa o link no meio de uma
    frase, e o checkbox tem o label inteiro como área de toque. */
+/* ─── Navegação entre as etapas do formulário ─────────
+ *
+ * O formulário virou dois passos em 26/08/2026 — só na interface: o envio
+ * continua sendo um POST único, com o mesmo `id` de lead do começo ao fim.
+ * Estes dois helpers existem para que as ~15 asserções sobre o payload não
+ * precisem mudar de novo quando a interface mudar: elas descrevem o contrato
+ * com a API, e o contrato não mudou. */
+async function avancarEtapa(pagina) {
+  await pagina.getByRole("button", { name: "Continuar" }).click();
+  await pagina.waitForTimeout(350);
+}
+
+async function preencherCandidatura(pagina) {
+  await pagina.fill("#c10-nome", "Ana Souza");
+  await pagina.fill("#c10-empresa", "Empresa Modelo");
+  await pagina.fill("#c10-telefone", "62999998888");
+  await avancarEtapa(pagina);
+  await pagina.selectOption("#c10-segmento", "E-commerce");
+  await pagina.selectOption("#c10-volume", "De 201 a 500");
+  await pagina.selectOption("#c10-objetivo", "Qualificar leads");
+  await pagina.fill(
+    "#c10-problema",
+    "Demoramos horas para responder e perdemos orçamento."
+  );
+  await pagina.check("#c10-consentimento");
+}
+
 function alvosPequenos() {
   return [
     ...document.querySelectorAll(
       'form button, form select, form textarea, form input:not([type="checkbox"])'
     ),
   ]
+    /* O campo isca fica fora da tela dentro de um `aria-hidden`, sem tabulação:
+       ninguém — pessoa ou leitor de tela — o alcança, então ele não é alvo de
+       toque. Medir a altura dele seria cobrar acessibilidade de uma armadilha
+       para robô. */
+    .filter((el) => !el.closest('[aria-hidden="true"]'))
     .map((el) => ({ el, r: el.getBoundingClientRect() }))
     .filter(({ r }) => (r.width || r.height) && r.height < 44)
     .map(({ el, r }) => `${(el.name || el.tagName).slice(0, 20)}=${Math.round(r.height)}px`);
@@ -322,17 +401,30 @@ for (const largura of [320, 375, 768, 1024, 1440]) {
   });
 
   const lateral = await rolagemLateral(pagina);
-  const pequenos = await pagina.evaluate(alvosPequenos);
+
+  /* Os alvos são medidos **nas duas etapas**. Medir só a visível reduziria a
+     cobertura sem nenhum teste falhar — que é pior do que falhar. */
+  const pequenosEtapa1 = await pagina.evaluate(alvosPequenos);
 
   // Com as mensagens de erro à mostra o formulário cresce: medir de novo.
   await pagina.locator("#candidatura").scrollIntoViewIfNeeded();
-  await pagina.locator('button[type="submit"]').click();
-  await pagina.waitForTimeout(300);
+  await avancarEtapa(pagina);
   const lateralComErro = await rolagemLateral(pagina);
 
+  await pagina.fill("#c10-nome", "Ana Souza");
+  await pagina.fill("#c10-empresa", "Empresa Modelo");
+  await pagina.fill("#c10-telefone", "62999998888");
+  await avancarEtapa(pagina);
+  const pequenosEtapa2 = await pagina.evaluate(alvosPequenos);
+  const lateralEtapa2 = await rolagemLateral(pagina);
+
+  const pequenos = [...pequenosEtapa1, ...pequenosEtapa2];
   relatar(
-    lateral <= 0 && lateralComErro <= 0 && pequenos.length === 0,
-    `${largura}px: rolagem lateral ${lateral}/${lateralComErro}px, alvos pequenos ${pequenos.join(", ") || "nenhum"}`
+    lateral <= 0 &&
+      lateralComErro <= 0 &&
+      lateralEtapa2 <= 0 &&
+      pequenos.length === 0,
+    `${largura}px: rolagem lateral ${lateral}/${lateralComErro}/${lateralEtapa2}px, alvos pequenos ${pequenos.join(", ") || "nenhum"}`
   );
   await contexto.close();
 }
