@@ -137,10 +137,19 @@ const navegador = await chromium.launch();
   const politica = await pagina.locator('a[href="/privacidade"]').count();
   relatar(politica >= 2, `Política de Privacidade vinculada (${politica} links)`);
 
+  /* Conta como rotulado tanto o `<label for>` explícito quanto o `<label>`
+     envolvendo o campo — as duas formas são válidas e acessíveis. As caixas de
+     "O que você quer que a IA faça?" usam a segunda, porque o rótulo delas é o
+     próprio texto clicável ao lado. `aria-label` também vale. */
   const semRotulo = await pagina.evaluate(() =>
     [...document.querySelectorAll("form input, form select, form textarea")]
       .filter((campo) => campo.type !== "hidden")
-      .filter((campo) => !document.querySelector(`label[for="${campo.id}"]`))
+      .filter(
+        (campo) =>
+          !(campo.id && document.querySelector(`label[for="${campo.id}"]`)) &&
+          !campo.closest("label") &&
+          !campo.getAttribute("aria-label")
+      )
       .map((campo) => campo.id || campo.name)
   );
   relatar(semRotulo.length === 0, `todos os campos com label${semRotulo.length ? `: falta em ${semRotulo}` : ""}`);
@@ -189,7 +198,7 @@ const navegador = await chromium.launch();
   );
   relatar(envios.length === 0, "formulário inválido não chama a API");
   relatar(
-    await pagina.locator("#c10-problema").isHidden(),
+    await pagina.locator("#c10-objetivos").isHidden(),
     "a etapa 2 fica fora do alcance enquanto a 1 não passa"
   );
 
@@ -213,7 +222,7 @@ const navegador = await chromium.launch();
   await pagina.fill("#c10-empresa", "Empresa Modelo");
   await avancarEtapa(pagina);
   relatar(
-    await pagina.locator("#c10-problema").isVisible(),
+    await pagina.locator("#c10-objetivos").isVisible(),
     "com a etapa 1 preenchida, a etapa 2 aparece"
   );
 
@@ -239,19 +248,17 @@ const navegador = await chromium.launch();
   );
   await avancarEtapa(pagina);
 
-  await pagina.fill("#c10-problema", "curto");
+  await pagina.selectOption("#c10-segmento", "E-commerce");
+  await pagina.selectOption("#c10-volume", "De 201 a 500");
+  await pagina.check("#c10-consentimento");
   await pagina.locator('button[type="submit"]').click();
   await pagina.waitForTimeout(300);
   relatar(
-    (await pagina.locator("#erro-c10-problema").count()) === 1,
-    "descrição curta demais do problema é recusada"
+    (await pagina.locator("#erro-c10-objetivos").count()) === 1,
+    "enviar sem marcar nenhum objetivo é recusado"
   );
 
-  await pagina.selectOption("#c10-segmento", "E-commerce");
-  await pagina.selectOption("#c10-volume", "De 201 a 500");
-  await pagina.fill("#c10-problema", "Demoramos horas para responder e perdemos orçamento.");
-  await pagina.selectOption("#c10-objetivo", "Qualificar leads");
-  await pagina.check("#c10-consentimento");
+  await marcarObjetivos(pagina, ["Qualificar leads", "Fazer follow-up"]);
   await pagina.locator('button[type="submit"]').click();
 
   await pagina.waitForSelector("text=Candidatura recebida!", { timeout: 10_000 });
@@ -263,7 +270,10 @@ const navegador = await chromium.launch();
   relatar(envio.nome === "Ana Souza" && envio.empresa === "Empresa Modelo", "nome e empresa");
   relatar(envio.telefone === "(62) 99999-8888", `telefone: ${envio.telefone}`);
   relatar(envio.volume === "De 201 a 500", `volume: ${envio.volume}`);
-  relatar(String(envio.dor).includes("Demoramos horas"), "problema do atendimento em `dor`");
+  relatar(
+    String(envio.dor) === "Qualificar leads · Fazer follow-up",
+    `objetivos escolhidos em \`dor\`: ${envio.dor}`
+  );
   relatar(envio.concluido === true && envio.etapa === 1, "marcado como concluído");
   relatar(origem.origem === "lp-10-empresas", `origem: ${origem.origem}`);
   relatar(origem.campanha === "10-empresas-10-assistentes", `campanha: ${origem.campanha}`);
@@ -277,8 +287,9 @@ const navegador = await chromium.launch();
   relatar(origem.pagina === "/10-empresas", `página de origem: ${origem.pagina}`);
   relatar(Boolean(origem.enviado_em), `data e hora da candidatura: ${origem.enviado_em}`);
   relatar(
-    origem.segmento === "E-commerce" && origem.objetivo === "Qualificar leads",
-    `segmento e objetivo preservados: ${origem.segmento} / ${origem.objetivo}`
+    origem.segmento === "E-commerce" &&
+      origem.objetivos === "Qualificar leads · Fazer follow-up",
+    `segmento e objetivos preservados: ${origem.segmento} / ${origem.objetivos}`
   );
   /* Prova do consentimento. A política publicada promete guardar "a data, a
      hora e a versão do texto que você aceitou" — até 26/08/2026 o checkbox era
@@ -362,6 +373,17 @@ async function avancarEtapa(pagina) {
   await pagina.waitForTimeout(350);
 }
 
+/** Marca as caixas do grupo "O que você quer que a IA faça?" pelo texto. */
+async function marcarObjetivos(pagina, opcoes) {
+  for (const opcao of opcoes) {
+    await pagina
+      .locator("#c10-objetivos label", { hasText: opcao })
+      .first()
+      .locator('input[type="checkbox"]')
+      .check();
+  }
+}
+
 async function preencherCandidatura(pagina) {
   await pagina.fill("#c10-nome", "Ana Souza");
   await pagina.fill("#c10-empresa", "Empresa Modelo");
@@ -369,11 +391,7 @@ async function preencherCandidatura(pagina) {
   await avancarEtapa(pagina);
   await pagina.selectOption("#c10-segmento", "E-commerce");
   await pagina.selectOption("#c10-volume", "De 201 a 500");
-  await pagina.selectOption("#c10-objetivo", "Qualificar leads");
-  await pagina.fill(
-    "#c10-problema",
-    "Demoramos horas para responder e perdemos orçamento."
-  );
+  await marcarObjetivos(pagina, ["Qualificar leads", "Fazer follow-up"]);
   await pagina.check("#c10-consentimento");
 }
 

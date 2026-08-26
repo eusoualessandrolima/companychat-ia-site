@@ -10,11 +10,9 @@ import {
   ChevronDown,
   Loader2,
   Lock,
-  MessageSquareText,
   Phone,
   ShieldCheck,
   Tag,
-  Target,
   TrendingUp,
   User,
 } from "lucide-react";
@@ -37,8 +35,8 @@ type Campos = {
   telefone: string;
   segmento: string;
   volume: string;
-  problema: string;
-  objetivo: string;
+  /** Múltipla escolha: a operação raramente tem um objetivo isolado. */
+  objetivos: string[];
   consentimento: boolean;
 };
 
@@ -50,8 +48,7 @@ const VAZIO: Campos = {
   telefone: "",
   segmento: "",
   volume: "",
-  problema: "",
-  objetivo: "",
+  objetivos: [],
   consentimento: false,
 };
 
@@ -60,13 +57,8 @@ const VAZIO: Campos = {
  *  começo — a idempotência do upsert depende disso. */
 const ETAPAS: (keyof Campos)[][] = [
   ["nome", "empresa", "telefone"],
-  ["segmento", "volume", "objetivo", "problema", "consentimento"],
+  ["segmento", "volume", "objetivos", "consentimento"],
 ];
-
-/** Limite dos campos abertos. O servidor corta a dor em 400 caracteres e cada
- *  valor da origem em 600: cortar aqui evita que a pessoa escreva um texto que
- *  chegaria truncado do outro lado sem ela saber. */
-const LIMITE_TEXTO = 400;
 
 const CAMPOS_ORIGEM = [
   "utm_source",
@@ -206,9 +198,8 @@ export default function FormularioCandidatura() {
     }
     if (!campos.segmento) todos.segmento = "Escolha o segmento da empresa";
     if (!campos.volume) todos.volume = "Escolha a faixa de contatos";
-    if (!campos.objetivo) todos.objetivo = "Escolha o objetivo principal";
-    if (campos.problema.trim().length < 10) {
-      todos.problema = "Descreva o principal problema do atendimento";
+    if (campos.objetivos.length === 0) {
+      todos.objetivos = "Marque pelo menos uma opção";
     }
     if (!campos.consentimento) {
       todos.consentimento = "É preciso concordar para enviar a candidatura";
@@ -335,7 +326,13 @@ export default function FormularioCandidatura() {
           empresa: campos.empresa,
           telefone: campos.telefone,
           volume: campos.volume,
-          dor: campos.problema,
+          /* `dor` passou a carregar os objetivos escolhidos.
+             O campo aberto de "principal problema do atendimento" saiu do
+             formulário em 26/08/2026, e esta é a coluna que o painel e o CRM
+             já leem para mostrar o que a empresa quer resolver — deixá-la
+             vazia esvaziaria o card do lead. A lista estruturada segue em
+             `origem.objetivos`, para quem precisar filtrar. */
+          dor: campos.objetivos.join(" · "),
           etapa: 1,
           concluido: true,
           /* Campo isca: preenchido, é robô. O servidor já checava por ele —
@@ -351,7 +348,7 @@ export default function FormularioCandidatura() {
           origem: {
             ...origem.current,
             segmento: campos.segmento,
-            objetivo: campos.objetivo,
+            objetivos: campos.objetivos.join(" · "),
             enviado_em: new Date().toISOString(),
           },
         }),
@@ -490,10 +487,14 @@ export default function FormularioCandidatura() {
           dado só atrapalham. */}
       <div className="mt-7">
         <div className="flex items-baseline justify-between gap-4">
+          {/* Recebe foco só para o leitor de tela anunciar a troca de etapa —
+              não é um controle, e ninguém chega aqui pelo Tab. Por isso o anel
+              é suprimido: exibi-lo desenhava um retângulo verde no meio de uma
+              frase, sem indicar nada acionável. */}
           <p
             ref={tituloEtapa}
             tabIndex={-1}
-            className="text-sm font-semibold text-dark-text focus:outline-none"
+            className="text-sm font-semibold text-dark-text outline-none focus-visible:outline-none"
           >
             {formulario.etapas[etapa].titulo}
             <span className="ml-2 font-normal text-dark-muted">
@@ -544,7 +545,12 @@ export default function FormularioCandidatura() {
       <fieldset className="mt-6 border-0 p-0" hidden={etapa !== 0}>
         <legend className="sr-only">{formulario.etapas[0].titulo}</legend>
         <div className="space-y-4">
-          <Campo id="c10-nome" rotulo="Nome completo" icone={User} erro={erros.nome}>
+          <Campo
+            id="c10-nome"
+            rotulo={formulario.campos.nome}
+            icone={User}
+            erro={erros.nome}
+          >
             <input
               id="c10-nome"
               name="nome"
@@ -562,7 +568,7 @@ export default function FormularioCandidatura() {
 
           <Campo
             id="c10-empresa"
-            rotulo="Nome da empresa"
+            rotulo={formulario.campos.empresa}
             icone={Building2}
             erro={erros.empresa}
           >
@@ -583,10 +589,10 @@ export default function FormularioCandidatura() {
 
           <Campo
             id="c10-telefone"
-            rotulo="WhatsApp com DDD"
+            rotulo={formulario.campos.telefone}
             icone={Phone}
             erro={erros.telefone}
-            ajuda="É por aqui que respondemos a sua candidatura."
+            ajuda={formulario.campos.telefoneAjuda}
           >
             <input
               id="c10-telefone"
@@ -610,77 +616,104 @@ export default function FormularioCandidatura() {
 
       <fieldset className="mt-6 border-0 p-0" hidden={etapa !== 1}>
         <legend className="sr-only">{formulario.etapas[1].titulo}</legend>
+        {/* Uma pergunta por linha, como na etapa 1. Segmento e volume estavam
+            lado a lado num grid de duas colunas: dois campos estreitos, com
+            rótulos de tamanhos diferentes, criavam um degrau no meio do
+            formulário e nenhum dos dois cabia confortavelmente. */}
         <div className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Campo
-              id="c10-segmento"
-              rotulo="Segmento da empresa"
-              icone={Tag}
-              erro={erros.segmento}
-            >
-              <Selecao
-                id="c10-segmento"
-                nome="segmento"
-                valor={campos.segmento}
-                erro={Boolean(erros.segmento)}
-                aoMudar={(v) => alterar("segmento", v)}
-                opcoes={[...SEGMENTOS, OUTRO_SEGMENTO]}
-              />
-            </Campo>
-
-            <Campo
-              id="c10-volume"
-              rotulo="Contatos por mês"
-              icone={TrendingUp}
-              erro={erros.volume}
-            >
-              <Selecao
-                id="c10-volume"
-                nome="volume"
-                valor={campos.volume}
-                erro={Boolean(erros.volume)}
-                aoMudar={(v) => alterar("volume", v)}
-                opcoes={VOLUMES}
-              />
-            </Campo>
-          </div>
-
           <Campo
-            id="c10-objetivo"
-            rotulo="O que a IA deve fazer"
-            icone={Target}
-            erro={erros.objetivo}
+            id="c10-segmento"
+            rotulo={formulario.campos.segmento}
+            icone={Tag}
+            erro={erros.segmento}
           >
             <Selecao
-              id="c10-objetivo"
-              nome="objetivo"
-              valor={campos.objetivo}
-              erro={Boolean(erros.objetivo)}
-              aoMudar={(v) => alterar("objetivo", v)}
-              opcoes={OBJETIVOS}
+              id="c10-segmento"
+              nome="segmento"
+              valor={campos.segmento}
+              erro={Boolean(erros.segmento)}
+              aoMudar={(v) => alterar("segmento", v)}
+              opcoes={[...SEGMENTOS, OUTRO_SEGMENTO]}
             />
           </Campo>
 
           <Campo
-            id="c10-problema"
-            rotulo="Principal problema do atendimento atual"
-            icone={MessageSquareText}
-            erro={erros.problema}
+            id="c10-volume"
+            rotulo={formulario.campos.volume}
+            icone={TrendingUp}
+            erro={erros.volume}
           >
-            <textarea
-              id="c10-problema"
-              name="problema"
-              required
-              rows={3}
-              maxLength={LIMITE_TEXTO}
-              placeholder="Ex.: demoramos para responder fora do horário comercial e perdemos orçamentos."
-              value={campos.problema}
-              onChange={(e) => alterar("problema", e.target.value)}
-              aria-invalid={Boolean(erros.problema)}
-              aria-describedby={erros.problema ? "erro-c10-problema" : undefined}
-              className={`${classesCampo(Boolean(erros.problema))} resize-y leading-relaxed`}
+            <Selecao
+              id="c10-volume"
+              nome="volume"
+              valor={campos.volume}
+              erro={Boolean(erros.volume)}
+              aoMudar={(v) => alterar("volume", v)}
+              opcoes={VOLUMES}
             />
           </Campo>
+
+          {/* Múltipla escolha em vez de `<select>`: quem quer qualificar lead
+              quase sempre quer agendar também, e obrigar a escolher um só
+              jogava fora o que ajuda a entender o caso. É um `<fieldset>` com
+              `<legend>` porque um grupo de caixas precisa de rótulo próprio —
+              um `<label>` solto não amarra o grupo para o leitor de tela. */}
+          <fieldset
+            id="c10-objetivos"
+            className="border-0 p-0"
+            aria-describedby={
+              erros.objetivos ? "erro-c10-objetivos" : "ajuda-c10-objetivos"
+            }
+          >
+            <legend className="mb-1.5 block text-sm font-semibold text-dark-text">
+              {formulario.campos.objetivos}
+              <span aria-hidden="true" className="ml-1 text-primary">
+                *
+              </span>
+            </legend>
+            <p id="ajuda-c10-objetivos" className="mb-3 text-xs text-dark-muted">
+              {formulario.campos.objetivosAjuda}
+            </p>
+
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {OBJETIVOS.map((opcao) => {
+                const marcado = campos.objetivos.includes(opcao);
+                return (
+                  <label
+                    key={opcao}
+                    className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 text-[0.9375rem] leading-snug transition-colors ${
+                      marcado
+                        ? "border-primary/60 bg-primary/10 text-dark-text"
+                        : "border-dark-field-border bg-dark-surface text-dark-muted hover:border-primary/40"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      name="objetivos"
+                      value={opcao}
+                      checked={marcado}
+                      onChange={(e) =>
+                        alterar(
+                          "objetivos",
+                          e.target.checked
+                            ? [...campos.objetivos, opcao]
+                            : campos.objetivos.filter((o) => o !== opcao)
+                        )
+                      }
+                      className="h-4 w-4 shrink-0 accent-[var(--color-primary)]"
+                    />
+                    {opcao}
+                  </label>
+                );
+              })}
+            </div>
+
+            {erros.objetivos && (
+              <p id="erro-c10-objetivos" className="mt-2 text-sm text-dark-error">
+                {erros.objetivos}
+              </p>
+            )}
+          </fieldset>
 
           <div className="rounded-2xl border border-dark-border bg-dark-base/60 p-4">
             <label
