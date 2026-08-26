@@ -175,7 +175,12 @@ await contextoDesktop.close();
 
 /* ─── 2. O clique do CTA da home chega ao Pixel do funil ─
    A home não carrega o Pixel de propósito (ver src/lib/analytics.ts). O evento
-   fica na sessão e é entregue ao chegar em /teste-gratis. */
+   fica na sessão e é entregue ao chegar em /teste-gratis.
+
+   Ressalva desde 2026-08-25: medição só existe nos domínios de produção. Este
+   teste roda em localhost, então o esperado aqui é o **silêncio** — nem Pixel,
+   nem fila, nem requisição para a Meta. A entrega da fila continua coberta em
+   `tests/unidade/analytics.test.mjs`, que simula o host de produção. */
 {
   const contexto = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const pagina = await contexto.newPage();
@@ -202,6 +207,10 @@ await contextoDesktop.close();
 
   const temPixelNoFunil = await pagina.evaluate(() => typeof window.fbq === "function");
 
+  const ehProducao = await pagina.evaluate(() =>
+    ["companychatia.com.br", "www.companychatia.com.br"].includes(location.hostname)
+  );
+
   if (temPixelNoFunil) {
     // Com Pixel: a fila é descarregada e o evento aparece na fila do fbq.
     await pagina
@@ -221,9 +230,22 @@ await contextoDesktop.close();
       window.sessionStorage.getItem("cc_eventos_pendentes")
     );
     if (sobrou) falhas.push("[analytics] a fila não foi esvaziada após a entrega");
-  } else if (!guardadoNoClique?.some((e) => e.nome === "free_trial_cta_clicked")) {
-    // Sem Pixel configurado no build: o evento não pode simplesmente sumir.
-    falhas.push("[analytics] sem Pixel no build, o clique do CTA não ficou guardado");
+  } else if (ehProducao) {
+    // Produção sem Pixel no build: o evento não pode simplesmente sumir.
+    if (!guardadoNoClique?.some((e) => e.nome === "free_trial_cta_clicked")) {
+      falhas.push("[analytics] sem Pixel no build, o clique do CTA não ficou guardado");
+    }
+  } else {
+    // Fora de produção: nada pode ser guardado, porque guardar vira entrega
+    // assim que a mesma sessão abrir uma página com Pixel.
+    if (guardadoNoClique) {
+      falhas.push(
+        `[analytics] evento enfileirado fora de produção: ${JSON.stringify(guardadoNoClique)}`
+      );
+    }
+    if (temPixelNoFunil) {
+      falhas.push("[analytics] o Pixel foi carregado fora dos domínios de produção");
+    }
   }
 
   await contexto.close();

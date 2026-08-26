@@ -27,7 +27,16 @@ export type EventoCliente =
   | "free_trial_cta_clicked"
   | "free_trial_form_started"
   | "free_trial_form_submitted"
-  | "free_trial_form_error";
+  | "free_trial_form_error"
+  /* Campanha "10 Empresas, 10 Assistentes de IA" (`/10-empresas`). Prefixo
+     próprio para a seleção ser medida separada do funil de teste grátis. */
+  | "campanha10_page_view"
+  | "campanha10_cta_clicked"
+  | "campanha10_form_started"
+  | "campanha10_form_submit"
+  | "campanha10_form_submitted"
+  | "campanha10_form_error"
+  | "campanha10_whatsapp_clicked";
 
 declare global {
   interface Window {
@@ -38,6 +47,41 @@ declare global {
 
 const CHAVE_PRIMEIRA_VISITA = "cc_url_inicial";
 const CHAVE_PENDENTES = "cc_eventos_pendentes";
+const CHAVE_DEBUG = "cc_debug_analytics";
+
+/** Onde a medição de produção pode acontecer. Fora desta lista nada é
+ *  carregado nem transmitido.
+ *
+ *  Por que o domínio e não `NODE_ENV`: `npm run start` roda em `production` no
+ *  localhost, e um build de preview também. Um page view disparado da máquina
+ *  de quem desenvolve entra no mesmo Pixel que a campanha otimiza, e um `Lead`
+ *  de teste vira conversão falsa. O host é o único sinal que separa o site real
+ *  de qualquer outra coisa. */
+const DOMINIOS_DE_PRODUCAO = [
+  "companychatia.com.br",
+  "www.companychatia.com.br",
+];
+
+/** Este navegador está no site de verdade? Usada aqui e pelo `MetaPixel`, que
+ *  nem injeta o script fora dela — em localhost não sai uma requisição sequer
+ *  para a Meta. */
+export function analyticsPermitido() {
+  if (typeof window === "undefined") return false;
+  return DOMINIOS_DE_PRODUCAO.includes(window.location.hostname);
+}
+
+/** Modo de depuração local: `localStorage.cc_debug_analytics = "true"`.
+ *
+ *  Liga apenas o `dataLayer`, que é um array na memória da própria aba — serve
+ *  para conferir no console que o evento certo saiu na hora certa, sem nada
+ *  cruzar a rede. Não liga o Pixel. */
+function debugLocal() {
+  try {
+    return window.localStorage.getItem(CHAVE_DEBUG) === "true";
+  } catch {
+    return false;
+  }
+}
 
 /* Teto da fila. Um punhado de cliques de CTA na mesma visita é o cenário real;
    mais que isso é robô ou dedo nervoso, e não vale encher o sessionStorage. */
@@ -106,11 +150,27 @@ function enviarAoPixel(nome: EventoCliente, dados: Record<string, unknown>) {
   window.fbq?.("trackCustom", nome, dados);
 
   // O envio também alimenta o evento padrão, que é o que a campanha otimiza.
-  if (nome === "free_trial_form_submitted") window.fbq?.("track", "Lead");
+  if (nome === "free_trial_form_submitted" || nome === "campanha10_form_submitted") {
+    window.fbq?.("track", "Lead");
+  }
 }
 
 export function evento(nome: EventoCliente, dados: Record<string, unknown> = {}) {
   if (typeof window === "undefined") return;
+
+  /* Fora dos domínios de produção nada é transmitido e nada é enfileirado: uma
+     fila guardada aqui viraria entrega assim que a mesma sessão abrisse uma
+     página com Pixel. O `dataLayer` local só é alimentado no modo de debug. */
+  if (!analyticsPermitido()) {
+    if (debugLocal()) {
+      try {
+        window.dataLayer?.push({ event: nome, ...dados, ambiente_local: true });
+      } catch {
+        /* debug não pode atrapalhar a navegação */
+      }
+    }
+    return;
+  }
 
   try {
     /* O `dataLayer` só existe se houver contêiner de tags carregado nesta
@@ -131,7 +191,9 @@ export function evento(nome: EventoCliente, dados: Record<string, unknown> = {})
  *
  *  Chamado por `EventosPendentes`, montado apenas em `/teste-gratis`. */
 export function descarregarPendentes() {
-  if (!pixelDisponivel()) return 0;
+  // Segundo cinto: em host não autorizado o Pixel nem existe, mas uma fila
+  // herdada de outra sessão não pode virar entrega por acidente.
+  if (!analyticsPermitido() || !pixelDisponivel()) return 0;
 
   try {
     const fila = lerPendentes();
