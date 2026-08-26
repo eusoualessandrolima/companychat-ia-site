@@ -79,10 +79,19 @@
   --color-dark-surface: #0f1917; /* dark.surface.1 */
   --color-dark-elevated: #1d2925; /* dark.surface.2 */
   --color-dark-border: #35403c; /* dark.border — divisores */
-  --color-dark-field-border: #707b76; /* 4,08:1 sobre dark-surface */
+  --color-dark-field-border: #707b76; /* 4,08:1 sobre dark-surface, 3,43:1 sobre dark-elevated */
   --color-dark-text: #f5f7f6; /* 17,89:1 sobre dark-base */
   --color-dark-muted: #c7d0cc; /* 12,21:1 sobre dark-base */
   --color-dark-link: #70e8c6; /* green.300 — 12,87:1 */
+
+  /* Erro em superfície escura. `accent-error` (#c73546) é o par do modo claro
+     e dá 3,49:1 sobre `dark-elevated` — reprova para texto. Os vermelhos crus
+     do Tailwind que os formulários vinham usando (`red-400`, `red-300`) nunca
+     passaram pela medição do guia. Medido: 7,46:1 sobre `dark-elevated`,
+     8,89:1 sobre `dark-surface` e 9,55:1 sobre `dark-base` — AA nos três. */
+  --color-dark-error: #ff9aa5;
+  --color-dark-error-border: rgba(255, 154, 165, 0.55);
+  --color-dark-error-surface: rgba(199, 53, 70, 0.14);
 
   /* ── Fonts ── */
   --font-sans: var(--font-outfit), system-ui, sans-serif;
@@ -152,6 +161,17 @@ section {
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5.5rem;
+}
+
+/* As landings de anúncio não têm header fixo — o cabeçalho delas rola junto
+   com a página. Herdando os 5.5rem acima, o salto para `#candidatura` parava
+   com 112px de vazio sobre o formulário (somando o `scroll-mt` da seção):
+   17% de uma viewport de celular em branco no exato momento da conversão.
+   O `:has()` resolve sem prop drilling e sem layout de segmento só para isso;
+   quem não suportar continua com a folga antiga, que é um defeito estético e
+   não uma quebra. */
+html:has([data-landing-sem-header-fixo]) {
+  scroll-padding-top: 1.25rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -411,7 +431,16 @@ body::before {
   /* Brilho discreto atrás das letras: o suficiente para a linha "acender" no
      fundo escuro, longe de néon. */
   filter: drop-shadow(0 0 26px rgba(0, 212, 160, 0.18));
-  animation: headline-brilho 7s ease-in-out infinite;
+  /* Três voltas e para, em vez de `infinite`.
+   *
+   * As três regras do comentário acima continuam valendo, e uma quarta se
+   * juntou a elas depois da medição: `background-position` sobre texto
+   * recortado com `drop-shadow` não é compositável. Em loop infinito isso
+   * repinta o elemento de LCP a 60fps durante toda a permanência na página —
+   * não atrasa o LCP, mas cobra main thread justamente onde INP é medido.
+   * Vinte e um segundos de brilho entregam o efeito; o resto era só custo. */
+  animation: headline-brilho 7s ease-in-out 3;
+  animation-fill-mode: forwards;
 }
 
 /* Fallback: sem recorte de fundo no texto, o `color: transparent` deixaria a
@@ -565,4 +594,180 @@ body::before {
 /* Fill bar utility (used in Beneficios) */
 .bar-fill {
   animation: fill-bar 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* =====================================================
+   REVELAÇÃO AO ROLAR — sem JavaScript
+   ===================================================== */
+
+/* Substitui o `<Revelar>` de Framer Motion (`initial={{opacity:0}}` +
+ * `whileInView`) nas landings de anúncio.
+ *
+ * A diferença que importa não é o peso do bundle — é *quando* o conteúdo
+ * existe. O componente de Framer renderiza `opacity: 0` já no HTML do
+ * servidor: se o JS não chegar, a página serve o hero e mais nada. Foi o que
+ * media 32 elementos invisíveis no HTML de `/10-empresas`, incluindo o
+ * formulário de candidatura.
+ *
+ * Aqui o elemento nasce **visível e pintado**. A animação é enhancement: só
+ * existe dentro do `@supports`, e mesmo lá o navegador já tem o conteúdo
+ * renderizado antes de animar. Sem suporte a scroll-driven animations
+ * (Firefox, Safari antigo), o bloco simplesmente aparece — que é o
+ * comportamento correto para uma LP de tráfego pago.
+ *
+ * `prefers-reduced-motion` é coberto pela regra global de `animation-duration`
+ * mais acima; não precisa de exceção própria. */
+@keyframes revelar-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .revelar {
+      animation: revelar-entrada 0.55s cubic-bezier(0.16, 1, 0.3, 1)
+        var(--atraso, 0s) both;
+      animation-timeline: view();
+      /* Termina cedo (40% da entrada) para o bloco já estar legível quando
+         chega à altura da leitura, em vez de acompanhar a rolagem inteira. */
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+
+/* Impressão e captura de página inteira não têm rolagem — e sem rolagem uma
+   animação ancorada na rolagem nunca sai do quadro inicial. Sem esta regra, um
+   Ctrl+P da landing sai com o hero e seis seções em branco, e qualquer
+   ferramenta de captura `fullPage` mostra a mesma coisa (foi assim que o
+   problema apareceu). No papel o conteúdo é o que importa: animação nenhuma. */
+@media print {
+  .revelar,
+  .trilho-entrega::before {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* =====================================================
+   TIMELINE DA ENTREGA — trilho que progride ao rolar
+   ===================================================== */
+
+/* O trilho é um pseudo-elemento do próprio `<ol>`: um nó a menos e nada que
+ * possa dessincronizar da lista. `scaleY` a partir do topo é compositável —
+ * o trilho progride sem repintar os passos ao lado.
+ *
+ * Sem scroll-driven animations o trilho fica cheio, que é o estado correto:
+ * a linha existe para ligar os passos, não para medir a rolagem. */
+.trilho-entrega {
+  position: relative;
+}
+.trilho-entrega::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.4rem;
+  bottom: 0.4rem;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to bottom,
+    var(--color-primary) 0%,
+    #00d4a0 55%,
+    var(--color-accent-blue) 100%
+  );
+  transform-origin: top center;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .trilho-entrega::before {
+      animation: preencher-trilho linear both;
+      animation-timeline: view();
+      animation-range: entry 25% cover 65%;
+    }
+  }
+}
+
+@keyframes preencher-trilho {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* =====================================================
+   COMPOSIÇÃO DO HERO — cartões flutuantes do mock
+   ===================================================== */
+
+/* Os cartões orbitam o telefone com deslocamentos pequenos e defasados. Só
+ * `transform`, nada de `top`/`left`: sem reflow, sem CLS. `badge-float` já
+ * existe no sistema e é reaproveitada — o que muda aqui é só a superfície. */
+.cartao-flutuante {
+  background: rgba(15, 25, 23, 0.82);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+/* Fio que liga WhatsApp → IA → CRM atrás do telefone. Decorativo e sempre
+   `aria-hidden`: a informação real está no texto da seção de jornada. */
+.fio-conexao {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 200, 150, 0.45) 20%,
+    rgba(56, 189, 248, 0.45) 80%,
+    transparent 100%
+  );
+}
+
+/* =====================================================
+   BORDA ESTÁTICA DE DESTAQUE
+   ===================================================== */
+
+/* Par estático do `.glow-border`. Aquele roda duas animações infinitas, uma
+ * delas com `filter: blur(11px)` sobre a área inteira do cartão, animando
+ * `background-position` — propriedade não compositável, logo repaint por
+ * frame. Sob o formulário isso significa raster contínuo no main thread
+ * *enquanto a pessoa digita*, que é o cenário canônico de INP ruim no celular.
+ *
+ * O anel aqui é o mesmo degradê, parado. O brilho só acende no ponteiro, e só
+ * onde existe ponteiro. */
+.borda-destaque {
+  position: relative;
+}
+.borda-destaque::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(120deg, #00c896, #00d4a0, #38bdf8, #00c896);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.borda-destaque::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, #00c896, #38bdf8, #00c896);
+  opacity: 0.18;
+  filter: blur(14px);
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+@media (hover: hover) {
+  .borda-destaque:hover::after {
+    opacity: 0.32;
+  }
 }

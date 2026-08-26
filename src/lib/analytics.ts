@@ -33,6 +33,15 @@ export type EventoCliente =
   | "campanha10_page_view"
   | "campanha10_cta_clicked"
   | "campanha10_form_started"
+  /* Conclusão de cada etapa do formulário. Sem ele não dá para saber em qual
+     das duas as pessoas desistem — que é o motivo de o formulário ter sido
+     dividido. */
+  | "campanha10_step_completed"
+  /* Tentativa barrada pela validação do navegador. Existe separado porque
+     `form_submit` disparava antes de validar e contava cada clique num
+     formulário incompleto, o que tornava a razão submitted/submit do funil
+     estruturalmente pessimista e incomparável com qualquer outra coisa. */
+  | "campanha10_form_validation_failed"
   | "campanha10_form_submit"
   | "campanha10_form_submitted"
   | "campanha10_form_error"
