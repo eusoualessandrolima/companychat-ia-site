@@ -7,8 +7,6 @@ import Hero from "./Hero";
 import MedidorDePagina from "./MedidorDePagina";
 import SecaoCapacidades from "./SecaoCapacidades";
 import SecaoEntrega from "./SecaoEntrega";
-import SecaoFaq from "./SecaoFaq";
-import SecaoFechamento from "./SecaoFechamento";
 import SecaoJornada from "./SecaoJornada";
 import SecaoPerfil from "./SecaoPerfil";
 import SecaoProva from "./SecaoProva";
@@ -40,9 +38,7 @@ import { ANCORA_FORMULARIO, CAMPANHA_ENCERRADA } from "./conteudo";
  *   perfil → é para mim?
  *   prova → posso confiar?
  *   seleção → no que estou me metendo?  ← última objeção antes do formulário
- *   formulário
- *   faq → objeções que sobraram
- *   fechamento → o CTA encontra quem acabou de resolver a objeção */
+ *   formulário → e a página acaba aqui, de propósito */
 export default function Campanha() {
   return (
     <div
@@ -91,8 +87,11 @@ export default function Campanha() {
           </div>
         </section>
 
-        <SecaoFaq />
-        <SecaoFechamento />
+        {/* Sem FAQ e sem CTA final: a página termina no formulário.
+            Decisão do dono, 26/08/2026 — a segunda vez que o FAQ sai daqui na
+            mesma semana. Os textos das duas seções continuam em `conteudo.ts`
+            porque alimentam a base da Jade, que responde no WhatsApp o que a
+            página não explica mais. */}
       </main>
 
       <Rodape />

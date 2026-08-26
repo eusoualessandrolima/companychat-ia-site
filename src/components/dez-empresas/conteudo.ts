@@ -530,10 +530,18 @@ export const OBJETIVOS = [
    ou recurso que ainda não exista — o que está fora do escopo é tratado à
    parte, não antecipado aqui.
 
-   O FAQ voltou para a página em 26/08/2026, depois de ter saído na mesma
-   semana. Duas perguntas novas entraram, ambas ancoradas em capacidade que já
-   existe: a IA direcionar a conversa para uma pessoa, e a configuração ser
-   planejada conforme a viabilidade técnica de cada empresa.
+   ⚠️ **Fora da página desde 26/08/2026** — a segunda saída na mesma semana,
+   por decisão do dono. O FAQ chegou a voltar no redesign e saiu de novo junto
+   com o CTA final: a página termina no formulário. Este bloco continua aqui
+   porque é a fonte das respostas da Jade
+   (`docs/jade-campanha-10-empresas.md`), que responde no WhatsApp o que a
+   página não explica mais. Apagar daqui faria a base do agente e o site
+   divergirem — o problema que este arquivo existe para evitar. Para trazer de
+   volta, basta um `<SecaoFaq />` em `Campanha.tsx`.
+
+   Duas perguntas novas entraram no redesign e permanecem, ambas ancoradas em
+   capacidade que já existe: a IA direcionar a conversa para uma pessoa, e a
+   configuração ser planejada conforme a viabilidade técnica de cada empresa.
 
    ⚠️ Duas perguntas do briefing NÃO entraram, por falta de fonte:
    "quanto tempo leva a implantação" (não há prazo definido em lugar nenhum do
@@ -592,6 +600,10 @@ export const faq = {
   ],
 };
 
+/** Fechamento da página. **Fora do ar desde 26/08/2026**, junto com o FAQ: a
+ *  landing termina no formulário. Mantido aqui pelo mesmo motivo do FAQ — é
+ *  copy aprovada, e trazer de volta é um `<SecaoFechamento />` em
+ *  `Campanha.tsx`. */
 export const ctaFinal = {
   icone: Target,
   titulo:
