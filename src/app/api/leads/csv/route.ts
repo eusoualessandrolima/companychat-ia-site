@@ -2,18 +2,30 @@ import { NextResponse } from "next/server";
 import { listarLeads } from "@/lib/leads";
 import { estaAutenticado } from "@/lib/painel";
 
-const COLUNAS = [
-  ["criado_em", "Data"],
-  ["nome", "Nome"],
-  ["empresa", "Empresa"],
-  ["telefone", "WhatsApp"],
-  ["equipe", "Quem atende"],
-  ["volume", "Mensagens por dia"],
-  ["dor", "Maior problema"],
-  ["etapa", "Etapa"],
-  ["concluido", "Concluiu"],
-  ["clicou_whatsapp", "Clicou no WhatsApp"],
-] as const;
+import type { Lead } from "@/lib/leads";
+
+const COLUNAS: { titulo: string; valor: (lead: Lead) => unknown }[] = [
+  { titulo: "Data", valor: (l) => l.criado_em },
+  { titulo: "Nome", valor: (l) => l.nome },
+  { titulo: "Empresa", valor: (l) => l.empresa },
+  { titulo: "WhatsApp", valor: (l) => l.telefone },
+  { titulo: "Quem atende", valor: (l) => l.equipe },
+  { titulo: "Mensagens por dia", valor: (l) => l.volume },
+  { titulo: "Maior problema", valor: (l) => l.dor },
+  { titulo: "Etapa", valor: (l) => l.etapa },
+  { titulo: "Concluiu", valor: (l) => l.concluido },
+  { titulo: "Clicou no WhatsApp", valor: (l) => l.clicou_whatsapp },
+  /* Campos que não têm coluna na tabela e viajam em `origem` (jsonb): o
+     segmento, que já vinha das LPs, e o restante da candidatura de
+     `/10-empresas`. Lead que não tem a chave sai com a célula vazia. */
+  { titulo: "E-mail", valor: (l) => l.origem?.email },
+  { titulo: "Segmento", valor: (l) => l.origem?.segmento },
+  { titulo: "Cidade e estado", valor: (l) => l.origem?.cidade },
+  { titulo: "Objetivo com a IA", valor: (l) => l.origem?.objetivo },
+  { titulo: "Por que ser selecionada", valor: (l) => l.origem?.motivo },
+  { titulo: "Campanha", valor: (l) => l.origem?.campanha ?? l.origem?.utm_campaign },
+  { titulo: "Página", valor: (l) => l.origem?.pagina },
+];
 
 /** Escapa para CSV e neutraliza fórmulas: um lead com nome `=CMD()` não
  *  pode virar execução quando o arquivo abrir no Excel. */
@@ -43,9 +55,9 @@ export async function GET() {
 
   const leads = await listarLeads(5000);
   const linhas = [
-    COLUNAS.map(([, titulo]) => celula(titulo)).join(","),
+    COLUNAS.map((coluna) => celula(coluna.titulo)).join(","),
     ...leads.map((lead) =>
-      COLUNAS.map(([chave]) => celula(lead[chave as keyof typeof lead])).join(",")
+      COLUNAS.map((coluna) => celula(coluna.valor(lead))).join(",")
     ),
   ];
 

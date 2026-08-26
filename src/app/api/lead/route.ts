@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { salvarLead } from "@/lib/leads";
+import { sanitizarOrigem } from "@/lib/origem";
 
 /** Destino opcional além do banco (CRM, n8n). O quiz grava a cada etapa, mas o
  *  webhook só sai nos marcos que mudam alguma coisa lá fora — ver `marcoDoLead`. */
@@ -33,8 +34,11 @@ function marcoDoLead(
   return inserido || lead.etapa === 1 || lead.concluido || lead.clicou_whatsapp;
 }
 
+/** Devolve se o lead realmente chegou do outro lado — é metade da resposta
+ *  `entregue`, que a candidatura de `/10-empresas` usa para não anunciar
+ *  sucesso quando nada foi guardado. */
 async function entregarNoWebhook(lead: Record<string, unknown>) {
-  if (!WEBHOOK) return;
+  if (!WEBHOOK) return false;
 
   try {
     const resposta = await fetch(WEBHOOK, {
@@ -49,9 +53,13 @@ async function entregarNoWebhook(lead: Record<string, unknown>) {
 
     if (!resposta.ok) {
       console.error(`Webhook de lead respondeu ${resposta.status}`);
+      return false;
     }
+
+    return true;
   } catch (erro) {
     console.error("Falha ao entregar lead no webhook:", erro);
+    return false;
   }
 }
 
@@ -79,21 +87,30 @@ export async function POST(requisicao: Request) {
     telefone_e164: digitos.length >= 10 ? `55${digitos}` : null,
     equipe: texto(corpo.equipe, 40),
     volume: texto(corpo.volume, 40),
-    dor: texto(corpo.dor, 80),
+    /* 400 e não os 80 de antes: no quiz a dor é escolha de lista, mas na
+       candidatura de `/10-empresas` a pessoa descreve o problema do
+       atendimento com as próprias palavras, e cortar em 80 caracteres
+       decapitava justamente a informação que decide a seleção. */
+    dor: texto(corpo.dor, 400),
     etapa: typeof corpo.etapa === "number" ? Math.min(Math.max(corpo.etapa, 0), 99) : 0,
     concluido: corpo.concluido === true,
     clicou_whatsapp: corpo.clicouWhatsapp === true,
-    origem:
-      corpo.origem && typeof corpo.origem === "object"
-        ? (corpo.origem as Record<string, unknown>)
-        : {},
+    origem: sanitizarOrigem(corpo.origem),
   };
 
   const { gravado, inserido } = await salvarLead(lead);
 
+  let noWebhook = false;
   if (contatavel(lead) && marcoDoLead(lead, inserido)) {
-    await entregarNoWebhook(lead);
+    noWebhook = await entregarNoWebhook(lead);
   }
 
-  return NextResponse.json({ ok: true, gravado });
+  /* `entregue`: o lead chegou a algum lugar de onde dá para recuperá-lo — o
+     banco ou o webhook. Sem isto, banco fora do ar significava um "Candidatura
+     recebida!" na tela e o lead no vazio: `salvarLead` engole o erro e devolve
+     `ok`, que é o certo para o quiz (grava a cada etapa e não pode travar a
+     navegação), mas péssimo para quem acabou de escrever dez campos.
+
+     Campo novo e aditivo: o quiz e as LPs só olham `ok`, e para eles nada muda. */
+  return NextResponse.json({ ok: true, gravado, entregue: gravado || noWebhook });
 }

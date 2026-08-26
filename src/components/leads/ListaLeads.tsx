@@ -46,6 +46,17 @@ function linkWhatsApp(lead: Lead) {
   return `https://wa.me/${lead.telefone_e164}?text=${texto}`;
 }
 
+/* Campos que a candidatura de `/10-empresas` manda em `origem` (a tabela não
+   tem coluna para eles). Sem isto o painel mostraria só nome, empresa e
+   telefone, e quem seleciona as empresas precisaria abrir o banco. */
+const CAMPOS_DA_ORIGEM: { chave: string; rotulo: string }[] = [
+  { chave: "email", rotulo: "E-mail" },
+  { chave: "segmento", rotulo: "Segmento" },
+  { chave: "cidade", rotulo: "Cidade e estado" },
+  { chave: "objetivo", rotulo: "Objetivo com a IA" },
+  { chave: "motivo", rotulo: "Por que ser selecionada" },
+];
+
 function Etiqueta({ texto, rotulo }: { texto: string | null; rotulo: string }) {
   if (!texto) return null;
   return (
@@ -237,7 +248,13 @@ export default function ListaLeads({ leads }: { leads: Lead[] }) {
           <ul className="mt-6 space-y-3">
             {visiveis.map((lead) => {
               const whats = linkWhatsApp(lead);
-              const campanha = lead.origem?.utm_campaign ?? lead.origem?.utm_source;
+              const campanha =
+                lead.origem?.utm_campaign ??
+                lead.origem?.campanha ??
+                lead.origem?.utm_source;
+              const daOrigem = CAMPOS_DA_ORIGEM.filter(
+                (campo) => lead.origem?.[campo.chave]
+              );
 
               return (
                 <li
@@ -280,11 +297,18 @@ export default function ListaLeads({ leads }: { leads: Lead[] }) {
                     </span>
                   </div>
 
-                  {(lead.equipe || lead.volume || lead.dor) && (
+                  {(lead.equipe || lead.volume || lead.dor || daOrigem.length > 0) && (
                     <div className="mt-4 space-y-1 border-t border-dark-border pt-4">
                       <Etiqueta rotulo="Quem atende" texto={lead.equipe} />
                       <Etiqueta rotulo="Mensagens por dia" texto={lead.volume} />
                       <Etiqueta rotulo="Maior problema" texto={lead.dor} />
+                      {daOrigem.map((campo) => (
+                        <Etiqueta
+                          key={campo.chave}
+                          rotulo={campo.rotulo}
+                          texto={lead.origem[campo.chave]}
+                        />
+                      ))}
                     </div>
                   )}
 
