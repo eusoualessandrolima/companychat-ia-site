@@ -175,7 +175,7 @@ const ETAPAS: Etapa[] = [
 ];
 
 /* O que o assistente faz, na linguagem do cliente. Tudo já está em
-   `planos-data.ts` e em `Capacidades.tsx`: nenhuma promessa nova. */
+   `Capacidades.tsx`: nenhuma promessa nova. */
 const BENEFICIOS = [
   "Responde na hora, 24 horas por dia, inclusive fim de semana",
   "Entende áudio, foto e documento, e qualifica o cliente sozinho",

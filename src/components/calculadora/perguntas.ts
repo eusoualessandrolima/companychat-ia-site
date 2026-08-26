@@ -80,7 +80,7 @@ export const PASSOS_ATIVA: Passo[] = [
     pergunta: "Qual a taxa de resposta dessas campanhas?",
     ajuda:
       "É o percentual de contatos que respondem e abrem uma conversa. Quanto " +
-      "maior a taxa, mais conversas — e é dentro delas que o modelo novo passa " +
+      "maior a taxa, mais conversas, e é dentro delas que o modelo novo passa " +
       "a cobrar por mensagem enviada.",
     tipo: "numero",
     exemplo: "Ex.: 12",
@@ -123,7 +123,7 @@ export const PASSOS_RECEPTIVA: Passo[] = [
     chave: "atendimentosPorMes",
     pergunta: "Quantos atendimentos você recebe por mês?",
     ajuda:
-      "É o volume mensal de conversas iniciadas pelo cliente — dúvidas, " +
+      "É o volume mensal de conversas iniciadas pelo cliente: dúvidas, " +
       "pedidos, suporte e orçamento.",
     tipo: "numero",
     exemplo: "Ex.: 11.000",

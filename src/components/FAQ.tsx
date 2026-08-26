@@ -24,9 +24,9 @@ const faqs = [
   {
     pergunta: "Quanto custa?",
     resposta:
-      "O plano CompanyChat Pro custa R$ 497 por mês e já inclui o assistente de IA, o CRM com visão Kanban, atendentes ilimitados e toda a implantação, sem taxa de setup. Para operações com várias unidades ou mais de um número, montamos um plano sob medida.",
-    href: "/planos",
-    linkLabel: "Ver planos e preços",
+      "Cada projeto é montado sob medida, então o valor sai depois que a gente entende a sua operação: quantos atendimentos você recebe, quantos números vai conectar e o que precisa ser integrado. Você recebe uma proposta com escopo e valor fechados antes de começar, sem taxa de setup e sem contrato de fidelidade.",
+    href: "/#contato",
+    linkLabel: "Pedir uma proposta",
   },
   {
     pergunta: "O que está incluso?",
@@ -129,7 +129,7 @@ export default function FAQ() {
             Perguntas <span className="text-primary-text">Frequentes</span>
           </h2>
           <p className="mt-4 text-text-secondary">
-            Tire suas dúvidas sobre nossos serviços e planos.
+            Tire suas dúvidas sobre o atendimento com IA e como a implantação funciona.
           </p>
         </motion.div>
 

@@ -10,11 +10,8 @@ import {
   ChevronDown,
   Loader2,
   Lock,
-  Mail,
-  MapPin,
   MessageSquareText,
   Phone,
-  Sparkles,
   Tag,
   Target,
   TrendingUp,
@@ -35,13 +32,10 @@ type Campos = {
   nome: string;
   empresa: string;
   telefone: string;
-  email: string;
   segmento: string;
-  cidade: string;
   volume: string;
   problema: string;
   objetivo: string;
-  motivo: string;
   consentimento: boolean;
 };
 
@@ -51,13 +45,10 @@ const VAZIO: Campos = {
   nome: "",
   empresa: "",
   telefone: "",
-  email: "",
   segmento: "",
-  cidade: "",
   volume: "",
   problema: "",
   objetivo: "",
-  motivo: "",
   consentimento: false,
 };
 
@@ -178,22 +169,12 @@ export default function FormularioCandidatura() {
       encontrados.telefone = "Informe o DDD e o número";
     }
 
-    if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(campos.email.trim())) {
-      encontrados.email = "Informe um e-mail válido";
-    }
-
     if (!campos.segmento) encontrados.segmento = "Escolha o segmento da empresa";
-    if (campos.cidade.trim().length < 3) {
-      encontrados.cidade = "Informe a cidade e o estado";
-    }
     if (!campos.volume) encontrados.volume = "Escolha a faixa de contatos";
     if (campos.problema.trim().length < 10) {
       encontrados.problema = "Descreva o principal problema do atendimento";
     }
     if (!campos.objetivo) encontrados.objetivo = "Escolha o objetivo principal";
-    if (campos.motivo.trim().length < 10) {
-      encontrados.motivo = "Conte por que a sua empresa deveria ser selecionada";
-    }
     if (!campos.consentimento) {
       encontrados.consentimento = "É preciso concordar para enviar a candidatura";
     }
@@ -245,11 +226,8 @@ export default function FormularioCandidatura() {
           concluido: true,
           origem: {
             ...origem.current,
-            email: campos.email.trim(),
             segmento: campos.segmento,
-            cidade: campos.cidade.trim(),
             objetivo: campos.objetivo,
-            motivo: campos.motivo.trim(),
             enviado_em: new Date().toISOString(),
           },
         }),
@@ -262,7 +240,7 @@ export default function FormularioCandidatura() {
 
       /* `entregue === false` significa que nem o banco nem o CRM ficaram com a
          candidatura. Anunciar sucesso nesse caso seria mentir para quem acabou
-         de preencher dez campos. */
+         de preencher o formulário inteiro. */
       if (!resposta.ok || !dados.ok || dados.entregue === false) {
         setErros({
           geral:
@@ -434,29 +412,6 @@ export default function FormularioCandidatura() {
           </Campo>
 
           <Campo
-            id="c10-email"
-            rotulo="E-mail profissional"
-            icone={Mail}
-            erro={erros.email}
-          >
-            <input
-              id="c10-email"
-              name="email"
-              type="email"
-              inputMode="email"
-              autoComplete="email"
-              placeholder="ana@suaempresa.com.br"
-              value={campos.email}
-              onChange={(e) => alterar("email", e.target.value)}
-              aria-invalid={Boolean(erros.email)}
-              aria-describedby={erros.email ? "erro-c10-email" : undefined}
-              className={classesCampo(Boolean(erros.email))}
-            />
-          </Campo>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Campo
             id="c10-segmento"
             rotulo="Segmento da empresa"
             icone={Tag}
@@ -469,26 +424,6 @@ export default function FormularioCandidatura() {
               erro={Boolean(erros.segmento)}
               aoMudar={(v) => alterar("segmento", v)}
               opcoes={[...SEGMENTOS, OUTRO_SEGMENTO]}
-            />
-          </Campo>
-
-          <Campo
-            id="c10-cidade"
-            rotulo="Cidade e estado"
-            icone={MapPin}
-            erro={erros.cidade}
-          >
-            <input
-              id="c10-cidade"
-              name="cidade"
-              type="text"
-              autoComplete="address-level2"
-              placeholder="Ex.: Goiânia, GO"
-              value={campos.cidade}
-              onChange={(e) => alterar("cidade", e.target.value)}
-              aria-invalid={Boolean(erros.cidade)}
-              aria-describedby={erros.cidade ? "erro-c10-cidade" : undefined}
-              className={classesCampo(Boolean(erros.cidade))}
             />
           </Campo>
         </div>
@@ -542,26 +477,6 @@ export default function FormularioCandidatura() {
             erro={Boolean(erros.objetivo)}
             aoMudar={(v) => alterar("objetivo", v)}
             opcoes={OBJETIVOS}
-          />
-        </Campo>
-
-        <Campo
-          id="c10-motivo"
-          rotulo="Por que sua empresa deve ser selecionada"
-          icone={Sparkles}
-          erro={erros.motivo}
-        >
-          <textarea
-            id="c10-motivo"
-            name="motivo"
-            rows={3}
-            maxLength={LIMITE_TEXTO}
-            placeholder="Conte o que a sua empresa faz, o momento dela e como pretende usar a IA."
-            value={campos.motivo}
-            onChange={(e) => alterar("motivo", e.target.value)}
-            aria-invalid={Boolean(erros.motivo)}
-            aria-describedby={erros.motivo ? "erro-c10-motivo" : undefined}
-            className={`${classesCampo(Boolean(erros.motivo))} resize-y leading-relaxed`}
           />
         </Campo>
       </div>

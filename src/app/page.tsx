@@ -10,7 +10,6 @@ import PorteEmpresa from "@/components/PorteEmpresa";
 import Nichos from "@/components/Nichos";
 import Sobre from "@/components/Sobre";
 import Garantias from "@/components/Garantias";
-import PlanosHome from "@/components/PlanosHome";
 import FAQ from "@/components/FAQ";
 import Contato from "@/components/Contato";
 import Footer from "@/components/Footer";
@@ -32,7 +31,6 @@ export default function Home() {
         <Nichos />
         <Sobre />
         <Garantias />
-        <PlanosHome />
         <FAQ />
         <Contato />
       </main>

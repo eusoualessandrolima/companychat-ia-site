@@ -239,7 +239,7 @@ export default function Resultado({
                     {moeda(linha.custo)}
                   </td>
                   <td className="border-b border-dark-border px-4 py-3.5 align-top text-[13px] text-dark-muted">
-                    {linha.diferenca > 0 ? `+ ${moeda(linha.diferenca)}` : "—"}
+                    {linha.diferenca > 0 ? `+ ${moeda(linha.diferenca)}` : "-"}
                   </td>
                 </tr>
               ))}

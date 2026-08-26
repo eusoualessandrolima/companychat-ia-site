@@ -12,7 +12,6 @@ import { loginLink } from "./WhatsAppButton";
 const navLinks = [
   { href: "/assistente-ia", label: "Assistente IA" },
   { href: "/company-ai",    label: "Company AI" },
-  { href: "/planos",        label: "Planos" },
   { href: "#servicos",      label: "Serviços",   desktop: "hidden xl:block" },
   { href: "#beneficios",    label: "Benefícios", desktop: "hidden lg:block" },
   { href: "#sobre",         label: "Sobre",      desktop: "hidden lg:block" },

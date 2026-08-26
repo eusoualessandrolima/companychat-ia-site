@@ -182,23 +182,31 @@ const navegador = await chromium.launch();
   const telefone = await pagina.inputValue("#c10-telefone");
   relatar(telefone === "(62) 99999-8888", `máscara de telefone: ${telefone}`);
 
-  await pagina.fill("#c10-email", "ana@empresa");
+  /* Os três campos que saíram do formulário em 2026-08-26. A ausência é
+     verificada, e não só ignorada: um campo que volta sem querer é uma
+     pergunta a mais entre a pessoa e a candidatura. */
+  const removidos = await pagina.evaluate(() =>
+    ["c10-email", "c10-cidade", "c10-motivo"].filter((id) => document.getElementById(id))
+  );
+  relatar(
+    removidos.length === 0,
+    `e-mail, cidade e motivo fora do formulário${removidos.length ? `: ainda existem ${removidos}` : ""}`
+  );
+
+  await pagina.fill("#c10-problema", "curto");
   await pagina.locator('button[type="submit"]').click();
   await pagina.waitForTimeout(300);
   relatar(
-    (await pagina.locator("#erro-c10-email").count()) === 1,
-    "e-mail sem domínio completo é recusado"
+    (await pagina.locator("#erro-c10-problema").count()) === 1,
+    "descrição curta demais do problema é recusada"
   );
 
   await pagina.fill("#c10-nome", "Ana Souza");
   await pagina.fill("#c10-empresa", "Empresa Modelo");
-  await pagina.fill("#c10-email", "ana@empresamodelo.com.br");
   await pagina.selectOption("#c10-segmento", "E-commerce");
-  await pagina.fill("#c10-cidade", "Goiânia, GO");
   await pagina.selectOption("#c10-volume", "De 201 a 500");
   await pagina.fill("#c10-problema", "Demoramos horas para responder e perdemos orçamento.");
   await pagina.selectOption("#c10-objetivo", "Qualificar leads");
-  await pagina.fill("#c10-motivo", "Temos volume real e queremos testar a IA na operação.");
   await pagina.check("#c10-consentimento");
   await pagina.locator('button[type="submit"]').click();
 
@@ -225,8 +233,14 @@ const navegador = await chromium.launch();
   relatar(origem.pagina === "/10-empresas", `página de origem: ${origem.pagina}`);
   relatar(Boolean(origem.enviado_em), `data e hora da candidatura: ${origem.enviado_em}`);
   relatar(
-    Boolean(origem.email && origem.cidade && origem.objetivo && origem.motivo),
-    "e-mail, cidade, objetivo e motivo preservados"
+    origem.segmento === "E-commerce" && origem.objetivo === "Qualificar leads",
+    `segmento e objetivo preservados: ${origem.segmento} / ${origem.objetivo}`
+  );
+  /* Campo removido não pode voltar como string vazia: o CRM leria a chave como
+     resposta em branco, e o painel renderizaria um rótulo sem conteúdo. */
+  relatar(
+    !("email" in origem) && !("cidade" in origem) && !("motivo" in origem),
+    "nada enviado no lugar dos campos removidos"
   );
 
   const zap = await pagina.locator('a[href^="https://wa.me/"]').first().getAttribute("href");
@@ -264,13 +278,10 @@ const navegador = await chromium.launch();
   await pagina.fill("#c10-nome", "Ana Souza");
   await pagina.fill("#c10-empresa", "Empresa Modelo");
   await pagina.fill("#c10-telefone", "62999998888");
-  await pagina.fill("#c10-email", "ana@empresamodelo.com.br");
   await pagina.selectOption("#c10-segmento", "E-commerce");
-  await pagina.fill("#c10-cidade", "Goiânia, GO");
   await pagina.selectOption("#c10-volume", "De 201 a 500");
   await pagina.fill("#c10-problema", "Demoramos horas para responder e perdemos orçamento.");
   await pagina.selectOption("#c10-objetivo", "Qualificar leads");
-  await pagina.fill("#c10-motivo", "Temos volume real e queremos testar a IA.");
   await pagina.check("#c10-consentimento");
   await pagina.locator('button[type="submit"]').click();
   await pagina.waitForTimeout(1200);

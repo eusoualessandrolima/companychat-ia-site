@@ -39,7 +39,7 @@
 | Beneficios | `Beneficios.tsx` | Benefícios da plataforma |
 | Nichos | `Nichos.tsx` | Carrossel de 16 segmentos, gira sozinho; cada card abre o WhatsApp com a mensagem do segmento |
 | PorteEmpresa | `PorteEmpresa.tsx` | "A solução certa para qualquer tamanho de empresa" — pequenas, médias e grandes em zigue-zague, fundo escuro |
-| Garantias | `Garantias.tsx` | "O que você pode esperar da CompanyChat IA" — 6 compromissos, grid 3×2, antes dos planos |
+| Garantias | `Garantias.tsx` | "O que você pode esperar da CompanyChat IA" — 6 compromissos, grid 3×2, última seção antes do FAQ |
 | CompanyAi | `CompanyAi.tsx` | Resumo da Company AI na home (projetos sob medida); detalhe em `/company-ai` |
 | Sobre | `Sobre.tsx` | Sobre a empresa |
 | FAQ | `FAQ.tsx` | Perguntas frequentes |
@@ -159,7 +159,7 @@ Mesmo padrão visual das outras páginas internas e reaproveita `ApiHeader`, `No
 | Origem | `Origem.tsx` | Por que a Company AI existe: narrativa do YouTube + citação do fundador |
 | OqueConstruimos | `OqueConstruimos.tsx` | Quatro frentes de construção, alimentado por `company-ai-data.ts` |
 | ComoTrabalhamos | `ComoTrabalhamos.tsx` | Conversa, desenho, construção, entrega e ajuste |
-| CompanyAiCta | `CompanyAiCta.tsx` | CTA final (WhatsApp + cross-link para `/planos`) |
+| CompanyAiCta | `CompanyAiCta.tsx` | CTA final (WhatsApp + cross-link para `/assistente-ia`) |
 | company-ai-data | `company-ai-data.ts` | Fonte única das quatro frentes (home e página) |
 
 ### Calculadora de impacto — `components/calculadora/` (rota `/calculadora`)
@@ -383,6 +383,9 @@ inclui a versão de encerramento a aplicar quando a seleção fechar).
 - Nomes, valores e conversas das cenas são ilustrativos
 
 ### 2026-07-28 — Página `/planos` (primeira vez que o site exibe preço)
+
+> **Revertida em 2026-08-26** — ver "Preço sai do site". A rota, os componentes e o
+> `planos-data.ts` não existem mais; o registro fica pelo contexto comercial.
 - **Contexto:** referência do BotConversa (cards com toggle anual, grupos de features, badge "Recomendado") + documento comercial do dono com o plano **CompanyChat IA Pro, R$ 497/mês**. Fecha o item antigo de "Próximos Passos" sobre criar seção de planos
 - **Decisões comerciais confirmadas com o dono antes de construir:** 2 planos (Pro + Sob medida), **só mensal** (sem toggle anual, o desconto do exemplo não existe aqui), **sem taxa de setup** e **custo das mensagens da Meta explicitamente à parte**, com link para a calculadora de `/api-oficial`
 - **Fonte única dos planos:** `src/components/planos/planos-data.ts`. Atualizar preço ou escopo **só ali**, nunca no JSX
@@ -403,6 +406,8 @@ inclui a versão de encerramento a aplicar quando a seleção fechar).
 - **Verificação:** `tsc --noEmit` ✓ · `npm run lint` ✓ · `npm run build` ✓ (rota `/planos` estática) · visual em 1440px, 768px e 390px sem overflow · zero travessões longos
 
 ### 2026-07-28 — Seção de planos na home (`PlanosHome.tsx`)
+
+> **Revertida em 2026-08-26** — ver "Preço sai do site". `PlanosHome.tsx` foi removido.
 - A subpágina sozinha não bastava: o dono queria o preço visível na home também. Criado `src/components/PlanosHome.tsx`, versão resumida dos 2 cards
 - **Sem duplicar conteúdo:** o componente lê o mesmo `planos/planos-data.ts`, usando o novo campo `resumo` (5 itens no Pro, 4 no Sob medida). Preço muda em um lugar só e reflete na home e na página
 - **Posição na home:** entre `Sobre` (claro) e `FAQ` (claro), com fundo `bg-dark-base` para quebrar o ritmo e destacar o preço. Ordem final: Hero → Problemas → ComoFunciona → Servicos → CrmKanban → Beneficios → Solucao → Nichos → Sobre → **PlanosHome** → FAQ → Contato
@@ -1338,6 +1343,25 @@ devolve um `boundingBox` que cobre o parágrafo inteiro e a amostra cai no texto
 o único "achado" restante em `/calculadora` é esse artefato, conferido a olho.
 
 ---
+
+### 2026-08-26 — Preço sai do site: venda é consultiva, valor só no diagnóstico
+
+O dono vende sistema personalizado. O preço na vitrine ancorava a conversa antes de ele ver
+a operação do cliente e prejudicava o pitch. **Nenhum valor de plano aparece mais no site.**
+
+- **Removidos:** `src/app/planos/`, `src/components/planos/` (com `planos-data.ts`) e
+  `src/components/PlanosHome.tsx`. A home foi de 14 para 13 seções: `Garantias` → `FAQ`
+- **`/planos` responde 308** para `/teste-gratis?origem=planos` (`next.config.ts`). Link antigo,
+  anúncio e resultado de busca não caem em 404, e a origem fica rastreável no funil
+- **Menu e rodapé** perderam o item "Planos"; `Contato` trocou "Conheça os planos" por uma
+  linha sobre proposta com escopo e valor fechados; `Nichos` aponta para `#contato`;
+  `CompanyAiCta` aponta para `/assistente-ia`
+- **"Quanto custa?" foi reescrito em 5 FAQs** (home + `lp-adv`, `lp-seguros`, `lp-empresas`,
+  `lp-saude`): o valor sai depois do diagnóstico, sem taxa de setup e sem fidelidade
+- **Fonte única de preço não existe mais.** Se um dia o preço voltar ao site, ele volta a
+  `planos-data.ts` — o arquivo está no histórico do git, não foi reescrito
+- **Base da Jade:** o documento 6 (Planos e preços) ainda tinha R$ 497 quando esta mudança
+  foi aplicada. Site e base divergentes já causaram problema real antes
 
 ---
 

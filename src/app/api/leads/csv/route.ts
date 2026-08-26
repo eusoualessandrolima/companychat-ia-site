@@ -17,7 +17,10 @@ const COLUNAS: { titulo: string; valor: (lead: Lead) => unknown }[] = [
   { titulo: "Clicou no WhatsApp", valor: (l) => l.clicou_whatsapp },
   /* Campos que não têm coluna na tabela e viajam em `origem` (jsonb): o
      segmento, que já vinha das LPs, e o restante da candidatura de
-     `/10-empresas`. Lead que não tem a chave sai com a célula vazia. */
+     `/10-empresas`. Lead que não tem a chave sai com a célula vazia — é o que
+     acontece com `E-mail`, `Cidade e estado` e `Por que ser selecionada` nas
+     candidaturas a partir de 2026-08-26, quando esses três campos saíram do
+     formulário. As colunas ficam para o histórico já coletado não sumir. */
   { titulo: "E-mail", valor: (l) => l.origem?.email },
   { titulo: "Segmento", valor: (l) => l.origem?.segmento },
   { titulo: "Cidade e estado", valor: (l) => l.origem?.cidade },

@@ -48,7 +48,11 @@ function linkWhatsApp(lead: Lead) {
 
 /* Campos que a candidatura de `/10-empresas` manda em `origem` (a tabela não
    tem coluna para eles). Sem isto o painel mostraria só nome, empresa e
-   telefone, e quem seleciona as empresas precisaria abrir o banco. */
+   telefone, e quem seleciona as empresas precisaria abrir o banco.
+
+   `email`, `cidade` e `motivo` saíram do formulário em 2026-08-26 e continuam
+   listados aqui de propósito: as candidaturas recebidas antes disso os têm no
+   `jsonb`, e `Etiqueta` já não renderiza o que vier vazio. */
 const CAMPOS_DA_ORIGEM: { chave: string; rotulo: string }[] = [
   { chave: "email", rotulo: "E-mail" },
   { chave: "segmento", rotulo: "Segmento" },

@@ -166,12 +166,6 @@ try {
     );
   }
 
-  checar(
-    "a captação registra que o envio está desligado",
-    (porEvento.free_trial_captacao_sem_envio ?? 0) > 0,
-    `${porEvento.free_trial_captacao_sem_envio ?? 0} lead(s)`
-  );
-
   /* ─── 5. O lead enviado à mão ──────────────────────── */
   const { rows: leads } = await pool.query(
     `select * from teste_gratis_leads order by criado_em desc limit 1`
@@ -207,6 +201,16 @@ try {
       [lead.id]
     );
     checar("o lead não gerou job", jobsDoLead[0].n === 0);
+
+    /* Esta verificação só faz sentido depois de existir lead: antes disso
+       "zero" significa "ninguém se cadastrou ainda", e não "a captação está
+       quebrada". A primeira versão reprovava a auditoria de um deploy recém
+       publicado, que é justamente quando ela mais precisa ser confiável. */
+    checar(
+      "a captação registra que o envio está desligado",
+      (porEvento.free_trial_captacao_sem_envio ?? 0) > 0,
+      `${porEvento.free_trial_captacao_sem_envio ?? 0} lead(s)`
+    );
   }
 
   console.log(`\n  trilha de eventos: ${JSON.stringify(porEvento)}`);

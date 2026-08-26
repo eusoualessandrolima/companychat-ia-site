@@ -250,7 +250,7 @@ export const empresas: LPConteudo = {
       {
         pergunta: "Quanto custa?",
         resposta:
-          "Os planos começam em R$ 497 por mês, com implantação e treinamento inclusos e sem taxa de setup. Projetos maiores têm proposta sob medida, com escopo e valor fechados antes de começar.",
+          "O projeto é montado sob medida, então o valor sai depois do diagnóstico da sua operação. A proposta vem com escopo e valor fechados antes de começar, com implantação e treinamento inclusos, sem taxa de setup.",
       },
       {
         pergunta: "Como começo?",

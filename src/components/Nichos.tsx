@@ -307,10 +307,10 @@ export default function Nichos() {
             Não achei meu segmento
           </a>
           <a
-            href="#planos"
+            href="#contato"
             className="inline-flex items-center gap-2 rounded-full border border-card-border bg-card px-7 py-3.5 text-sm font-semibold text-foreground transition-all hover:border-primary/40 hover:text-primary-text"
           >
-            Ver planos
+            Pedir um diagnóstico
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </a>
         </div>

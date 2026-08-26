@@ -76,6 +76,15 @@ const nextConfig: NextConfig = {
         destination: "/lp-saude",
         permanent: true,
       },
+      /* A página de planos saiu do ar: o preço agora é definido no diagnóstico,
+         caso a caso, e nenhum valor é publicado. Quem chegar por link antigo,
+         anúncio ou resultado de busca cai no formulário de contato em vez de
+         num 404. */
+      {
+        source: "/planos",
+        destination: "/teste-gratis?origem=planos",
+        permanent: true,
+      },
     ];
   },
 };

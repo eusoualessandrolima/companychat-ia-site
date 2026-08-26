@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import CtaTesteGratis from "./CtaTesteGratis";
@@ -60,10 +59,8 @@ export default function Contato() {
           </p>
 
           <p className="mt-3 text-sm text-text-secondary">
-            Prefere ver os valores antes?{" "}
-            <Link href="/planos" className="font-semibold text-primary-text hover:underline">
-              Conheça os planos
-            </Link>
+            A proposta sai depois de entender a sua operação: escopo e valor fechados
+            antes de começar, sem taxa de setup e sem fidelidade.
           </p>
         </motion.div>
       </div>

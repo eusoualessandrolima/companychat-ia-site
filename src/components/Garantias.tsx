@@ -10,8 +10,8 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-/* Cada card corresponde a um compromisso já assumido em `planos-data.ts` ou no
-   FAQ. Nada aqui é promessa nova — a Jade responde por tudo isso no WhatsApp. */
+/* Cada card corresponde a um compromisso já assumido no FAQ. Nada aqui é
+   promessa nova — a Jade responde por tudo isso no WhatsApp. */
 const garantias = [
   {
     icon: PackageCheck,

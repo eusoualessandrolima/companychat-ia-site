@@ -51,7 +51,7 @@ comercial ou descrição de produto, ofereça ao usuário atualizar a base logo 
 mudança no código. Um hook em `.claude/hooks/avisar-base-jade.sh` avisa automaticamente quando um
 arquivo de conteúdo comercial é editado.
 
-Arquivos que alimentam a base: `components/planos/planos-data.ts`, `components/api-oficial/pricing.ts`,
+Arquivos que alimentam a base: `components/api-oficial/pricing.ts`,
 os cinco blocos de FAQ, `Capacidades.tsx`, `Recursos.tsx`, `NossasSolucoes.tsx`, `Categorias.tsx`,
 os componentes de `components/company-ai/` (incluindo `company-ai-data.ts`) e a página
 `app/teste-gratis/page.tsx` com `components/teste-gratis/`.
@@ -64,7 +64,7 @@ Como atualizar (ferramentas MCP `fazer-ai`, tenant `companychat-ia`):
 
 | Documento | id | Conteúdo |
 |---|---|---|
-| Planos e preços | 6 | valores, o que inclui, sob medida, regras comerciais |
+| Planos e preços | 6 | o que inclui, sob medida, regras comerciais. **Desde 2026-08-26 o site não publica valor nenhum:** preço sai no diagnóstico, caso a caso |
 | Assistente de IA | 7 | capacidades e dúvidas comuns |
 | API Oficial e custo por mensagem | 8 | janela de 24h, categorias, preços da Meta |
 | Disparo em massa e CRM Kanban | 9 | campanhas, templates, relatórios |

@@ -87,6 +87,17 @@ function medir(alvoMinimo) {
   for (const alvo of document.querySelectorAll("button, a[href], input")) {
     const r = alvo.getBoundingClientRect();
     if (r.width === 0 && r.height === 0) continue;
+    /* O atalho "Pular para o conteúdo" é `sr-only`: 1×1px recortado, invisível
+       até receber foco — e aí ele vira um botão de 48px. Medir o estado
+       escondido acusava 100 alvos pequenos por rodada, ruído que escondia
+       qualquer alvo pequeno de verdade. A WCAG 2.5.8 mede o alvo quando ele
+       está disponível, não quando está recolhido. */
+    const estilo = getComputedStyle(alvo);
+    const recortado =
+      estilo.clip === "rect(0px, 0px, 0px, 0px)" ||
+      estilo.clipPath === "inset(50%)" ||
+      (r.width <= 1 && r.height <= 1);
+    if (recortado) continue;
     if (r.height < alvoMinimo) {
       const rotulo = (alvo.textContent || alvo.name || alvo.tagName).trim().slice(0, 34);
       problemas.push(`alvo pequeno (${Math.round(r.height)}px): "${rotulo}"`);

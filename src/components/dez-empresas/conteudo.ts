@@ -262,8 +262,11 @@ export const condicoes = {
 
 export const formulario = {
   titulo: "Candidate sua empresa",
+  /* "pelo WhatsApp informado" e não "pelo WhatsApp ou e-mail": o formulário
+     deixou de pedir e-mail em 2026-08-26, e prometer um retorno por um canal
+     que não é coletado é promessa que não dá para cumprir. */
   subtitulo:
-    "Preencha as informações abaixo. Nossa equipe analisará a candidatura e responderá pelo WhatsApp ou e-mail informados, selecionada ou não.",
+    "Preencha as informações abaixo. Nossa equipe analisará a candidatura e responderá pelo WhatsApp informado, selecionada ou não.",
   botao: "Enviar minha candidatura",
   botaoEnviando: "Enviando a sua candidatura",
   microcopy:
@@ -275,7 +278,7 @@ export const formulario = {
   sucesso: {
     titulo: "Candidatura recebida!",
     mensagem:
-      "Obrigado pelo interesse em participar. Nossa equipe irá analisar as informações e responder pelo WhatsApp ou e-mail informados, tanto quem for selecionado quanto quem não for.",
+      "Obrigado pelo interesse em participar. Nossa equipe irá analisar as informações e responder pelo WhatsApp informado, tanto quem for selecionado quanto quem não for.",
     complemento:
       "Enquanto isso, você pode conhecer a IA da CompanyChat funcionando no WhatsApp.",
     botao: "Testar a IA no WhatsApp",

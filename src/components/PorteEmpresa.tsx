@@ -8,8 +8,8 @@ function linkComContexto(mensagem: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensagem)}`;
 }
 
-/* Os itens de cada porte saem do que já está publicado em `planos-data.ts`:
-   o Pro cobre o começo, o Sob medida cobre múltiplos números e integração. */
+/* Os itens de cada porte descrevem escopo, nunca valor: o preço sai no
+   diagnóstico, e nenhuma faixa de preço aparece no site. */
 const portes = [
   {
     icone: Store,

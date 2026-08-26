@@ -16,11 +16,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.95,
     },
     {
-      url: `${BASE_URL}/planos`,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
       url: `${BASE_URL}/assistente-ia`,
       changeFrequency: "monthly",
       priority: 0.9,
