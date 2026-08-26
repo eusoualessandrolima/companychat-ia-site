@@ -1,6 +1,9 @@
+import { after } from "next/server";
 import { NextResponse } from "next/server";
 import { salvarLead } from "@/lib/leads";
 import { sanitizarOrigem } from "@/lib/origem";
+import { consumir, ipDaRequisicao } from "@/lib/rate-limit";
+import { corpoGrandeDemais, respostaCorpoGrande } from "@/lib/corpo";
 
 /** Destino opcional além do banco (CRM, n8n). O quiz grava a cada etapa, mas o
  *  webhook só sai nos marcos que mudam alguma coisa lá fora — ver `marcoDoLead`. */
@@ -63,12 +66,38 @@ async function entregarNoWebhook(lead: Record<string, unknown>) {
   }
 }
 
+/* Limite folgado de propósito: o quiz de `/comecar` grava a cada etapa e um
+   preenchimento legítimo faz seis chamadas, mais o clique no WhatsApp. Trinta
+   em dez minutos cobre isso com margem — e continua barrando o script que
+   enche a tabela e transforma o site em amplificador de POSTs para o CRM. */
+const LIMITE_POR_IP = { limite: 30, janelaSegundos: 600 };
+
 export async function POST(requisicao: Request) {
+  if (corpoGrandeDemais(requisicao)) return respostaCorpoGrande();
+
+  /* Antes de ler o corpo: a contagem não pode depender de o JSON ser válido. */
+  const ip = ipDaRequisicao(requisicao.headers);
+  const veredito = consumir(`lead:${ip}`, LIMITE_POR_IP);
+  if (!veredito.permitido) {
+    return NextResponse.json(
+      { ok: false, erro: "muitas tentativas" },
+      { status: 429, headers: { "Retry-After": String(veredito.esperarSegundos) } }
+    );
+  }
+
   let corpo: Corpo;
   try {
     corpo = await requisicao.json();
   } catch {
     return NextResponse.json({ ok: false, erro: "corpo inválido" }, { status: 400 });
+  }
+
+  /* Isca: campo que nenhuma pessoa vê e nenhum formulário do site preenche.
+     Robô que preenche tudo o que encontra cai aqui. A resposta é `ok: true`
+     para o robô não descobrir que foi barrado e voltar variando o corpo — o
+     mesmo desenho que `/api/teste-gratis` já usa. */
+  if (typeof corpo.empresaWebsite === "string" && corpo.empresaWebsite.trim()) {
+    return NextResponse.json({ ok: true, gravado: false, entregue: false });
   }
 
   const id = typeof corpo.id === "string" && UUID.test(corpo.id) ? corpo.id : null;
@@ -100,9 +129,24 @@ export async function POST(requisicao: Request) {
 
   const { gravado, inserido } = await salvarLead(lead);
 
+  /* O webhook do CRM é um fetch de até 8s, e a conexão do banco fica presa
+     enquanto ele acontece — com uma pool de 5, é assim que uma lentidão no
+     n8n vira lentidão no site inteiro.
+   *
+   * Mas ele não pode sair do caminho da resposta sempre: quando o banco falha,
+   * o webhook é o único lugar de onde o lead pode ser recuperado, e é isso que
+   * o campo `entregue` informa ao formulário. Daí a divisão:
+   *
+   * - banco gravou  → `entregue` já é verdade, o webhook vai para o `after()`
+   *                   e a pessoa não espera por ele;
+   * - banco falhou  → esperamos a resposta do webhook, porque é ela que decide
+   *                   entre "recebemos" e "tente de novo". */
   let noWebhook = false;
-  if (contatavel(lead) && marcoDoLead(lead, inserido)) {
-    noWebhook = await entregarNoWebhook(lead);
+  const vaiParaOCrm = contatavel(lead) && marcoDoLead(lead, inserido);
+
+  if (vaiParaOCrm) {
+    if (gravado) after(() => entregarNoWebhook(lead));
+    else noWebhook = await entregarNoWebhook(lead);
   }
 
   /* `entregue`: o lead chegou a algum lugar de onde dá para recuperá-lo — o

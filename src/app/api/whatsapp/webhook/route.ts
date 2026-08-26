@@ -2,6 +2,7 @@ import { after, NextResponse } from "next/server";
 import { assinaturaConfere, segredoConfere } from "@/lib/teste-gratis/assinatura";
 import { configWhatsApp } from "@/lib/teste-gratis/config";
 import { processarWebhook } from "@/lib/teste-gratis/webhook";
+import { corpoGrandeDemais } from "@/lib/corpo";
 
 /* Webhook do WhatsApp: status das mensagens que saíram e respostas que
  * chegaram.
@@ -42,6 +43,18 @@ export async function POST(requisicao: Request) {
   if (!appSecret) {
     console.error("Webhook do WhatsApp chamado sem WHATSAPP_APP_SECRET configurado");
     return new NextResponse(null, { status: 503 });
+  }
+
+  /* Teto de tamanho antes de ler. Aqui a ordem não pode ser invertida como nas
+     outras rotas — a assinatura é calculada sobre o corpo cru, então ele
+     precisa ser lido para ser verificado, e quem não tem a assinatura ainda
+     assim consegue fazer a aplicação alocar o corpo inteiro. Limitar o
+     tamanho é a única defesa que sobra antes da leitura.
+
+     256 KB porque um lote de status da Cloud API é maior que um formulário:
+     o padrão de 64 KB cortaria evento legítimo. */
+  if (corpoGrandeDemais(requisicao, 256 * 1024)) {
+    return new NextResponse(null, { status: 413 });
   }
 
   // O corpo cru é o que foi assinado: reserializar o JSON muda os bytes.

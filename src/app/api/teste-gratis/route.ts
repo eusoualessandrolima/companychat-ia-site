@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { consumir, ipDaRequisicao } from "@/lib/rate-limit";
+import { corpoGrandeDemais, respostaCorpoGrande } from "@/lib/corpo";
 import { registrarSolicitacao } from "@/lib/teste-gratis/captacao";
 import { registrarEvento } from "@/lib/teste-gratis/repositorio";
 import { caiuNaIsca, validarFormulario } from "@/lib/teste-gratis/validacao";
@@ -21,19 +22,12 @@ const LIMITE_POR_IP = 5;
 const JANELA_SEGUNDOS = 600;
 
 export async function POST(requisicao: Request) {
-  let corpo: Record<string, unknown>;
-  try {
-    corpo = await requisicao.json();
-  } catch {
-    return NextResponse.json({ ok: false, erro: "corpo inválido" }, { status: 400 });
-  }
+  if (corpoGrandeDemais(requisicao)) return respostaCorpoGrande();
 
-  /* Resposta de sucesso de propósito: dizer ao robô que ele foi identificado
-     só ensina a próxima tentativa. Nada é gravado. */
-  if (caiuNaIsca(corpo)) {
-    return NextResponse.json({ ok: true, duplicado: false, agendado: false });
-  }
-
+  /* O limite vem **antes** do parse. Ele rodava depois, e nessa ordem um corpo
+     inválido devolvia 400 sem consumir o balde: bastava mandar lixo para
+     tentar à vontade, e o corpo inteiro já tinha sido alocado em memória
+     antes de qualquer decisão. */
   const ip = ipDaRequisicao(requisicao.headers);
   const veredito = consumir(`teste-gratis:${ip}`, {
     limite: LIMITE_POR_IP,
@@ -48,6 +42,19 @@ export async function POST(requisicao: Request) {
       },
       { status: 429, headers: { "Retry-After": String(veredito.esperarSegundos) } }
     );
+  }
+
+  let corpo: Record<string, unknown>;
+  try {
+    corpo = await requisicao.json();
+  } catch {
+    return NextResponse.json({ ok: false, erro: "corpo inválido" }, { status: 400 });
+  }
+
+  /* Resposta de sucesso de propósito: dizer ao robô que ele foi identificado
+     só ensina a próxima tentativa. Nada é gravado. */
+  if (caiuNaIsca(corpo)) {
+    return NextResponse.json({ ok: true, duplicado: false, agendado: false });
   }
 
   const validacao = validarFormulario(corpo);
