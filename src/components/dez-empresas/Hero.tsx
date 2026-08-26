@@ -101,7 +101,18 @@ export default function Hero() {
             aria-hidden="true"
             className="fio-conexao absolute left-0 right-0 top-1/2 hidden h-px lg:block"
           />
-          <div className="relative">
+          {/* Wrapper na largura exata do mock.
+              As etiquetas se posicionam por este contêiner, e não pela coluna
+              inteira: ancoradas na coluna, elas ficavam a até 100px do telefone
+              em telas largas e a etiqueta de 160px acabava por cima dos balões
+              da conversa — cobrindo justamente o conteúdo que a composição
+              existe para mostrar. */}
+          {/* `lg:mr-20` desloca o telefone para dentro da coluna e abre a
+              faixa que as etiquetas da direita ocupam. Sem ela, o mock encosta
+              na margem do contêiner e as duas etiquetas daquele lado saíam da
+              viewport — onde o `overflow-x-clip` do root as cortava pela
+              metade ("Reunião agend…"). */}
+          <div className="relative mx-auto w-full max-w-[19rem] sm:max-w-[21rem] lg:mr-20">
             <ConversaMock />
 
             {/* Etiquetas de resultado ao redor do mock.
@@ -129,13 +140,13 @@ export default function Hero() {
   );
 }
 
-/* Posições fixas, uma por etiqueta, em vez de cálculo: são quatro cantos
-   escolhidos para não cobrir os balões da conversa nem sair do contêiner em
-   larguras intermediárias. Fora do componente para não recriar o array a cada
-   render. */
+/* Posições fixas, uma por etiqueta. Cada uma é ancorada numa borda do telefone
+   e empurrada para **fora** dele com `translate`, de modo que só a ponta da
+   etiqueta encoste no aparelho — nenhuma passa por cima dos balões.
+   Fora do componente para não recriar o array a cada render. */
 const POSICOES = [
-  "-left-4 top-[14%] lg:-left-10",
-  "-right-3 top-[36%] lg:-right-8",
-  "-left-5 bottom-[26%] lg:-left-12",
-  "-right-4 bottom-[10%] lg:-right-6",
+  "left-0 top-[12%] -translate-x-[78%]",
+  "right-0 top-[34%] translate-x-[62%]",
+  "left-0 bottom-[28%] -translate-x-[92%]",
+  "right-0 bottom-[8%] translate-x-[58%]",
 ] as const;
