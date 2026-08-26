@@ -495,7 +495,7 @@ export default function FormularioCandidatura() {
 
         <Campo
           id="c10-volume"
-          rotulo="Quantos contatos a empresa recebe pelo WhatsApp por mês?"
+          rotulo="Contatos recebidos pelo WhatsApp por mês"
           icone={TrendingUp}
           erro={erros.volume}
         >
@@ -511,7 +511,7 @@ export default function FormularioCandidatura() {
 
         <Campo
           id="c10-problema"
-          rotulo="Qual é o principal problema do atendimento atual?"
+          rotulo="Principal problema do atendimento atual"
           icone={MessageSquareText}
           erro={erros.problema}
         >
@@ -531,7 +531,7 @@ export default function FormularioCandidatura() {
 
         <Campo
           id="c10-objetivo"
-          rotulo="O que você gostaria que a IA fizesse?"
+          rotulo="O que a IA deve fazer"
           icone={Target}
           erro={erros.objetivo}
         >
@@ -547,7 +547,7 @@ export default function FormularioCandidatura() {
 
         <Campo
           id="c10-motivo"
-          rotulo="Por que sua empresa deveria ser selecionada?"
+          rotulo="Por que sua empresa deve ser selecionada"
           icone={Sparkles}
           erro={erros.motivo}
         >
