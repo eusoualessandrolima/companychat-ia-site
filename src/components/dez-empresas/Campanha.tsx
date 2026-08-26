@@ -205,11 +205,11 @@ export default function Campanha() {
               (91% em render delay) e deixava o topo da página em branco para
               quem chega com conexão ruim — justamente o tráfego de anúncio.
               A animação de entrada segue valendo da segunda dobra em diante. */}
-          {/* 54rem = 864px. A medida não é estética: a linha mais longa
-              ("A sua pode ser uma delas.") ocupa 837px no teto de 64px da
-              fonte. Container mais estreito que isso quebraria a linha e
-              desfaria a composição de três frases. */}
-          <div className="max-w-[54rem]">
+          {/* 58rem = 928px. A medida sai da fonte, não do gosto: no teto de
+              64px, "mais eficiência e agilidade" ocupa 868px. Um container de
+              864px estouraria por 4px e quebraria a linha do degradê em duas,
+              desfazendo a composição. */}
+          <div className="max-w-[58rem]">
             {/* Escassez declarada, sem contador: são 10 vagas fixas, e não
                 existe fonte de dados de "restantes" para mostrar. */}
             <div className="flex w-fit items-center gap-2.5 rounded-full border border-primary/25 bg-primary/[0.08] px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary shadow-[0_0_24px_-6px_rgba(0,171,122,0.45)] backdrop-blur-sm sm:text-sm">
@@ -233,7 +233,6 @@ export default function Campanha() {
             <h1 className="mt-8 text-[clamp(2.15rem,5.6vw,4rem)] font-extrabold uppercase leading-[0.98] tracking-[-0.03em] max-[360px]:mt-5">
               <span className="block">{hero.titulo.linha1}</span>
               <span className="headline-gradiente block">{hero.titulo.destaque}</span>
-              <span className="block text-dark-text/90">{hero.titulo.linha3}</span>
             </h1>
 
             {/* Em ≤360px o texto encolhe meio ponto e fecha o entrelinhas —

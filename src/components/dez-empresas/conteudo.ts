@@ -75,18 +75,12 @@ export const SEO = {
 export const hero = {
   badge: "Seleção exclusiva • Apenas 10 empresas",
 
-  /* Três linhas, três frases. As quebras são intencionais e valem no desktop:
-     cada linha carrega uma ideia inteira, e a do meio — a que promete o
-     assistente — é a que recebe o degradê da marca.
-
-     No celular a segunda e a terceira linha quebram sozinhas; o ` ` entre
-     "DE" e "IA." impede o pior caso, que é "IA." sobrando sozinho numa linha. */
+  /* Duas linhas: a ação e o ganho. O degradê da marca fica na segunda, que é
+     onde está o benefício, e não no verbo. As duas metades têm largura
+     parecida, então no celular nenhuma palavra sobra órfã numa linha. */
   titulo: {
-    linha1: "10 empresas.",
-    /* Atenção: o espaço entre "de" e "IA." é um NBSP (U+00A0), não um espaço
-       comum. É ele que impede o celular de deixar "IA." sozinho numa linha. */
-    destaque: "10 assistentes de IA.",
-    linha3: "A sua pode ser uma delas.",
+    linha1: "Atenda seus clientes com",
+    destaque: "mais eficiência e agilidade",
   },
 
   subtitulo:

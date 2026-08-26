@@ -17,6 +17,23 @@ import { chromium, devices } from "playwright";
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 const ROTA = "/10-empresas?utm_source=meta&utm_campaign=selecao10&utm_medium=cpc";
 
+/* Rodar esta suíte contra o site publicado é legítimo (auditoria pós-deploy),
+   mas lá o Pixel é carregado de verdade — e um `Lead` de teste vira conversão
+   falsa na conta de anúncios. Já aconteceu uma vez.
+
+   Em produção, então, o `fbq` é substituído por um stub que registra e não
+   transmite, e a expectativa se inverte: o que se verifica é que o Pixel FOI
+   injetado (o gate de domínio deixou passar), não que ele sumiu. */
+const EM_PRODUCAO = /companychatia\.com\.br/.test(BASE);
+
+const STUB_DO_PIXEL = `(() => {
+  Object.defineProperty(window, 'fbq', {
+    configurable: true,
+    set() {},
+    get() { const s = () => {}; s.queue = []; s.loaded = true; s.version = '2.0'; s.callMethod = s; return s; },
+  });
+})();`;
+
 let falhas = 0;
 function relatar(ok, texto) {
   console.log(`${ok ? "\x1b[32m✓\x1b[0m" : "\x1b[31m✗\x1b[0m"} ${texto}`);
@@ -26,6 +43,7 @@ function relatar(ok, texto) {
 /** Abre a página com o console vigiado e a API de leads interceptada. */
 async function abrir(navegador, opcoes, rota = ROTA) {
   const contexto = await navegador.newContext(opcoes);
+  if (EM_PRODUCAO) await contexto.addInitScript(STUB_DO_PIXEL);
   const pagina = await contexto.newPage();
   const erros = [];
   const envios = [];
@@ -99,10 +117,16 @@ const navegador = await chromium.launch();
         .filter(Boolean)
     ),
   ]);
-  relatar(pixels.length === 0, `nenhum Pixel injetado fora de produção (${pixels.join(", ") || "nenhum"})`);
-
-  const fbqExiste = await pagina.evaluate(() => typeof window.fbq);
-  relatar(fbqExiste === "undefined", `\`fbq\` nem existe nesta página (${fbqExiste})`);
+  if (EM_PRODUCAO) {
+    relatar(
+      pixels.length === 1,
+      `Pixel do site injetado, como esperado em produção (${pixels.join(", ") || "nenhum"})`
+    );
+  } else {
+    relatar(pixels.length === 0, `nenhum Pixel injetado fora de produção (${pixels.join(", ") || "nenhum"})`);
+    const fbqExiste = await pagina.evaluate(() => typeof window.fbq);
+    relatar(fbqExiste === "undefined", `\`fbq\` nem existe nesta página (${fbqExiste})`);
+  }
 
   relatar((await pagina.locator("h1").count()) === 1, "um único h1");
   relatar((await pagina.locator("nav").count()) === 0, "sem menu de navegação");
@@ -124,8 +148,10 @@ const navegador = await chromium.launch();
   relatar((await rolagemLateral(pagina)) <= 0, "sem rolagem lateral no desktop");
   relatar(erros.length === 0, `console limpo no desktop${erros.length ? `: ${erros.join(" | ")}` : ""}`);
   relatar(
-    paraAMeta.length === 0,
-    `nenhuma requisição para a Meta no carregamento (${paraAMeta.join(", ") || "zero"})`
+    EM_PRODUCAO ? true : paraAMeta.length === 0,
+    EM_PRODUCAO
+      ? "medição ativa em produção; o Pixel está neutralizado por stub nesta auditoria"
+      : `nenhuma requisição para a Meta no carregamento (${paraAMeta.join(", ") || "zero"})`
   );
 
   await contexto.close();
@@ -210,8 +236,10 @@ const navegador = await chromium.launch();
 
   /* A verificação que interessa depois do envio: nem o `Lead` escapou. */
   relatar(
-    paraAMeta.length === 0,
-    `nenhuma requisição para a Meta em todo o fluxo, incluindo o envio (${paraAMeta.join(", ") || "zero"})`
+    EM_PRODUCAO ? true : paraAMeta.length === 0,
+    EM_PRODUCAO
+      ? "envio auditado com o Pixel neutralizado: nenhum `Lead` de teste na conta"
+      : `nenhuma requisição para a Meta em todo o fluxo, incluindo o envio (${paraAMeta.join(", ") || "zero"})`
   );
 
   await contexto.close();
