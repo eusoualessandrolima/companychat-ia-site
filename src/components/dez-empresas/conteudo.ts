@@ -6,12 +6,10 @@ import {
   Handshake,
   Headset,
   KanbanSquare,
-  LifeBuoy,
   LineChart,
   MessagesSquare,
   Repeat2,
-  ShoppingBag,
-  Smartphone,
+  Send,
   Sparkles,
   Target,
   UserCheck,
@@ -26,11 +24,15 @@ import {
  * que é gratuito, o que acontece depois), muda este arquivo e nada mais.
  *
  * Duas regras seguidas na redação:
- *   1. Só entra recurso que a CompanyChat já entrega hoje — cada item de
- *      "o que a IA poderá fazer" e de "o que será entregue" tem contrapartida
- *      no que as LPs e as páginas de produto já prometem.
+ *   1. Só entra recurso que a CompanyChat já entrega hoje — cada item do bento
+ *      e da timeline tem contrapartida no que as LPs e as páginas de produto já
+ *      prometem.
  *   2. Nenhum número inventado: não há contador de vagas restantes, prazo de
- *      resposta prometido nem resultado de cliente que não exista. */
+ *      resposta prometido, preço de referência nem resultado de cliente que não
+ *      exista. Em particular, **não há âncora de preço riscado**: o site parou
+ *      de publicar valor em 26/08/2026 ("preço sai no diagnóstico, caso a
+ *      caso"), e inventar um "de R$ X por R$ 0" contrariaria essa decisão além
+ *      de ser número sem lastro. O valor percebido vem do escopo detalhado. */
 
 export const VAGAS = 10;
 
@@ -57,12 +59,19 @@ export const encerramento = {
 };
 
 /** Identificação do lead na integração (`origem` do `/api/lead`). O CRM lê
- *  estas chaves para separar a candidatura dos leads das outras páginas. */
+ *  estas chaves para separar a candidatura dos leads das outras páginas.
+ *  **Não mudar sem alinhar do outro lado.** */
 export const IDENTIFICACAO = {
   origem: "lp-10-empresas",
   campanha: "10-empresas-10-assistentes",
   tipo: "candidatura",
 } as const;
+
+/** Versão do texto de consentimento aceito. Muda **junto** com qualquer
+ *  alteração em `formulario.consentimento*` — é ela que permite provar, mais
+ *  tarde, qual redação a pessoa leu quando marcou a caixa. Mesmo padrão de
+ *  `src/lib/teste-gratis/consentimento.ts`. */
+export const CONSENTIMENTO_VERSAO = "2026-08-26";
 
 export const SEO = {
   title: "10 empresas receberão um Assistente de IA no WhatsApp | CompanyChat",
@@ -73,23 +82,36 @@ export const SEO = {
     "Sua empresa pode ser uma das selecionadas para receber um Assistente de IA personalizado no WhatsApp.",
 };
 
+/* ─── Hero ──────────────────────────────────────────────────────────────
+ *
+ * A ordem mudou em 26/08/2026. Antes o `<h1>` era "Atenda seus clientes com
+ * mais eficiência e agilidade" — a **mesma frase da `/teste-gratis`** — e a
+ * campanha aparecia só num badge de 12px. Numa página cujo argumento inteiro é
+ * a escassez, a escassez não pode estar no menor tipo da tela: quem chega pelo
+ * anúncio precisa entender em três segundos que são 10 vagas e que a
+ * implantação é gratuita. A promessa genérica desceu para o subtítulo. */
 export const hero = {
-  badge: "Seleção exclusiva • Apenas 10 empresas",
+  badge: "Seleção exclusiva • 10 empresas",
 
-  /* Duas linhas: a ação e o ganho, com o degradê da marca no benefício.
-     Mesma frase da `/teste-gratis` — decisão do dono, ciente de que as duas
-     páginas passam a abrir igual. */
   titulo: {
-    linha1: "Atenda seus clientes com",
-    destaque: "mais eficiência e agilidade",
+    linha1: "Sua empresa pode receber um",
+    destaque: "Assistente de IA personalizado",
+    linha3: "no WhatsApp",
+  },
+
+  /* A faixa que carrega a oferta. Fica logo abaixo do `<h1>`, em superfície
+     própria, porque é a informação que decide a candidatura. */
+  oferta: {
+    principal: "Implantação inicial 100% gratuita",
+    complemento: "para apenas 10 empresas selecionadas",
   },
 
   subtitulo:
-    "A CompanyChat vai selecionar 10 empresas para receber gratuitamente a implantação inicial de um Assistente de IA personalizado no WhatsApp, capaz de atender, qualificar e acompanhar clientes 24 horas por dia.",
-  /* Rótulo curto de propósito: em 320px "Quero candidatar minha empresa"
-     ocupava duas linhas e esticava o botão para 80px. */
-  cta: "Quero participar da seleção",
-  microcopy: "Candidatura gratuita • Leva menos de 2 minutos",
+    "A CompanyChat vai selecionar 10 empresas para implantar um assistente que atende, qualifica, agenda, faz follow-up e organiza as oportunidades no WhatsApp — 24 horas por dia.",
+
+  cta: "Quero candidatar minha empresa",
+  microcopy: "Candidatura gratuita • menos de 2 minutos",
+  confianca: "Sem compromisso • apenas 10 empresas serão selecionadas",
 };
 
 /* A conversa do mock ao lado do hero.
@@ -117,38 +139,156 @@ export const conversa = {
   ],
 } as const;
 
-export const capacidades: {
-  titulo: string;
-  complemento: string;
-  itens: { icone: LucideIcon; texto: string }[];
-} = {
-  titulo: "Veja como a IA pode ajudar sua empresa",
-  complemento:
-    "O fluxo será adaptado ao segmento, ao atendimento e aos objetivos da empresa selecionada.",
+/** Etiquetas que orbitam o telefone no hero. Cada uma nomeia um resultado que
+ *  a conversa ao lado produz — não é enfeite solto: "Lead qualificado" é o que
+ *  aconteceu no segundo balão, "Reunião agendada" é o quarto. Quatro, e não
+ *  oito: o mock precisa continuar sendo o objeto principal da composição. */
+export const etiquetasHero = [
+  { texto: "Lead qualificado", icone: UserCheck },
+  { texto: "Reunião agendada", icone: CalendarCheck },
+  { texto: "Atendimento 24h", icone: Clock3 },
+  { texto: "CRM atualizado", icone: KanbanSquare },
+] as const;
+
+/* ─── Percepção de valor ────────────────────────────────────────────────
+ *
+ * Seção nova. O diagnóstico era que a página comunicava "é de graça" sem
+ * comunicar **o que** é de graça — e gratuidade sem escopo lê como brinde, não
+ * como oportunidade. Os sete itens abaixo são exatamente os da entrega, ditos
+ * em duas palavras cada: aqui eles servem de inventário (o tamanho da lista é
+ * o argumento), e a timeline mais abaixo os explica um a um. */
+export const valor = {
+  rotulo: "O que sua empresa recebe",
+  titulo: "Não é apenas um chatbot pronto",
+  texto:
+    "As empresas selecionadas recebem uma implantação personalizada para a própria operação: o assistente é configurado com os produtos, os serviços, as regras e a linguagem do negócio.",
   itens: [
-    { icone: Clock3, texto: "Atender clientes 24 horas por dia" },
-    { icone: MessagesSquare, texto: "Responder dúvidas automaticamente" },
-    { icone: UserCheck, texto: "Qualificar novos leads" },
-    { icone: ShoppingBag, texto: "Apresentar produtos e serviços" },
-    { icone: CalendarCheck, texto: "Agendar reuniões ou consultas" },
-    { icone: Repeat2, texto: "Fazer follow-up de oportunidades" },
-    { icone: LifeBuoy, texto: "Auxiliar no suporte e pós-venda" },
-    { icone: Headset, texto: "Direcionar a conversa para um atendente humano" },
-    { icone: KanbanSquare, texto: "Registrar contatos e etapas no CRM" },
+    "Diagnóstico da operação",
+    "Mapeamento das conversas",
+    "Configuração do Assistente de IA",
+    "Personalização para o segmento",
+    "Integração com o WhatsApp",
+    "Organização no CRM",
+    "Acompanhamento inicial",
+  ],
+  cartao: {
+    rotulo: "Investimento para as empresas selecionadas",
+    valor: "R$ 0",
+    linha: "Implantação inicial 100% gratuita",
+    nota: "Automações, integrações ou fluxos adicionais são avaliados separadamente, com escopo e valor apresentados antes de qualquer execução.",
+  },
+};
+
+/* ─── Jornada ───────────────────────────────────────────────────────────
+ *
+ * Seção nova, quatro passos, para ser entendida em cinco segundos. Horizontal
+ * no desktop, vertical no celular. É o resumo mecânico do que o bento detalha
+ * logo abaixo — quem só passar o olho sai sabendo o essencial. */
+export const jornada = {
+  rotulo: "Como funciona na prática",
+  titulo: "Do primeiro “oi” até a oportunidade organizada",
+  passos: [
+    {
+      icone: Send,
+      titulo: "O cliente chama",
+      texto: "Pelo WhatsApp, a qualquer hora do dia ou da noite.",
+    },
+    {
+      icone: Bot,
+      titulo: "A IA entende",
+      texto: "Identifica a intenção e o contexto da conversa.",
+    },
+    {
+      icone: Workflow,
+      titulo: "A IA executa",
+      texto: "Responde, qualifica, agenda ou encaminha para uma pessoa.",
+    },
+    {
+      icone: KanbanSquare,
+      titulo: "Fica organizado",
+      texto: "Cada conversa vira um card no funil, com histórico e etapa.",
+    },
   ],
 };
 
+/* ─── O que a IA faz ────────────────────────────────────────────────────
+ *
+ * Eram nove itens numa grade 3×3 mais uma lista de seis — vinte e três bullets
+ * entre o hero e o formulário, com ícone repetido entre as listas e um item
+ * ("Registrar contatos e etapas no CRM") que dizia o mesmo que outro da lista
+ * seguinte ("Organização dos contatos no CRM"). Viraram seis blocos de
+ * tamanhos diferentes, e os dois que sobraram entraram como a linha de apoio
+ * do fim da seção — nada foi perdido, só parou de competir. */
+export const capacidades: {
+  rotulo: string;
+  titulo: string;
+  complemento: string;
+  itens: { icone: LucideIcon; titulo: string; texto: string; largo?: boolean }[];
+  extras: { icone: LucideIcon; texto: string }[];
+} = {
+  rotulo: "Possibilidades de automação",
+  titulo: "O que o assistente pode fazer pela sua empresa",
+  complemento:
+    "O fluxo será adaptado ao segmento, ao atendimento e aos objetivos da empresa selecionada.",
+  itens: [
+    {
+      icone: Clock3,
+      titulo: "Atendimento 24 horas",
+      texto:
+        "Responde seus clientes mesmo quando sua equipe está offline, no fim de semana e no feriado.",
+      largo: true,
+    },
+    {
+      icone: UserCheck,
+      titulo: "Qualificação automática",
+      texto: "Entende a necessidade do cliente antes de encaminhá-lo.",
+    },
+    {
+      icone: CalendarCheck,
+      titulo: "Agendamentos",
+      texto: "Identifica a intenção e direciona para reunião ou consulta.",
+    },
+    {
+      icone: Repeat2,
+      titulo: "Follow-up inteligente",
+      texto: "Retoma oportunidades que poderiam ser esquecidas.",
+    },
+    {
+      icone: KanbanSquare,
+      titulo: "CRM organizado",
+      texto: "Registra contatos, histórico e etapas automaticamente.",
+    },
+    {
+      icone: Headset,
+      titulo: "Atendimento humano quando necessário",
+      texto:
+        "A IA reconhece quando a conversa deve sair dela e ir para uma pessoa do seu time.",
+      largo: true,
+    },
+  ],
+  extras: [
+    { icone: MessagesSquare, texto: "Apresentar produtos e serviços" },
+    { icone: Handshake, texto: "Auxiliar no suporte e no pós-venda" },
+  ],
+};
+
+/* ─── A entrega ─────────────────────────────────────────────────────────
+ *
+ * Oito itens viraram seis passos numerados. As fusões: "personalização para o
+ * segmento" + "um fluxo principal de automação" (a personalização É do fluxo),
+ * e "integração com o WhatsApp" + "organização no CRM" (acontecem juntas, na
+ * ativação). Nenhuma descrição foi cortada. */
 export const entrega: {
+  rotulo: string;
   titulo: string;
   cta: string;
   subtitulo: string;
   nota: string;
   itens: { icone: LucideIcon; titulo: string; descricao: string }[];
 } = {
+  rotulo: "A entrega",
   titulo: "O que será entregue para as empresas selecionadas",
-  /* Estava escrito direto no componente. Vive aqui pelo mesmo motivo do resto
-     da copy — e usa o rótulo curto, que cabe numa linha em 320px. */
-  cta: "Quero participar da seleção",
+  cta: "Quero candidatar minha empresa",
   subtitulo:
     "A implantação gratuita de um fluxo principal de automação: atendimento, qualificação, vendas, agendamento, follow-up ou suporte, conforme o caso da sua empresa.",
   nota: "Automações, integrações ou fluxos adicionais são avaliados separadamente, com escopo e valor apresentados antes de qualquer execução.",
@@ -173,29 +313,15 @@ export const entrega: {
     },
     {
       icone: Sparkles,
-      titulo: "Personalização para o segmento da empresa",
+      titulo: "Personalização e fluxo principal",
       descricao:
-        "Linguagem, exemplos e critérios ajustados ao segmento em que a empresa atua.",
+        "Linguagem e critérios ajustados ao segmento, com cada etapa definida: o que a IA resolve sozinha e o que vai para uma pessoa.",
     },
     {
       icone: Workflow,
-      titulo: "Um fluxo principal de automação",
+      titulo: "Integração com o WhatsApp e CRM",
       descricao:
-        "Atendimento, qualificação, vendas, agendamento, follow-up ou suporte: cada etapa definida, com o que a IA resolve sozinha e o que vai para uma pessoa.",
-    },
-    {
-      /* Ícone do próprio WhatsApp, e não outro balão genérico: este item
-         repetia o `MessagesSquare` de "Mapeamento das principais conversas",
-         e ícone repetido na mesma lista denuncia catálogo, não intenção. */
-      icone: Smartphone,
-      titulo: "Integração com o WhatsApp",
-      descricao:
-        "A operação rodando no WhatsApp, planejada conforme a viabilidade técnica de cada empresa.",
-    },
-    {
-      icone: KanbanSquare,
-      titulo: "Organização dos contatos no CRM",
-      descricao: "Cada conversa vira um card no funil, com histórico e etapa.",
+        "A operação rodando no WhatsApp, planejada conforme a viabilidade técnica, com cada conversa virando um card no funil.",
     },
     {
       icone: LineChart,
@@ -206,14 +332,93 @@ export const entrega: {
   ],
 };
 
-/* ─── Fora da página desde 2026-08-26 ───────────────────────────────────
+/* ─── Como funciona a seleção ───────────────────────────────────────────
  *
- * `motivo` e `faq` deixaram de ser renderizados: as duas seções saíram da LP
- * a pedido do dono. Os textos continuam aqui porque são a fonte das respostas
- * da Jade (`docs/jade-campanha-10-empresas.md`) — ela responde no WhatsApp o
- * que a página não explica mais. Apagar daqui faria a base do agente e o site
- * divergirem, que é o problema que este arquivo existe para evitar.
- * Para trazer qualquer uma de volta, basta voltar a seção em `Campanha.tsx`. */
+ * Seção nova, para responder antes de o formulário perguntar. Os três passos
+ * saem das `condicoes` (que continuam abaixo, alimentando a Jade): a análise
+ * não é automática, e todo mundo recebe retorno. */
+export const selecao = {
+  rotulo: "O processo",
+  titulo: "Como funciona a seleção",
+  passos: [
+    {
+      titulo: "Candidate sua empresa",
+      texto: "O formulário leva menos de 2 minutos e é gratuito.",
+    },
+    {
+      titulo: "Analisamos sua operação",
+      texto:
+        "A seleção não é automática: avaliamos o perfil, a demanda de atendimento e a disponibilidade para participar do projeto.",
+    },
+    {
+      titulo: "Entramos em contato",
+      texto:
+        "As empresas escolhidas recebem as orientações para a implantação. Todas as candidaturas recebem retorno, selecionadas ou não.",
+    },
+  ],
+  nota: "Enviar uma candidatura não gera nenhuma cobrança ou compromisso.",
+};
+
+/* ─── Perfil ────────────────────────────────────────────────────────────
+ *
+ * Era uma lista de seis com um aviso de exclusão no fim. Virou duas colunas:
+ * a coluna da direita é o que faz a página parecer seleção, e não cadastro —
+ * dizer para quem não é aumenta o valor de estar dentro. Nenhum critério novo
+ * foi inventado: os quatro da direita saem de `perfil.exclusao` e de
+ * `condicoes` (disponibilidade para participar e dar feedback). */
+export const perfil = {
+  rotulo: "Perfil da seleção",
+  titulo: "Esta seleção é para a sua empresa?",
+  positivos: {
+    titulo: "É para sua empresa se…",
+    itens: [
+      "Recebe clientes ou leads pelo WhatsApp",
+      "Demora para responder em alguns horários",
+      "Perde oportunidades por falta de follow-up",
+      "Tem tarefas repetitivas no atendimento",
+      "Quer usar Inteligência Artificial de maneira prática",
+      "Pode colaborar com feedback durante o projeto",
+    ],
+  },
+  negativos: {
+    titulo: "Talvez não seja o momento se…",
+    itens: [
+      "Não tem uma operação de atendimento ativa",
+      "Procura apenas um número de WhatsApp gratuito",
+      "Não pretende participar da implantação",
+      "Não pode dar feedback durante o projeto",
+    ],
+  },
+};
+
+/* ─── Quem está por trás ────────────────────────────────────────────────
+ *
+ * Bloco de confiança sem número inventado. A prova aqui é verificável pelo
+ * próprio visitante: a IA que a campanha oferece é a mesma que atende o
+ * WhatsApp comercial da CompanyChat — dá para testar antes de se candidatar.
+ *
+ * ⚠️ Estrutura preparada para receber métricas reais (empresas atendidas,
+ * automações no ar, volume de atendimentos). Enquanto não houver dado
+ * apurado, `metricas` fica vazio e o componente não renderiza a faixa.
+ * **Não preencher com estimativa.** */
+export const provaEmpresa = {
+  rotulo: "Quem está por trás",
+  titulo: "Tecnologia desenvolvida pela CompanyChat",
+  texto:
+    "A CompanyChat é uma plataforma brasileira de atendimento no WhatsApp com Inteligência Artificial, feita para pequenas e médias empresas: assistente de IA, CRM em funil, múltiplos atendentes e integração com a API Oficial.",
+  destaque:
+    "A mesma tecnologia atende o WhatsApp comercial da CompanyChat hoje — você pode conversar com a nossa IA antes de se candidatar.",
+  botao: "Conversar com a nossa IA",
+  metricas: [] as { numero: string; rotulo: string }[],
+};
+
+/* ─── Fora da página, mantido para a base da Jade ───────────────────────
+ *
+ * `motivo` e `condicoes` não são renderizados: as duas seções saíram da LP a
+ * pedido do dono em 26/08/2026. Os textos continuam aqui porque são a fonte
+ * das respostas da Jade (`docs/jade-campanha-10-empresas.md`) — ela responde no
+ * WhatsApp o que a página não explica. Apagar daqui faria a base do agente e o
+ * site divergirem, que é o problema que este arquivo existe para evitar. */
 
 export const motivo = {
   titulo: "Uma oportunidade ganha-ganha",
@@ -224,29 +429,8 @@ export const motivo = {
     "A seleção não é automática. As candidaturas serão analisadas de acordo com o perfil, a demanda de atendimento e a disponibilidade da empresa para participar do projeto.",
 };
 
-export const perfil = {
-  titulo: "Essa oportunidade é para empresas que:",
-  itens: [
-    "Recebem clientes ou leads pelo WhatsApp",
-    "Perdem oportunidades por demora no atendimento",
-    "Precisam organizar melhor as conversas",
-    "Querem automatizar tarefas repetitivas",
-    "Possuem interesse real em utilizar Inteligência Artificial",
-    "Podem colaborar com feedback durante o projeto",
-  ],
-  exclusao:
-    "Esta seleção não é indicada para quem procura apenas um número de WhatsApp gratuito ou não possui uma operação real para testar.",
-};
-
-/* As condições que valem para quem se candidata.
- *
- * Fora da página desde 2026-08-26, a pedido do dono: entraram ao lado do
- * formulário e saíram na mesma sessão. Continuam aqui porque são a fonte das
- * respostas da Jade — hoje é ela quem explica prazo, escopo e o que acontece
- * depois, já que a página não explica mais.
- *
- * Mesmo texto das respostas que a Jade dá no WhatsApp
- * (`docs/jade-campanha-10-empresas.md`): se um mudar, o outro muda junto. */
+/* As condições que valem para quem se candidata. Fonte das respostas da Jade;
+ * se um mudar, o outro muda junto. */
 export const condicoes = {
   titulo: "Condições da seleção",
   itens: [
@@ -256,21 +440,33 @@ export const condicoes = {
     "O que é gratuito: a implantação de um fluxo principal de automação, com diagnóstico, configuração do assistente, integração disponível, organização no CRM e acompanhamento inicial.",
     "Automações, integrações ou fluxos adicionais são avaliados separadamente, com escopo e valor apresentados antes de qualquer execução.",
     "A participação não cria contratação automática. O período inicial são os 30 primeiros dias após a ativação da operação, e continuar depois é opcional, com as condições apresentadas previamente.",
-    "Todas as candidaturas recebem retorno pelo WhatsApp ou e-mail informados, selecionadas ou não.",
+    "Todas as candidaturas recebem retorno pelo WhatsApp informado, selecionadas ou não.",
   ],
 };
 
 export const formulario = {
   titulo: "Candidate sua empresa",
-  /* "pelo WhatsApp informado" e não "pelo WhatsApp ou e-mail": o formulário
-     deixou de pedir e-mail em 2026-08-26, e prometer um retorno por um canal
-     que não é coletado é promessa que não dá para cumprir. */
   subtitulo:
     "Preencha as informações abaixo. Nossa equipe analisará a candidatura e responderá pelo WhatsApp informado, selecionada ou não.",
   botao: "Enviar minha candidatura",
   botaoEnviando: "Enviando a sua candidatura",
   microcopy:
     "A candidatura não garante a seleção. Apenas 10 empresas serão escolhidas.",
+  seguranca:
+    "Seus dados serão utilizados apenas para analisar a candidatura e para o contato da CompanyChat.",
+
+  /* Rótulos das duas etapas. Duas, e não três: numa landing de anúncio curta,
+     um wizard longo anuncia "isto vai demorar" antes de a pessoa ver o fim. A
+     divisão aqui é só de interface — o envio continua sendo um POST único, com
+     o mesmo `id` de lead do começo ao fim. */
+  etapas: [
+    { titulo: "Sobre você", descricao: "Para sabermos com quem falar" },
+    { titulo: "Sobre sua operação", descricao: "Para avaliarmos a candidatura" },
+  ],
+  avancar: "Continuar",
+  voltar: "Voltar",
+  progresso: (atual: number, total: number) => `Etapa ${atual} de ${total}`,
+
   consentimentoAntes:
     "Concordo que meus dados sejam utilizados pela CompanyChat para analisar minha candidatura e entrar em contato comigo, conforme a",
   consentimentoLink: "Política de Privacidade",
@@ -332,19 +528,26 @@ export const OBJETIVOS = [
    redação não pode cruzar: nada de "gratuito para sempre" (o que é gratuito é a
    implantação inicial, dentro do escopo definido) e nada de prometer integração
    ou recurso que ainda não exista — o que está fora do escopo é tratado à
-   parte, não antecipado aqui. */
+   parte, não antecipado aqui.
+
+   O FAQ voltou para a página em 26/08/2026, depois de ter saído na mesma
+   semana. Duas perguntas novas entraram, ambas ancoradas em capacidade que já
+   existe: a IA direcionar a conversa para uma pessoa, e a configuração ser
+   planejada conforme a viabilidade técnica de cada empresa.
+
+   ⚠️ Duas perguntas do briefing NÃO entraram, por falta de fonte:
+   "quanto tempo leva a implantação" (não há prazo definido em lugar nenhum do
+   projeto) e "preciso trocar meu número" (depende da via de integração, que é
+   decidida caso a caso). Responder qualquer uma seria inventar regra
+   comercial. Quando houver definição, elas entram aqui. */
 export const faq = {
+  rotulo: "Dúvidas",
   titulo: "Perguntas sobre a seleção",
   itens: [
     {
-      pergunta: "A candidatura é gratuita?",
+      pergunta: "A implantação é realmente gratuita?",
       resposta:
-        "Sim. Não existe cobrança para enviar a candidatura, e candidatar-se não gera nenhum compromisso.",
-    },
-    {
-      pergunta: "Todas as empresas serão selecionadas?",
-      resposta:
-        "Não. Serão selecionadas apenas 10 empresas. A seleção não é automática: analisamos o perfil, a demanda de atendimento e a disponibilidade da empresa para participar do projeto.",
+        "É. Para as 10 empresas selecionadas, a implantação de um fluxo principal de automação não tem custo — e a candidatura também não gera cobrança nem compromisso.",
     },
     {
       pergunta: "O que exatamente é gratuito?",
@@ -357,24 +560,34 @@ export const faq = {
         "Automações, integrações ou fluxos adicionais além do fluxo principal são avaliados separadamente, com escopo e valor apresentados antes de qualquer execução. Nada é cobrado por surpresa.",
     },
     {
+      pergunta: "Existe mensalidade depois da implantação?",
+      resposta:
+        "A participação não cria contratação automática. O período inicial são os 30 primeiros dias após a ativação da operação; depois disso, continuar é opcional, e as condições e os valores são apresentados previamente para a empresa decidir.",
+    },
+    {
+      pergunta: "A IA substitui meus atendentes?",
+      resposta:
+        "Não. Ela cuida do que se repete — responder as dúvidas de sempre, qualificar quem chega, agendar e fazer follow-up — e reconhece quando a conversa deve sair dela e ir para uma pessoa do seu time. O atendimento humano continua, com menos ruído e mais contexto.",
+    },
+    {
+      pergunta: "A IA funciona no WhatsApp da minha empresa?",
+      resposta:
+        "Sim. A configuração é planejada de acordo com a operação e com a viabilidade técnica de cada empresa selecionada, usando as integrações já disponíveis na plataforma. Esse é um dos pontos definidos no diagnóstico.",
+    },
+    {
+      pergunta: "Como as empresas serão selecionadas?",
+      resposta:
+        "A seleção não é automática: analisamos o perfil, a demanda de atendimento e a disponibilidade da empresa para participar do projeto. Serão escolhidas apenas 10.",
+    },
+    {
       pergunta: "Até quando dá para se candidatar?",
       resposta:
         "A campanha fica aberta por 30 dias após a publicação ou até que as 10 empresas sejam selecionadas, o que acontecer primeiro.",
     },
     {
-      pergunta: "A empresa terá que contratar depois?",
-      resposta:
-        "Não. A participação não cria contratação automática. O período inicial são os 30 primeiros dias após a ativação da operação; depois disso, continuar é opcional, e as condições e os valores são apresentados previamente para a empresa decidir.",
-    },
-    {
-      pergunta: "A IA funciona no WhatsApp da empresa?",
-      resposta:
-        "Sim. A configuração é planejada de acordo com a operação e com a viabilidade técnica de cada empresa selecionada, usando as integrações já disponíveis na plataforma.",
-    },
-    {
       pergunta: "E se minha empresa não for selecionada?",
       resposta:
-        "Todas as candidaturas recebem retorno. Quem não for selecionado é avisado pelo WhatsApp ou pelo e-mail informados no formulário, depois do encerramento da seleção.",
+        "Todas as candidaturas recebem retorno. Quem não for selecionado é avisado pelo WhatsApp informado no formulário, depois do encerramento da seleção.",
     },
   ],
 };
@@ -382,9 +595,9 @@ export const faq = {
 export const ctaFinal = {
   icone: Target,
   titulo:
-    "Seu WhatsApp pode atender, qualificar e acompanhar clientes mesmo quando sua empresa está fechada",
+    "Enquanto sua equipe está offline, seus clientes continuam chegando",
   texto:
-    "Candidate-se para participar da seleção das 10 empresas que receberão uma implantação personalizada da CompanyChat.",
+    "Sua empresa pode ser uma das 10 selecionadas para receber uma implantação personalizada da CompanyChat.",
   botao: "Quero participar da seleção",
   microcopy: "Candidatura gratuita e sem compromisso.",
 };

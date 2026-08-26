@@ -1,4 +1,4 @@
-import { WhatsAppIcon } from "@/components/WhatsAppButton";
+import { WhatsAppIcon } from "@/components/icones/WhatsAppIcon";
 import { conversa } from "./conteudo";
 
 /* A conversa que a página inteira descreve, mostrada em vez de explicada.
