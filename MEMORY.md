@@ -196,6 +196,84 @@ Caminho comercial principal do site. Detalhes de operação em `docs/funil-teste
 | `db/teste_gratis.sql` | DDL das três tabelas |
 | `tests/unidade/` + `tests/teste-gratis.mjs` + `tests/banco-teste-gratis.mjs` | Testes |
 
+### Campanha "10 Empresas, 10 Assistentes de IA" — rota `/10-empresas` (2026-08-25)
+
+LP de campanha com um objetivo só: candidatura para a seleção de 10 empresas que
+recebem a implantação gratuita de um assistente de IA. Sem menu, sem calculadora e
+mais curta que as LPs de nicho — hero → o que a IA poderá fazer → o que será entregue
+→ por que estamos fazendo isso → para quem é → formulário → FAQ → CTA final.
+
+| Arquivo | Descrição |
+|---------|-----------|
+| `src/app/10-empresas/page.tsx` | Rota, metadados/OG, `noindex` e o Pixel global (`<MetaPixel />`, sem variável própria) |
+| `src/components/dez-empresas/Campanha.tsx` | A landing inteira (client), com as seções e os CTAs |
+| `src/components/dez-empresas/FormularioCandidatura.tsx` | Formulário de 10 campos, validação, estados e pós-envio sem recarregar |
+| `src/components/dez-empresas/conteudo.ts` | Toda a copy, incluindo o FAQ com a regra comercial da campanha |
+| `src/lib/origem.ts` | Saneia o `origem` (jsonb) de qualquer lead: teto de chaves e de tamanho |
+| `tests/campanha-10-empresas.mjs` | Verificação no navegador (`npm run test:campanha10`) |
+| `tests/unidade/origem.test.mjs` | Testes do saneamento da origem |
+
+Decisões desta LP:
+- **Estrutura própria, não a `Landing` das LPs.** Aquela é um funil longo e acoplado a
+  `LPConteudo`; mexer nela para caber uma seção opcional colocaria as quatro LPs em
+  risco. Reaproveitado o sistema visual (tokens, `glass-card-dark`, `glow-border`,
+  `animate-cta-pulse`, padrão de revelação), nenhum arquivo de `components/lp/` tocado.
+- **Mesma integração `/api/lead`.** Nome, empresa, telefone e volume nas colunas
+  próprias; o problema do atendimento em `dor`; e-mail, cidade, segmento, objetivo,
+  motivo, UTMs, referrer, página e `enviado_em` em `origem`, junto de
+  `origem=lp-10-empresas`, `campanha=10-empresas-10-assistentes` e `tipo=candidatura`.
+  **Sem mudança de schema:** a tabela `leads_site` continua igual.
+- **`noindex` e fora do `sitemap.ts`** (decisão do dono, 2026-08-25): a campanha é
+  temporária e uma página de seleção encerrada envelhece mal no resultado de busca.
+  Sitemap listando URL bloqueada seria contradição reportada como erro no Search
+  Console. O tráfego vem de anúncio e link direto; o card de OG continua valendo no
+  compartilhamento. Mesma postura das LPs de nicho.
+- **Um Pixel só.** A página monta `<MetaPixel />` sem `pixelId`, ou seja, o
+  `NEXT_PUBLIC_META_PIXEL_ID` global. A campanha é separada pelos eventos
+  `campanha10_*` dentro do mesmo Pixel, sem variável de ambiente nova.
+- **Escopo comercial aprovado em 2026-08-25:** o que é gratuito é a *implantação
+  inicial*, dentro do escopo definido pela CompanyChat; o que fica fora é tratado
+  separadamente, com valor apresentado antes; a participação não gera contratação
+  automática. Proibido na copy: "gratuito para sempre" e qualquer integração ou
+  recurso que ainda não exista.
+- **Hero fora do `Revelar`.** O `Revelar` (motion com `initial opacity 0`) sai no
+  HTML do servidor já invisível e só acende na hidratação. Como o `<h1>` é o
+  elemento de LCP, isso custava **5,2 s de LCP no Lighthouse mobile** (91% em
+  render delay) e deixava o topo em branco em conexão ruim. Com o hero estático:
+  **LCP 3,0 s e Performance 90** (desktop 100). A animação continua da segunda
+  dobra em diante.
+  > As quatro LPs de nicho têm o mesmo padrão e a mesma penalidade
+  > (`/lp-empresas` medida em Performance 75 / LCP 5,2 s). Não foram alteradas
+  > por decisão de escopo — é a melhoria de maior retorno se um dia forem tocadas.
+- **`preconnect` da Meta em `MetaPixel.tsx`** (2026-08-25): o handshake custava
+  ~360 ms no caminho crítico. Mudança aditiva, vale para todas as páginas com
+  Pixel, sem alterar layout nem o que é carregado.
+- **Analytics só nos domínios de produção** (2026-08-25, vale para o site todo):
+  `analyticsPermitido()` em `src/lib/analytics.ts` libera medição apenas em
+  `companychatia.com.br` e `www.companychatia.com.br`. `MetaPixel` virou client
+  component e não injeta **nada** fora dessa lista — nem script, nem preconnect —
+  e `evento()` não transmite nem enfileira. `localStorage.cc_debug_analytics =
+  "true"` liga só o `dataLayer` local, que não cruza a rede.
+  > `NODE_ENV` não servia: `npm run start` roda em `production` no localhost, e
+  > foi assim que uma sessão de teste chegou a registrar 2 page views no Pixel
+  > real. O host é o único sinal confiável.
+  > O pixel de `<noscript>` saiu junto: era a única parte impossível de
+  > condicionar ao domínio, e no formato atual nunca chegaria a um navegador sem
+  > JS. Perde-se a contagem de visitante sem JavaScript, que não converte.
+- **`entregue` na resposta de `/api/lead`** (2026-08-25): com o banco fora, o
+  lead se perdia e o visitante via "Candidatura recebida!" — `salvarLead` engole
+  o erro e devolve `ok`, o que é certo para o quiz e péssimo para quem preencheu
+  dez campos. A rota agora informa se o lead chegou ao banco **ou** ao webhook, e
+  a candidatura só comemora quando chegou. Campo aditivo: quiz e LPs olham só
+  `ok` e não mudam. O `fetch` do formulário também ganhou teto de 20 s.
+- **`CAMPANHA_ENCERRADA` em `conteudo.ts`**: chave que troca o formulário pelo
+  aviso de seleção encerrada e muda o rótulo dos CTAs, como manda a regra
+  comercial. Ao virá-la, vale revisar também o badge do hero e o selo de vagas,
+  que seguem falando em vaga aberta.
+
+Rascunho da base da Jade: `docs/jade-campanha-10-empresas.md` (aguarda aprovação;
+inclui a versão de encerramento a aplicar quando a seleção fechar).
+
 ---
 
 ## Skills Ativas
@@ -1148,6 +1226,48 @@ sem token e responde `envioDesligado`, que nenhum job nasceu, que nenhum evento 
 existe e que o lead enviado à mão foi gravado inteiro. Saída mascara nome, e-mail e
 telefone. Validado: 25/25.
 
+### 2026-08-25 — Publicação em modo somente captação + incidente de 8 dias resolvido
+
+**O site estava perdendo lead em silêncio desde 17/08 às 14:33.** A porta pública do
+Postgres foi fechada em algum momento, mas o `DATABASE_URL` da aplicação continuava
+apontando para `72.60.152.110:5435`: `ECONNREFUSED`, 26 ocorrências no log, `leads_site`
+com **0 linhas**. Atingia o quiz `/comecar` e as quatro LPs de nicho, não só o funil novo.
+Descoberto ao conferir os pré-requisitos da publicação, não por monitoramento.
+
+**Corrigido pela raiz.** Os dois containers estão na mesma rede `coolify` e o nome interno
+agora resolve (Coolify subiu de 4.1.2 para 4.3.9), o que fecha a pendência registrada em
+2026-08-06. `DATABASE_URL` passou a
+`postgres://***:***@zodw9ve89i8c3m0hspu3qhqy:5432/leads_site?sslmode=disable`. A porta
+pública fica fechada: o banco deixou de estar exposto na internet.
+
+**Como alterar variável no Coolify por fora do painel:** o valor é cifrado com a APP_KEY
+(payload Laravel), então escrever direto no `environment_variables` corrompe. O caminho é
+`docker exec coolify php artisan tinker` mexendo pelo modelo `EnvironmentVariable`.
+
+**As "duplicatas" de `LEAD_WEBHOOK_*` não eram erro.** O Coolify cria uma contrapartida
+com `is_preview=true` para cada variável. Alarme falso meu; fica registrado para não
+custar investigação de novo.
+
+**Publicado.** Commit `3980fb6` em `origin/main`, redeploy só da `site-companychat`
+(applicationId 3, uuid `rk7m8v4yjc9q4d7vu0jfae2c`), imagem na tag `3980fb6…`, deploy
+`finished`. As 10 rotas públicas respondem 200, `/teste-gratis` deixou de dar 404, zero
+5xx, zero erro de conexão, e os outros 35 containers da VPS ficaram intactos. Confirmado
+que a aplicação voltou a gravar: o evento da validação que disparei chegou na tabela.
+
+**Migration aplicada** no `leads_site` com backup prévio em
+`/root/backups/leads-site-pre-teste-gratis-2026-08-25-1742.sql.gz` (gzip íntegro, tabela
+estava vazia por causa do incidente). Três tabelas e os dois índices únicos conferidos.
+
+⚠️ **Não existe backup externo.** Nenhum `s3_storages` cadastrado e zero agendamentos de
+backup em toda a instância do Coolify — para nenhum banco, não só este. O backup que criei
+mora na própria VPS: protege contra erro de operação, não contra perder a máquina. Antes
+de receber lead real, cadastrar um S3 e agendar backup diário do `leads-site`.
+
+**Defeito corrigido na auditoria:** ela reprovava um deploy recém-publicado porque exigia
+`free_trial_captacao_sem_envio > 0`, que só existe depois do primeiro lead. Zero ali
+significa "ninguém se cadastrou ainda", não "captação quebrada". A verificação passou para
+dentro do bloco que só roda quando há lead.
+
 ---
 
 ## Aprendizados e Padrões
@@ -1170,6 +1290,25 @@ telefone. Validado: 25/25.
 ---
 
 ## Próximos Passos
+
+### Campanha `/10-empresas` (antes de divulgar)
+
+- [x] ~~Regras comerciais do FAQ~~ → definidas pelo dono em 2026-08-25 (implantação
+      inicial gratuita dentro do escopo, extras à parte, sem contratação automática)
+- [x] ~~Pixel próprio da campanha~~ → descartado: reutiliza o Pixel global
+- [x] ~~Indexação~~ → `noindex` e fora do sitemap enquanto for campanha temporária
+- [ ] **Confirmar `DATABASE_URL` e `LEAD_WEBHOOK_URL` no painel do deploy antes de
+      publicar.** Não são observáveis de fora (server-side) e o banco não aceita
+      conexão de fora da VPS. Sem nenhum dos dois, a candidatura passa a mostrar erro
+      em vez de sucesso falso — comportamento correto, mas ninguém quer descobrir com
+      a campanha no ar. O painel `/leads` autenticado avisa quando o banco falta.
+- [ ] **Encerramento da campanha é manual.** Se o deploy for em 25/08/2026, o prazo
+      de 30 dias vence em **24/09/2026 23h59 (Brasília)** — nada no código fecha
+      sozinho. Virar `CAMPANHA_ENCERRADA` para `true` em
+      `src/components/dez-empresas/conteudo.ts` e publicar. Procedimento completo em
+      `docs/jade-campanha-10-empresas.md`, seção "Período da campanha e como encerrar".
+- [ ] **Aprovar `docs/jade-campanha-10-empresas.md`** e só então aplicar na base da Jade,
+      para ela não desconhecer a seleção nem prometer condição diferente da página
 
 ### Funil de teste grátis (bloqueantes para o funil ir ao ar)
 
