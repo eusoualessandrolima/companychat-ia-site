@@ -395,7 +395,9 @@ export const perfil = {
  *
  * Bloco de confiança sem número inventado. A prova aqui é verificável pelo
  * próprio visitante: a IA que a campanha oferece é a mesma que atende o
- * WhatsApp comercial da CompanyChat — dá para testar antes de se candidatar.
+ * WhatsApp comercial da CompanyChat. Sem convite para ir conversar lá, porém —
+ * a página tem um objetivo só, e o WhatsApp continua no rodapé para quem
+ * procurar.
  *
  * ⚠️ Estrutura preparada para receber métricas reais (empresas atendidas,
  * automações no ar, volume de atendimentos). Enquanto não houver dado
@@ -407,8 +409,7 @@ export const provaEmpresa = {
   texto:
     "A CompanyChat é uma plataforma brasileira de atendimento no WhatsApp com Inteligência Artificial, feita para pequenas e médias empresas: assistente de IA, CRM em funil, múltiplos atendentes e integração com a API Oficial.",
   destaque:
-    "A mesma tecnologia atende o WhatsApp comercial da CompanyChat hoje — você pode conversar com a nossa IA antes de se candidatar.",
-  botao: "Conversar com a nossa IA",
+    "A mesma tecnologia atende o WhatsApp comercial da CompanyChat hoje.",
   metricas: [] as { numero: string; rotulo: string }[],
 };
 
@@ -463,6 +464,21 @@ export const formulario = {
     { titulo: "Sobre você", descricao: "Para sabermos com quem falar" },
     { titulo: "Sobre sua operação", descricao: "Para avaliarmos a candidatura" },
   ],
+
+  /* Rótulos dos campos.
+     Na etapa 1 são substantivos, porque nome e telefone se explicam sozinhos.
+     Na etapa 2 são perguntas: ali a pessoa está contando sobre a operação
+     dela, e "Contatos por mês" soava como célula de planilha. */
+  campos: {
+    nome: "Nome completo",
+    empresa: "Nome da empresa",
+    telefone: "WhatsApp com DDD",
+    telefoneAjuda: "É por aqui que respondemos a sua candidatura.",
+    segmento: "Qual é o segmento da sua empresa?",
+    volume: "Quantos contatos você recebe por mês?",
+    objetivos: "O que você quer que a IA faça?",
+    objetivosAjuda: "Marque quantas opções quiser.",
+  },
   avancar: "Continuar",
   voltar: "Voltar",
   progresso: (atual: number, total: number) => `Etapa ${atual} de ${total}`,
@@ -514,6 +530,11 @@ export const VOLUMES = [
   "Ainda não sei",
 ];
 
+/* Múltipla escolha desde 26/08/2026, e não mais um `<select>` de uma opção só.
+   A operação de uma empresa raramente tem um objetivo isolado — quem quer
+   qualificar lead quase sempre quer agendar também — e obrigar a escolher um
+   jogava fora justamente o que ajuda a entender o caso na hora de selecionar.
+   "Outro" saiu: sem campo aberto ao lado, ele não informava nada. */
 export const OBJETIVOS = [
   "Atender clientes",
   "Qualificar leads",
@@ -521,7 +542,7 @@ export const OBJETIVOS = [
   "Agendar reuniões ou consultas",
   "Fazer follow-up",
   "Suporte e pós-venda",
-  "Outro",
+  "Organizar as conversas no CRM",
 ];
 
 /* Regra comercial da campanha, aprovada em 2026-08-25. Duas fronteiras que a

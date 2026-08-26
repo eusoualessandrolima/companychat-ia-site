@@ -230,10 +230,17 @@ Decisões desta LP:
   risco. Reaproveitado o sistema visual (tokens, `glass-card-dark`, `glow-border`,
   `animate-cta-pulse`, padrão de revelação), nenhum arquivo de `components/lp/` tocado.
 - **Mesma integração `/api/lead`.** Nome, empresa, telefone e volume nas colunas
-  próprias; o problema do atendimento em `dor`; e-mail, cidade, segmento, objetivo,
-  motivo, UTMs, referrer, página e `enviado_em` em `origem`, junto de
+  próprias; os objetivos escolhidos em `dor`, unidos por ` · `; e-mail, cidade,
+  segmento, `objetivos` (a mesma string, para quem filtra por `origem`), consentimento
+  com versão e data, UTMs, referrer, página e `enviado_em` em `origem`, junto de
   `origem=lp-10-empresas`, `campanha=10-empresas-10-assistentes` e `tipo=candidatura`.
   **Sem mudança de schema:** a tabela `leads_site` continua igual.
+- **A etapa 2 pergunta objetivos, não o problema (2026-08-26).** O campo livre
+  "descreva seu problema" virou caixas de seleção múltipla: quem candidata marca o que
+  quer que a IA faça. Texto livre em formulário de campanha rende resposta curta e
+  inútil ("atendimento ruim") e ainda cria fricção no celular; a lista fechada devolve
+  dado comparável entre candidatas e escolhe mais de um objetivo quando é o caso.
+  A copy das opções vive em `conteudo.ts`; `dor` continua sendo a coluna de destino.
 - **`noindex` e fora do `sitemap.ts`** (decisão do dono, 2026-08-25): a campanha é
   temporária e uma página de seleção encerrada envelhece mal no resultado de busca.
   Sitemap listando URL bloqueada seria contradição reportada como erro no Search
