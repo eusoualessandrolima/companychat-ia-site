@@ -1,8 +1,6 @@
 import { Simbolo } from "@/components/Logo";
-import { WhatsAppIcon } from "@/components/icones/WhatsAppIcon";
 import Revelar from "@/components/comum/Revelar";
 import Rotulo from "@/components/comum/Rotulo";
-import LinkWhatsApp from "./LinkWhatsApp";
 import { provaEmpresa } from "./conteudo";
 
 /* Confiança sem número inventado.
@@ -32,17 +30,13 @@ export default function SecaoProva() {
                 {provaEmpresa.texto}
               </p>
 
+              {/* Sem botão para o WhatsApp aqui, a pedido do dono: a página
+                  tem um objetivo só, e um segundo caminho de saída ao lado do
+                  argumento de confiança tirava gente do funil da candidatura
+                  em vez de trazer. O WhatsApp continua no rodapé. */}
               <p className="mt-5 border-l-2 border-primary/40 pl-4 text-[0.9375rem] leading-relaxed text-dark-text/90 sm:text-base">
                 {provaEmpresa.destaque}
               </p>
-
-              <LinkWhatsApp
-                local="prova"
-                className="mt-6 inline-flex min-h-11 items-center justify-center gap-2.5 rounded-full border border-dark-border bg-dark-surface px-6 py-3 text-[0.9375rem] font-semibold text-dark-text transition-colors hover:border-primary/40 hover:text-primary"
-              >
-                <WhatsAppIcon className="h-4 w-4 text-[#25D366]" />
-                {provaEmpresa.botao}
-              </LinkWhatsApp>
             </div>
           </div>
         </Revelar>
