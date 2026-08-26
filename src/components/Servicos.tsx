@@ -69,7 +69,7 @@ const servicos = [
 
 export default function Servicos() {
   return (
-    <section id="servicos" className="relative py-24">
+    <section id="servicos" className="superficie-areia relative py-24">
       <div className="mx-auto max-w-6xl px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

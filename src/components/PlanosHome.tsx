@@ -9,7 +9,7 @@ import { planos } from "./planos/planos-data";
 /** Resumo dos planos na home. O detalhamento completo vive em /planos. */
 export default function PlanosHome() {
   return (
-    <section id="planos" className="relative overflow-hidden bg-dark-base py-24">
+    <section id="planos" className="atmosfera-escura-alt relative overflow-hidden py-24">
       <div className="pointer-events-none absolute inset-0">
         <div
           className="absolute -top-32 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full opacity-[0.09]"

@@ -41,6 +41,14 @@
 
   --color-text-secondary: #505b57; /* neutral.600 — 5,98:1 sobre section */
 
+  /* Escala areia do guia. Ela existe para "respiro" — a instrução da página 7
+     é literal: "reserve #E5E0D6 para páginas de entrada, comunicação e
+     respiro". É o degrau que faltava entre o branco e o quase-preto: hoje o
+     site salta 203x de luminância entre seções vizinhas, e com um tom quente
+     no meio o salto vira 1,2x seguido de 37x. */
+  --color-sand: #f7f4ed; /* sand.50 — respiro em seção clara */
+  --color-sand-warm: #e5e0d6; /* sand.100 — entrada e comunicação */
+
   /* Acentos dos cards de solução e do mockup de CRM. Eles vivem quase sempre
      em superfície escura, e são usados nos dois papéis: como texto e como
      preenchimento de etiqueta.
@@ -85,6 +93,40 @@ body {
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
+}
+
+/* ── Ambientação das seções escuras ──
+ *
+ * O problema não era o site ser escuro demais — a proporção clara (75%) é
+ * próxima da das referências. Era o **salto**: entre uma seção clara e a
+ * seguinte havia 203x de diferença de luminância, e o escuro era quase-preto
+ * neutro, sem cor. Preto chapado lê como peso; escuro com cor lê como
+ * profundidade.
+ *
+ * A receita abaixo é a do próprio guia (página 8, "Receitas de atmosfera"),
+ * copiada como está: o `#071011` continua sendo a base do modo escuro, como o
+ * guia manda, e ganha um brilho verde no canto superior esquerdo.
+ *
+ * O gradiente é decorativo e fica **atrás** do conteúdo — nenhum texto se
+ * apoia nele, o que respeita o aviso do guia de não pôr texto direto sobre
+ * gradiente verde. O contraste medido continua o mesmo do fundo sólido. */
+.atmosfera-escura {
+  background:
+    radial-gradient(circle at 15% 15%, rgba(0, 200, 150, 0.18), transparent 38%),
+    var(--color-dark-base);
+}
+
+/* Variante para as seções escuras do meio da página: o brilho entra pelo lado
+   oposto, para as três não parecerem a mesma seção repetida. */
+.atmosfera-escura-alt {
+  background:
+    radial-gradient(circle at 85% 20%, rgba(0, 200, 150, 0.14), transparent 42%),
+    var(--color-dark-base);
+}
+
+/* Transição quente do guia: fecha o degrau entre o branco e o escuro. */
+.superficie-areia {
+  background: linear-gradient(160deg, var(--color-sand-warm) 0%, var(--color-sand) 55%, var(--color-background) 100%);
 }
 
 /* Onze blocos entram deslizando na horizontal (`initial={{ x: 28 }}` e

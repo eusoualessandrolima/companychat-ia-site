@@ -61,7 +61,7 @@ const portes = [
 
 export default function PorteEmpresa() {
   return (
-    <section id="porte" className="relative overflow-hidden bg-dark-base py-24">
+    <section id="porte" className="atmosfera-escura relative overflow-hidden py-24">
       {/* Faixa escura: quebra a sequência de seções claras e dá respiro à página */}
       <div
         className="pointer-events-none absolute inset-0 opacity-60"

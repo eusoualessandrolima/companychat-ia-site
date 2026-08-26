@@ -110,7 +110,7 @@ function LeadCard({ card, accent }: { card: Card; accent: string }) {
 
 export default function CrmKanban() {
   return (
-    <section id="crm-kanban" className="relative overflow-hidden bg-dark-base py-24">
+    <section id="crm-kanban" className="atmosfera-escura-alt relative overflow-hidden py-24">
       {/* aurora accents */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -left-32 top-10 h-96 w-96 rounded-full bg-primary/8 blur-3xl" />

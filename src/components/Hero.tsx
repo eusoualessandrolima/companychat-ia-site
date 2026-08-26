@@ -393,7 +393,7 @@ function Smartphone() {
 /* ─── Hero ───────────────────────────────────────────── */
 export default function Hero() {
   return (
-    <section className="relative flex min-h-screen items-center overflow-hidden bg-dark-base pt-16">
+    <section className="atmosfera-escura relative flex min-h-screen items-center overflow-hidden pt-16">
       {/* Fundo: aurora + pontos de profundidade */}
       <div className="pointer-events-none absolute inset-0">
         {/* Malha de pontos: textura de fundo que some nas bordas para não

@@ -205,7 +205,7 @@ export default function Nichos() {
   }, [aVista, movimentoReduzido, deslizar]);
 
   return (
-    <section ref={secaoRef} id="nichos" className="relative py-24">
+    <section ref={secaoRef} id="nichos" className="superficie-areia relative py-24">
       <div className="mx-auto max-w-6xl px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

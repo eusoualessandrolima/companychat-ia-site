@@ -53,7 +53,7 @@ const garantias = [
 
 export default function Garantias() {
   return (
-    <section id="garantias" className="relative bg-section py-24">
+    <section id="garantias" className="superficie-areia relative py-24">
       <div className="mx-auto max-w-6xl px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
