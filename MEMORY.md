@@ -1411,6 +1411,30 @@ a operação do cliente e prejudicava o pitch. **Nenhum valor de plano aparece m
 
 ---
 
+### 2026-08-26 — O site não tem deploy automático: o repositório está sem webhook
+
+Três commits de `main` ficaram sete horas fora do ar sem ninguém notar, incluindo o que
+tirava o preço da vitrine. O sintoma que puxou o fio foi outro: `/favicon.ico`,
+`/apple-icon.png`, `/manifest.webmanifest` e `/icons/*.png` respondiam 404 em produção
+mesmo estando commitados.
+
+- **Causa:** `gh api repos/eusoualessandrolima/companychat-ia-site/hooks` devolve `[]`.
+  O Coolify tem `is_auto_deploy_enabled = true` e guarda o secret do webhook, mas o GitHub
+  nunca chama ninguém. **Todo deploy que já aconteceu foi disparado à mão pelo painel.**
+- **O que estava no ar:** container criado 15:12 com o commit `1b2eb33` (12:58). Faltavam
+  `165d215` (verde antigo), `86ed4f3` (favicon e identidade v3) e `036546b` (preço fora)
+- **Resolvido na hora:** deploy manual disparado, HEAD `036546b` publicado, os seis assets
+  voltaram a 200 e o R$ 497 saiu da home. O webhook **não** foi criado — decisão do dono
+- **O `R$ 2.500` e o `R$ 4.000` que sobram no HTML da home não são preço:** são valores de
+  negociação dos cards fictícios do mock em `CrmKanban.tsx` (linhas 57 e 65). Quem for
+  auditar "preço sumiu do site" com `grep 'R\$'` vai tropeçar neles
+
+**Onde o site roda de verdade:** VPS Hostinger `72.60.152.110` (KVM 4, Ubuntu 24.04 com
+Coolify), painel em `https://coolify.companychatia.com.br`, aplicação id 3, uuid
+`rk7m8v4yjc9q4d7vu0jfae2c`. O domínio aponta direto para esse IP.
+
+---
+
 ## Aprendizados e Padrões
 
 - Tailwind v4 não usa `tailwind.config.js` — toda configuração fica em `globals.css`
@@ -1418,8 +1442,9 @@ a operação do cliente e prejudicava o pitch. **Nenhum valor de plano aparece m
 - Estrutura de componentes: um arquivo `.tsx` por seção da landing page
 - Animações via Framer Motion — não usar CSS puro para animações complexas
 - CSS variables para tokens de cor e tipografia — centralizar em `globals.css`
-- Verificação de deploy: usar `vercel ls` (status `Ready`) em vez de polling de `curl` no domínio de produção, que dispara a proteção antibot da Vercel (ver incidente de 2026-07-28)
-- "Está no ar" exige três evidências, todas fora da máquina local: working tree limpo, HEAD publicado no remoto e o deploy ativo em `vercel ls` apontando para esse commit. Em 2026-08-03 uma sessão registrou o hero como publicado tendo verificado só o `localhost`; o trabalho ficou quatro dias parado sem commit
+- ~~Verificação de deploy: usar `vercel ls`~~ — **o site não roda mais na Vercel.** Desde a migração para o Coolify, a checagem é `docker ps --filter name=rk7m8v4yjc9q4d7vu0jfae2c --format "{{.Image}}"` na VPS: a tag da imagem **é** o SHA do commit publicado. As menções a "cadastrar no Vercel" nos Próximos Passos são anteriores à migração e devem ser lidas como "cadastrar no painel do Coolify"
+- "Está no ar" exige três evidências, todas fora da máquina local: working tree limpo, HEAD publicado no remoto e o container ativo com a tag igual a esse commit. Em 2026-08-03 uma sessão registrou o hero como publicado tendo verificado só o `localhost`; o trabalho ficou quatro dias parado sem commit. Em 2026-08-26 o inverso aconteceu — commit e push corretos, deploy nunca disparado (ver o incidente do webhook ausente)
+- Assets estáticos que respondem 404 em produção mas existem no repositório quase nunca são bug de código: são build antigo. `public/` e os arquivos especiais de `src/app/` entram na imagem, então um 404 neles prova que a imagem no ar é anterior ao commit que os adicionou. Confirme pela tag do container antes de investigar o `Dockerfile`
 - Botões e links de header ou de par lado a lado precisam de `whitespace-nowrap`, senão quebram em duas linhas em 768px e em cards estreitos
 - Validação visual: use o build de produção numa porta dedicada (`npx next start -p 3005`). O servidor de desenvolvimento recarrega a página na primeira compilação, o que derruba a captura do MCP do Chrome e esconde os elementos animados por Framer Motion
 - Elemento `fixed` no canto inferior direito cobre conteúdo em telas estreitas: em 390px, qualquer bloco centralizado com mais de ~262px passa por baixo. Não adianta caçar a seção "culpada" — resolve-se encolhendo o que está fixo (foi o que fizemos com os botões de WhatsApp em 2026-08-15)
@@ -1431,6 +1456,18 @@ a operação do cliente e prejudicava o pitch. **Nenhum valor de plano aparece m
 ---
 
 ## Próximos Passos
+
+### Deploy (o automático está quebrado)
+
+- [ ] **Criar o webhook no GitHub** — enquanto não existir, todo merge em `main` exige
+      deploy manual pelo painel. Payload URL
+      `https://coolify.companychatia.com.br/webhooks/source/github/events/manual`,
+      evento `push`; o secret já existe no Coolify (aplicação id 3, Configuration →
+      Webhooks). Adiado por decisão do dono em 2026-08-26
+- [ ] **Mergear o PR #1** (`redesign/10-empresas` → `main`) e **disparar o deploy à mão
+      logo depois** — sem o webhook, o merge sozinho não publica nada
+- [x] ~~Favicon, manifest e ícones 404 em produção~~ → era build antigo; resolvido com o
+      deploy manual de `036546b` em 2026-08-26
 
 ### Campanha `/10-empresas` (antes de divulgar)
 
