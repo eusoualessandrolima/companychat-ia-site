@@ -38,7 +38,7 @@ export default function DisparosPage() {
   return (
     <>
       <ApiHeader />
-      <main>
+      <main id="conteudo" tabIndex={-1}>
         <DisparoHero />
         <Fluxo />
         <Recursos />

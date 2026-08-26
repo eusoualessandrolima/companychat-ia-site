@@ -29,7 +29,8 @@ const SEGMENTOS = [
 ];
 
 type Campos = { nome: string; empresa: string; telefone: string; segmento: string };
-type Erros = Partial<Record<keyof Campos, string>>;
+/* `geral` para a falha de gravação, que não pertence a nenhum campo. */
+type Erros = Partial<Record<keyof Campos | "geral", string>>;
 
 function mascararTelefone(valor: string) {
   const d = valor.replace(/\D/g, "").slice(0, 11);
@@ -62,6 +63,10 @@ export default function ModalLead({
   const origem = useRef<Record<string, string>>({});
   const idLead = useRef("");
   const painel = useRef<HTMLDivElement>(null);
+  /* Trava de envio fora do estado: dois toques rápidos disparam os dois
+     manipuladores antes de o React repintar com `enviando`. */
+  const emVoo = useRef(false);
+  const tituloSucesso = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     if (!aberto) return;
@@ -107,6 +112,11 @@ export default function ModalLead({
     };
   }, [aberto, aoFechar]);
 
+  /* Leva o foco para a confirmação quando ela substitui o formulário. */
+  useEffect(() => {
+    if (enviado) tituloSucesso.current?.focus();
+  }, [enviado]);
+
   if (!aberto) return null;
 
   /* O número simulado viaja junto com o lead: quem atender já abre a conversa
@@ -118,7 +128,7 @@ export default function ModalLead({
     economia_anual: moeda(resultado.prejuizoAnual),
   };
 
-  function registrar(extras: { clicouWhatsapp?: boolean } = {}) {
+  async function registrar(extras: { clicouWhatsapp?: boolean } = {}) {
     if (!idLead.current) idLead.current = crypto.randomUUID();
 
     const corpo = JSON.stringify({
@@ -137,17 +147,27 @@ export default function ModalLead({
         "/api/lead",
         new Blob([corpo], { type: "application/json" })
       );
-      return Promise.resolve();
+      return Promise.resolve(true);
     }
 
-    return fetch("/api/lead", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: corpo,
-      keepalive: true,
-    }).catch(() => {
-      /* silencioso: nada trava a tela de sucesso */
-    });
+    /* No envio o desfecho importa: `entregue: false` significa que nem o
+       banco nem o CRM ficaram com o lead. Anunciar sucesso aí promete um
+       contato que não vai acontecer e ainda conta uma conversão inexistente
+       no Pixel. */
+    try {
+      const resposta = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: corpo,
+        keepalive: true,
+        signal: AbortSignal.timeout(20_000),
+      });
+      if (!resposta.ok) return false;
+      const dados = await resposta.json().catch(() => null);
+      return !(dados && dados.entregue === false);
+    } catch {
+      return false;
+    }
   }
 
   async function enviar(evento: React.FormEvent) {
@@ -163,14 +183,27 @@ export default function ModalLead({
 
     if (Object.keys(encontrados).length > 0) {
       setErros(encontrados);
+      // Sem mover o foco, o leitor de tela não anuncia nada e o erro fica
+      // fora do campo de visão.
+      document.getElementById(`calc-${Object.keys(encontrados)[0]}`)?.focus();
       return;
     }
 
+    if (emVoo.current) return;
+    emVoo.current = true;
+
     setErros({});
     setEnviando(true);
-    await registrar();
-    window.fbq?.("track", "Lead");
+    const entregue = await registrar();
     setEnviando(false);
+    emVoo.current = false;
+
+    if (!entregue) {
+      setErros({ geral: "Não conseguimos registrar os seus dados agora. Tente de novo em instantes." });
+      return;
+    }
+
+    window.fbq?.("track", "Lead");
     setEnviado(true);
   }
 
@@ -261,7 +294,10 @@ export default function ModalLead({
         </button>
 
         {enviado ? (
-          <div className="py-2 text-center">
+          /* `role="status"` porque o formulário é substituído: sem ele o
+             botão que tinha o foco é desmontado, o foco cai no painel e nada
+             é anunciado. */
+          <div role="status" className="py-2 text-center">
             <motion.span
               initial={{ scale: 0.6, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -271,7 +307,11 @@ export default function ModalLead({
               <Check aria-hidden="true" className="h-8 w-8 text-primary" />
             </motion.span>
 
-            <h2 className="mt-6 text-2xl font-bold text-dark-text">
+            <h2
+              ref={tituloSucesso}
+              tabIndex={-1}
+              className="mt-6 text-2xl font-bold text-dark-text outline-none"
+            >
               Pronto, {campos.nome.trim().split(" ")[0]}.
               <span className="mt-1 block text-primary">
                 Recebemos a sua simulação.
@@ -346,6 +386,7 @@ export default function ModalLead({
                   {erros[item.campo] && (
                     <p
                       id={`erro-calc-${item.campo}`}
+                      role="alert"
                       className="mt-1.5 text-sm text-red-400"
                     >
                       {erros[item.campo]}
@@ -398,12 +439,21 @@ export default function ModalLead({
                   />
                 </div>
                 {erros.segmento && (
-                  <p id="erro-calc-segmento" className="mt-1.5 text-sm text-red-400">
+                  <p id="erro-calc-segmento" role="alert" className="mt-1.5 text-sm text-red-400">
                     {erros.segmento}
                   </p>
                 )}
               </div>
             </div>
+
+            {erros.geral && (
+              <p
+                role="alert"
+                className="mt-5 rounded-2xl border border-red-400/40 bg-red-500/10 px-4 py-3 text-sm text-red-400"
+              >
+                {erros.geral}
+              </p>
+            )}
 
             <button
               type="submit"

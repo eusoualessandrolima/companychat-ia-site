@@ -38,7 +38,7 @@ export default function AssistenteIaPage() {
   return (
     <>
       <ApiHeader />
-      <main>
+      <main id="conteudo" tabIndex={-1}>
         <AgenteHero />
         <Cenas />
         <Capacidades />

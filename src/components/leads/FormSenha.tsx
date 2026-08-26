@@ -41,7 +41,11 @@ export default function FormSenha() {
   }
 
   return (
-    <div className="flex min-h-svh items-center justify-center bg-dark-base px-4">
+    <main
+      id="conteudo"
+      tabIndex={-1}
+      className="flex min-h-svh items-center justify-center bg-dark-base px-4"
+    >
       <form
         onSubmit={entrar}
         className="w-full max-w-sm rounded-3xl border border-dark-border bg-dark-surface p-8 shadow-2xl shadow-black/50"
@@ -61,7 +65,14 @@ export default function FormSenha() {
           Informe a senha para ver os contatos do quiz.
         </p>
 
+        {/* O rótulo é visualmente oculto porque o `h1` acima já diz o que é a
+            tela — mas o campo precisa de nome próprio: o placeholder some ao
+            digitar e não vale como nome acessível. */}
+        <label htmlFor="senha-painel" className="sr-only">
+          Senha do painel
+        </label>
         <input
+          id="senha-painel"
           type="password"
           autoFocus
           autoComplete="current-password"
@@ -72,11 +83,18 @@ export default function FormSenha() {
             if (erro) setErro("");
           }}
           aria-invalid={Boolean(erro)}
+          aria-describedby={erro ? "erro-senha" : undefined}
           className={`mt-6 w-full rounded-xl border bg-dark-base px-4 py-3 text-dark-text placeholder:text-dark-muted/60 transition-colors focus:outline-none ${
             erro ? "border-red-400/70" : "border-dark-border focus:border-primary"
           }`}
         />
-        {erro && <p className="mt-2 text-sm text-red-400">{erro}</p>}
+        {/* `role="alert"` para o motivo ser anunciado: sozinho, o
+            `aria-invalid` diz "inválido" sem dizer por quê. */}
+        {erro && (
+          <p id="erro-senha" role="alert" className="mt-2 text-sm text-red-400">
+            {erro}
+          </p>
+        )}
 
         <button
           type="submit"
@@ -93,6 +111,6 @@ export default function FormSenha() {
           )}
         </button>
       </form>
-    </div>
+    </main>
   );
 }

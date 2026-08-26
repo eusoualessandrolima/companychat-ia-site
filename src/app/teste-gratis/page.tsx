@@ -74,7 +74,7 @@ export default function TesteGratis() {
       {/* `overflow-x: clip` e não `hidden`: `hidden` viraria contêiner de
           rolagem e mataria o `sticky` do formulário. Mesmo motivo da regra de
           `section` em `globals.css`. */}
-      <main className="relative overflow-x-clip bg-dark-base pt-24 pb-20 sm:pt-28">
+      <main id="conteudo" tabIndex={-1} className="relative overflow-x-clip bg-dark-base pt-24 pb-20 sm:pt-28">
         {/* Aurora e malha de pontos: mesma abertura do hero da home, para a
             página não parecer de outro site. */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">

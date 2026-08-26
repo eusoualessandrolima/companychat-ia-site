@@ -38,7 +38,7 @@ export default function ApiOficialPage() {
   return (
     <>
       <ApiHeader />
-      <main>
+      <main id="conteudo" tabIndex={-1}>
         <ApiHero />
         <Janela24h />
         <Categorias />

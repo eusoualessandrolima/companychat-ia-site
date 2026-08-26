@@ -24,7 +24,8 @@ type Campos = {
   segmento: string;
 };
 
-type Erros = Partial<Record<keyof Campos, string>>;
+/* `geral` para a falha de gravação, que não pertence a nenhum campo. */
+type Erros = Partial<Record<keyof Campos | "geral", string>>;
 
 function mascararTelefone(valor: string) {
   const d = valor.replace(/\D/g, "").slice(0, 11);
@@ -67,6 +68,16 @@ export default function FormularioLead({
   /** Identidade do lead no banco, criada uma vez por visita: o clique no
    *  WhatsApp atualiza a mesma linha em vez de criar outra. */
   const idLead = useRef("");
+  /* Trava de envio fora do estado: dois toques rápidos disparam os dois
+     manipuladores antes de o React repintar com `enviando`, e o `disabled`
+     do botão chega tarde. Sem ela, o `fbq` conta duas conversões. */
+  const emVoo = useRef(false);
+  const tituloSucesso = useRef<HTMLHeadingElement>(null);
+
+  /* Leva o foco para a confirmação quando ela substitui o formulário. */
+  useEffect(() => {
+    if (enviado) tituloSucesso.current?.focus();
+  }, [enviado]);
 
   // De onde veio o clique do anúncio. Lido do window para a página
   // continuar estática, sem fronteira de Suspense.
@@ -91,7 +102,7 @@ export default function FormularioLead({
     origem.current = coletado;
   }, []);
 
-  function registrar(extras: { clicouWhatsapp?: boolean } = {}) {
+  async function registrar(extras: { clicouWhatsapp?: boolean } = {}) {
     if (!idLead.current) idLead.current = crypto.randomUUID();
 
     /* etapa 1 + concluido: na régua do painel /leads, contato completo que
@@ -109,22 +120,34 @@ export default function FormularioLead({
     });
 
     // `sendBeacon` sobrevive à saída da página no toque do botão do WhatsApp.
+    // Aqui o silêncio é correto: a pessoa já está indo para o WhatsApp e a
+    // medição não pode segurar a navegação.
     if (extras.clicouWhatsapp && navigator.sendBeacon) {
       navigator.sendBeacon(
         "/api/lead",
         new Blob([corpo], { type: "application/json" })
       );
-      return Promise.resolve();
+      return Promise.resolve(true);
     }
 
-    return fetch("/api/lead", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: corpo,
-      keepalive: true,
-    }).catch(() => {
-      /* silencioso de propósito: nada trava a tela de sucesso */
-    });
+    /* No envio do formulário o desfecho importa. `entregue: false` significa
+       que nem o banco nem o CRM ficaram com o lead — anunciar sucesso aí é
+       prometer um contato que não vai acontecer, e ainda contar uma conversão
+       que não existe no Pixel. */
+    try {
+      const resposta = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: corpo,
+        keepalive: true,
+        signal: AbortSignal.timeout(20_000),
+      });
+      if (!resposta.ok) return false;
+      const dados = await resposta.json().catch(() => null);
+      return !(dados && dados.entregue === false);
+    } catch {
+      return false;
+    }
   }
 
   async function enviar(evento: React.FormEvent) {
@@ -145,14 +168,27 @@ export default function FormularioLead({
     }
     if (Object.keys(encontrados).length > 0) {
       setErros(encontrados);
+      // O foco vai para o primeiro campo com problema: sem isto o leitor de
+      // tela não anuncia nada e o erro aparece fora do campo de visão.
+      document.getElementById(`lead-${Object.keys(encontrados)[0]}`)?.focus();
       return;
     }
 
+    if (emVoo.current) return;
+    emVoo.current = true;
+
     setErros({});
     setEnviando(true);
-    await registrar();
-    window.fbq?.("track", "Lead");
+    const entregue = await registrar();
     setEnviando(false);
+    emVoo.current = false;
+
+    if (!entregue) {
+      setErros({ geral: "Não conseguimos registrar os seus dados agora. Tente de novo em instantes." });
+      return;
+    }
+
+    window.fbq?.("track", "Lead");
     setEnviado(true);
   }
 
@@ -172,7 +208,11 @@ export default function FormularioLead({
 
   if (enviado) {
     return (
+      /* `role="status"` porque o formulário inteiro é substituído: sem ele o
+         botão que tinha o foco é desmontado, o foco cai no `body` e nada é
+         anunciado — a pessoa não sabe se enviou. */
       <motion.div
+        role="status"
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
@@ -187,7 +227,11 @@ export default function FormularioLead({
           <Check aria-hidden="true" className="h-8 w-8 text-primary" />
         </motion.div>
 
-        <h3 className="mt-6 break-words text-2xl font-bold tracking-[-0.02em] text-foreground">
+        <h3
+          ref={tituloSucesso}
+          tabIndex={-1}
+          className="mt-6 break-words text-2xl font-bold tracking-[-0.02em] text-foreground outline-none"
+        >
           Pronto, {campos.nome.trim().split(" ")[0]}.
           <span className="mt-1 block text-primary">Dados enviados com sucesso.</span>
         </h3>
@@ -292,7 +336,11 @@ export default function FormularioLead({
               />
             </div>
             {erros[item.campo] && (
-              <p id={`erro-${item.campo}`} className="mt-1.5 text-sm text-red-500">
+              <p
+                id={`erro-${item.campo}`}
+                role="alert"
+                className="mt-1.5 text-sm text-red-500"
+              >
                 {erros[item.campo]}
               </p>
             )}
@@ -342,12 +390,21 @@ export default function FormularioLead({
             />
           </div>
           {erros.segmento && (
-            <p id="erro-segmento" className="mt-1.5 text-sm text-red-500">
+            <p id="erro-segmento" role="alert" className="mt-1.5 text-sm text-red-500">
               {erros.segmento}
             </p>
           )}
         </div>
       </div>
+
+      {erros.geral && (
+        <p
+          role="alert"
+          className="mt-5 rounded-2xl border border-red-400/40 bg-red-500/5 px-4 py-3 text-sm text-red-500"
+        >
+          {erros.geral}
+        </p>
+      )}
 
       <button
         type="submit"

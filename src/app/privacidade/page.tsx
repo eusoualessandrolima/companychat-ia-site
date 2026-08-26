@@ -57,7 +57,7 @@ export default function PrivacidadePage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl px-[clamp(1rem,4vw,2rem)] py-12 sm:py-16">
+      <main id="conteudo" tabIndex={-1} className="mx-auto max-w-3xl px-[clamp(1rem,4vw,2rem)] py-12 sm:py-16">
         <h1 className="text-3xl font-bold tracking-[-0.02em] text-dark-text sm:text-4xl">
           Política de Privacidade
         </h1>

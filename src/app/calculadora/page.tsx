@@ -40,7 +40,7 @@ export default function PaginaCalculadora() {
       <MetaPixel />
       <div className="min-h-screen bg-dark-base">
         <ApiHeader />
-        <main>
+        <main id="conteudo" tabIndex={-1}>
           <Calculadora />
         </main>
         <Footer />

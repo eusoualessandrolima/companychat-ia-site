@@ -161,7 +161,17 @@ export default function Calculadora() {
                       step={100}
                       value={Math.min(c.volume, SLIDER_MAX)}
                       onChange={(e) => setVolume(c.id, Number(e.target.value))}
-                      className="h-1.5 flex-1 cursor-pointer appearance-none rounded-full bg-dark-border accent-primary"
+                      /* A trilha continua com 6px, mas o alvo de toque passa a
+                         ter 24px: a altura total é `h-6`, o `py-[9px]` empurra
+                         o conteúdo para uma faixa de 6px no meio e o
+                         `bg-clip-content` pinta o fundo só nessa faixa. A
+                         altura é 24 (e não 6) porque o `box-sizing: border-box`
+                         do Tailwind conta o padding dentro de `height` — com
+                         `h-1.5` a faixa colapsava para zero. `-my-[9px]`
+                         devolve ao layout o espaço que cresceu.
+                         O mínimo do WCAG 2.5.8 é 24px; antes o input inteiro
+                         media 6px, e arrastar isso no celular é sorte. */
+                      className="-my-[9px] h-6 flex-1 cursor-pointer appearance-none rounded-full bg-dark-border bg-clip-content py-[9px] accent-primary"
                       aria-label={`Ajustar mensagens de ${c.nome}`}
                     />
                     <span className={`w-24 shrink-0 text-right text-sm font-semibold ${c.gratis ? "text-accent-amber" : "text-dark-text"}`}>

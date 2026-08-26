@@ -39,7 +39,7 @@ export default function CompanyAiPage() {
   return (
     <>
       <ApiHeader />
-      <main>
+      <main id="conteudo" tabIndex={-1}>
         <CompanyAiHero />
         <Origem />
         <OqueConstruimos />

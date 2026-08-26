@@ -47,8 +47,13 @@ export default function Problemas() {
             aria-label="Você tem algum desses desafios na sua empresa?"
             className="text-3xl font-bold tracking-tight text-white md:text-4xl"
           >
+            {/* O espaço antes do `<br>` é explícito porque o JSX descarta o
+                whitespace que contém quebra de linha entre elementos. Abaixo
+                de 640px o `<br>` some, e sem este `{" "}` o texto saía
+                "desafiosna sua empresa?". Em telas maiores o espaço fica no
+                fim da linha e não aparece. */}
             Você tem algum desses{" "}
-            <span className="text-primary">desafios</span>
+            <span className="text-primary">desafios</span>{" "}
             <br className="hidden sm:block" />
             na sua empresa?
           </h2>

@@ -35,7 +35,7 @@ export default function PlanosPage() {
   return (
     <>
       <ApiHeader />
-      <main>
+      <main id="conteudo" tabIndex={-1}>
         <TabelaPlanos />
         <Incluso />
         <CustoMeta />

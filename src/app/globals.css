@@ -54,8 +54,14 @@ section {
   overflow-x: clip;
 }
 
+/* O cabeçalho é `fixed` e mede 56-64px. Sem folga, toda âncora do menu
+   aterrissa com o título debaixo dele, e o elemento que recebe foco por
+   teclado some junto quando o navegador o rola para o topo. A folga vale
+   para os dois casos: `scroll-padding` é respeitado tanto no salto por
+   âncora quanto no reposicionamento por foco. */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
 }
 
 h1, h2, h3, h4, h5, h6 {

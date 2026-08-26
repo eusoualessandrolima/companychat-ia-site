@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Outfit, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import StructuredData from "@/components/StructuredData";
+import Movimento from "@/components/Movimento";
 import { envOu } from "@/lib/env";
 
 const outfit = Outfit({
@@ -79,8 +80,18 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="scroll-smooth">
       <body className={`${outfit.variable} ${bricolage.variable} font-sans antialiased`}>
+        {/* Primeiro item da tabulação, invisível até receber foco. Sem ele,
+            chegar ao conteúdo exige passar pelo logo e pelos seis links do
+            menu — em cada uma das dezesseis rotas. O alvo é o `id="conteudo"`
+            que cada página põe no seu `<main>`. */}
+        <a
+          href="#conteudo"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-primary focus:px-5 focus:py-3 focus:font-semibold focus:text-on-primary"
+        >
+          Pular para o conteúdo
+        </a>
         <StructuredData />
-        {children}
+        <Movimento>{children}</Movimento>
       </body>
     </html>
   );

@@ -15,7 +15,11 @@ export const dynamic = "force-dynamic";
 
 function Aviso({ titulo, texto }: { titulo: string; texto: string }) {
   return (
-    <div className="flex min-h-svh items-center justify-center bg-dark-base px-4">
+    <main
+      id="conteudo"
+      tabIndex={-1}
+      className="flex min-h-svh items-center justify-center bg-dark-base px-4"
+    >
       <div className="max-w-md rounded-3xl border border-dark-border bg-dark-surface p-8 text-center">
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/15">
           <AlertTriangle aria-hidden="true" className="h-5 w-5 text-amber-400" />
@@ -23,7 +27,7 @@ function Aviso({ titulo, texto }: { titulo: string; texto: string }) {
         <h1 className="mt-5 text-xl font-bold text-dark-text">{titulo}</h1>
         <p className="mt-3 text-sm leading-relaxed text-dark-muted">{texto}</p>
       </div>
-    </div>
+    </main>
   );
 }
 

@@ -180,7 +180,7 @@ export default function ListaLeads({ leads }: { leads: Lead[] }) {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-8">
+      <main id="conteudo" tabIndex={-1} className="mx-auto max-w-5xl px-4 py-8">
         <div className="grid grid-cols-3 gap-3">
           {[
             { rotulo: "Total", valor: resumo.total },
@@ -207,6 +207,9 @@ export default function ListaLeads({ leads }: { leads: Lead[] }) {
             />
             <input
               type="search"
+              /* O placeholder some assim que se digita, então ele não serve de
+                 nome acessível. */
+              aria-label="Buscar leads por nome, empresa ou telefone"
               placeholder="Buscar por nome, empresa ou telefone"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}

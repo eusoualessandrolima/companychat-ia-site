@@ -193,7 +193,7 @@ export default function Campanha() {
         </a>
       </header>
 
-      <main className="relative">
+      <main id="conteudo" tabIndex={-1} className="relative">
         {/* ─── Hero ────────────────────────────────────── */}
         {/* `max-[360px]:` — só nas telas mais estreitas (iPhone SE e parentes),
             onde o hero inteiro precisa caber em 640px de altura para o CTA

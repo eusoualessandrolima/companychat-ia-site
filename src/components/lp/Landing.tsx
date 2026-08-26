@@ -154,7 +154,7 @@ export default function Landing({ nicho }: { nicho: Nicho }) {
         </a>
       </header>
 
-      <main className="relative">
+      <main id="conteudo" tabIndex={-1} className="relative">
         {/* ─── Hero ────────────────────────────────────── */}
         <section className="mx-auto max-w-6xl px-[clamp(1rem,4vw,2rem)] pb-20 pt-10 sm:pt-16">
           <div className="mx-auto max-w-3xl text-center">

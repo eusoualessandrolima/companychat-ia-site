@@ -78,7 +78,10 @@ export default function Wizard({
           onClick={voltar}
           disabled={noInicio}
           aria-label="Voltar para o passo anterior"
-          className="flex items-center text-on-primary/70 transition-colors hover:text-on-primary disabled:opacity-30"
+          /* `-m-2 p-2` leva o alvo de toque de 16px para 32px sem deslocar o
+             ícone: o padding cresce a área clicável e a margem negativa
+             devolve o espaço ao layout. O mínimo do WCAG 2.5.8 é 24px. */
+          className="-m-2 flex items-center p-2 text-on-primary/70 transition-colors hover:text-on-primary disabled:opacity-30"
         >
           <ArrowLeft aria-hidden="true" className="h-4 w-4" />
         </button>
@@ -92,7 +95,7 @@ export default function Wizard({
           type="button"
           onClick={recomecar}
           aria-label="Recomeçar a simulação"
-          className="flex items-center text-on-primary/70 transition-colors hover:text-on-primary"
+          className="-m-2 flex items-center p-2 text-on-primary/70 transition-colors hover:text-on-primary"
         >
           <RotateCcw aria-hidden="true" className="h-4 w-4" />
         </button>

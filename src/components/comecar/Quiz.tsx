@@ -23,7 +23,8 @@ declare global {
 
 type Campo = "equipe" | "volume" | "dor" | "nome" | "empresa" | "telefone";
 type Respostas = Record<Campo, string>;
-type Erros = Partial<Record<Campo, string>>;
+/* `geral` para a falha de gravação, que não pertence a nenhum campo. */
+type Erros = Partial<Record<Campo | "geral", string>>;
 
 type Opcao = {
   valor: string;
@@ -345,9 +346,19 @@ function Final({
   link: string;
   aoTestar: () => void;
 }) {
+  const titulo = useRef<HTMLHeadingElement>(null);
+
+  /* A etapa anterior é desmontada junto com o elemento que tinha o foco, que
+     cairia no `body`. O foco vem para cá, e o `role="status"` faz a mudança
+     ser anunciada. */
+  useEffect(() => {
+    titulo.current?.focus();
+  }, []);
+
   return (
     <motion.div
       key="final"
+      role="status"
       initial={{ opacity: 0, scale: 0.97 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
@@ -362,10 +373,16 @@ function Final({
         <Check aria-hidden="true" className="h-8 w-8 text-primary" />
       </motion.div>
 
-      <h2 className="mt-6 break-words text-[clamp(24px,3.2vw,32px)] font-bold leading-tight tracking-[-0.02em] text-foreground">
+      {/* `h1` e não `h2`: o `h1` da etapa é desmontado junto com a pergunta,
+          e a página ficava sem nenhum título de nível 1. */}
+      <h1
+        ref={titulo}
+        tabIndex={-1}
+        className="mt-6 break-words text-[clamp(24px,3.2vw,32px)] font-bold leading-tight tracking-[-0.02em] text-foreground outline-none"
+      >
         Pronto, {respostas.nome.trim().split(" ")[0]}.
         <span className="mt-1 block text-primary">Dados enviados com sucesso.</span>
-      </h2>
+      </h1>
       <p className="mx-auto mt-4 max-w-md leading-relaxed text-text-secondary">
         Agora é só falar com a nossa IA no WhatsApp. A conversa já começa com tudo o que
         você respondeu aqui, então ninguém vai repetir as mesmas perguntas.
@@ -405,6 +422,12 @@ export default function Quiz() {
   /** Identidade do lead no banco, criada uma vez por visita: cada etapa
    *  atualiza a mesma linha em vez de criar uma nova. */
   const idLead = useRef("");
+  /* Trava de envio fora do estado: dois toques rápidos disparam os dois
+     manipuladores antes de o React repintar, e o `disabled` chega tarde. */
+  const emVoo = useRef(false);
+  /* Id do timer de `escolher`: durante os 220ms da animação um segundo toque
+     agendava um segundo `avancar`, e a conversão ia dobrada para o Pixel. */
+  const timerEscolha = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // De onde veio o clique do anúncio. Lido do window para a página
   // continuar estática, sem fronteira de Suspense.
@@ -483,7 +506,7 @@ export default function Quiz() {
 
   /** Grava o que já foi respondido. Roda a cada etapa: se a pessoa
    *  abandonar depois de enviar os dados, o contato continua no banco. */
-  function registrar(
+  async function registrar(
     dados: Respostas,
     extras: { etapa: number; concluido?: boolean; clicouWhatsapp?: boolean }
   ) {
@@ -503,22 +526,48 @@ export default function Quiz() {
         "/api/lead",
         new Blob([corpo], { type: "application/json" })
       );
-      return Promise.resolve();
+      return Promise.resolve(true);
     }
 
-    return fetch("/api/lead", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: corpo,
-      keepalive: true,
-    }).catch(() => {
-      /* silencioso de propósito: nada trava o avanço do quiz */
-    });
+    /* Nas etapas intermediárias o desfecho não é consultado — o quiz avança
+       de qualquer jeito, porque travar a navegação por causa de uma gravação
+       parcial seria pior. Quem consulta é `concluir`, onde anunciar sucesso
+       falso significaria prometer um contato que não vai acontecer. */
+    try {
+      const resposta = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: corpo,
+        keepalive: true,
+        signal: AbortSignal.timeout(20_000),
+      });
+      if (!resposta.ok) return false;
+      const dados = await resposta.json().catch(() => null);
+      return !(dados && dados.entregue === false);
+    } catch {
+      return false;
+    }
   }
 
   async function concluir(finais: Respostas) {
+    if (emVoo.current) return;
+    emVoo.current = true;
+
     setEnviando(true);
-    await registrar(finais, { etapa: ETAPAS.length, concluido: true });
+    const entregue = await registrar(finais, {
+      etapa: ETAPAS.length,
+      concluido: true,
+    });
+
+    if (!entregue) {
+      setEnviando(false);
+      emVoo.current = false;
+      setErros({
+        geral:
+          "Não conseguimos registrar as suas respostas agora. Tente de novo em instantes.",
+      });
+      return;
+    }
 
     window.fbq?.("track", "Lead");
 
@@ -530,6 +579,7 @@ export default function Quiz() {
     if (temPorte(finais)) window.fbq?.("track", "LeadQualificado");
     setLink(montarLink(finais));
     setEnviando(false);
+    emVoo.current = false;
     setIndice(ETAPAS.length);
   }
 
@@ -551,10 +601,16 @@ export default function Quiz() {
 
   function escolher(valor: string) {
     if (etapa.tipo !== "escolha") return;
+    // Um toque em outra opção dentro da pausa substitui o anterior em vez de
+    // agendar um segundo avanço.
+    if (timerEscolha.current) clearTimeout(timerEscolha.current);
     const finais = { ...respostas, [etapa.campo]: valor };
     setRespostas(finais);
     // Pequena pausa para a marca de selecionado aparecer antes da troca de tela.
-    setTimeout(() => avancar(finais), 220);
+    timerEscolha.current = setTimeout(() => {
+      timerEscolha.current = null;
+      avancar(finais);
+    }, 220);
   }
 
   function enviarContato(evento: React.FormEvent) {
@@ -575,6 +631,8 @@ export default function Quiz() {
 
     if (Object.keys(encontrados).length > 0) {
       setErros(encontrados);
+      // Sem mover o foco, o leitor de tela não anuncia nada.
+      document.getElementById(`quiz-${Object.keys(encontrados)[0]}`)?.focus();
       return;
     }
 
@@ -607,7 +665,7 @@ export default function Quiz() {
         <Logo dark />
       </header>
 
-      <main className="relative flex flex-1 items-start justify-center px-[max(1rem,env(safe-area-inset-left))] pb-12 sm:items-center">
+      <main id="conteudo" tabIndex={-1} className="relative flex flex-1 items-start justify-center px-[max(1rem,env(safe-area-inset-left))] pb-12 sm:items-center">
         <div className="w-full max-w-xl">
           <AnimatePresence mode="wait">
             {!iniciado ? (
@@ -698,6 +756,7 @@ export default function Quiz() {
                             {erros[item.campo] && (
                               <p
                                 id={`erro-${item.campo}`}
+                                role="alert"
                                 className="mt-1.5 text-sm text-red-500"
                               >
                                 {erros[item.campo]}
@@ -794,6 +853,18 @@ export default function Quiz() {
                           );
                         })}
                       </div>
+
+                      {/* Falha ao gravar na última pergunta. As respostas ficam
+                          na tela para a pessoa poder tentar de novo sem
+                          recomeçar o quiz. */}
+                      {erros.geral && (
+                        <p
+                          role="alert"
+                          className="mt-5 rounded-2xl border border-red-400/40 bg-red-500/5 px-4 py-3 text-sm text-red-500"
+                        >
+                          {erros.geral}
+                        </p>
+                      )}
 
                       {/* A última pergunta é de escolha: sem este aviso, o clique
                           ficaria em silêncio enquanto o envio acontece. */}

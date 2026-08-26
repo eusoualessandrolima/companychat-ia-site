@@ -34,8 +34,13 @@ RUN npm run build
 
 FROM node:22-alpine AS runner
 WORKDIR /app
+# `TZ` porque o container roda em UTC por padrão, e tudo que o servidor
+# formata (a exportação CSV do painel, hoje) sairia três horas adiantado —
+# um lead das 21h virava meia-noite do dia seguinte. O banco continua
+# guardando `timestamptz`; isto muda só como o servidor apresenta.
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
+    TZ=America/Sao_Paulo \
     PORT=3000 \
     HOSTNAME=0.0.0.0
 

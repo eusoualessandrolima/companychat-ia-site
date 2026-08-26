@@ -34,8 +34,15 @@ function celula(valor: unknown) {
   if (valor === null || valor === undefined) texto = "";
   // O driver do Postgres devolve `timestamptz` como Date: sem isto a
   // planilha receberia "Thu Aug 06 2026 08:57:03 GMT-0300".
+  //
+  // O fuso é fixado porque quem formata aqui é o servidor, e o container não
+  // define `TZ` — rodava em UTC. Um lead das 21h saía no CSV como meia-noite
+  // do dia seguinte, enquanto o painel (que formata no navegador) mostrava a
+  // hora certa. Mesma coluna, duas respostas, e a planilha é o que decide
+  // horário de anúncio.
   else if (valor instanceof Date) {
     texto = valor.toLocaleString("pt-BR", {
+      timeZone: "America/Sao_Paulo",
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
