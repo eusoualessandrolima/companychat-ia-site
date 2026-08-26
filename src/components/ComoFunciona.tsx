@@ -50,7 +50,7 @@ export default function ComoFunciona() {
             transition={{ duration: 0.5 }}
             className="lg:sticky lg:top-28"
           >
-            <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
+            <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary-text">
               Como funciona
             </span>
             <h2
@@ -58,7 +58,7 @@ export default function ComoFunciona() {
               className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-[2.6rem]"
             >
               Do primeiro contato ao{" "}
-              <span className="text-primary">assistente funcionando</span>,
+              <span className="text-primary-text">assistente funcionando</span>,
               em 4 passos simples.
             </h2>
             <p className="mt-5 leading-relaxed text-text-secondary">
@@ -88,7 +88,7 @@ export default function ComoFunciona() {
               >
                 {/* Big number */}
                 <div className="shrink-0 w-16">
-                  <span className="font-display text-5xl font-bold leading-none text-primary/20 transition-colors group-hover:text-primary/40">
+                  <span className="font-display text-5xl font-bold leading-none text-primary-text/20 transition-colors group-hover:text-primary-text/40">
                     {passo.num}
                   </span>
                 </div>
@@ -99,7 +99,7 @@ export default function ComoFunciona() {
                   <p className="mt-2 text-sm leading-relaxed text-text-secondary">
                     {passo.descricao}
                   </p>
-                  <span className="mt-3 inline-block rounded-full bg-primary/8 px-3 py-1 text-xs font-medium text-primary">
+                  <span className="mt-3 inline-block rounded-full bg-primary/8 px-3 py-1 text-xs font-medium text-primary-text">
                     {passo.destaque}
                   </span>
                 </div>

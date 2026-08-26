@@ -34,7 +34,7 @@ type Coluna = {
 const colunas: Coluna[] = [
   {
     nome: "Novo Lead",
-    header: "bg-zinc-600",
+    header: "bg-zinc-600 text-white",
     accent: "border-l-zinc-500",
     cards: [
       { nome: "Conversa #412 · Ana S.", iniciais: "AS", grad: "from-primary to-accent-blue", contexto: "Quer orçamento do plano anual", tempo: "há 2h" },
@@ -43,7 +43,7 @@ const colunas: Coluna[] = [
   },
   {
     nome: "Qualificando",
-    header: "bg-accent-blue",
+    header: "bg-accent-blue text-on-primary",
     accent: "border-l-accent-blue",
     cards: [
       { nome: "Conversa #395 · Lucas O.", iniciais: "LO", grad: "from-accent-blue to-primary", contexto: "Interessado, validando orçamento", tempo: "há 1d" },
@@ -51,7 +51,7 @@ const colunas: Coluna[] = [
   },
   {
     nome: "Proposta Enviada",
-    header: "bg-accent-purple",
+    header: "bg-accent-purple text-on-primary",
     accent: "border-l-accent-purple",
     cards: [
       { nome: "Conversa #317 · Danilo D.", iniciais: "DD", grad: "from-accent-purple to-primary", contexto: "Proposta enviada por WhatsApp", tempo: "há 1 mês", valor: "R$ 2.500" },
@@ -59,7 +59,7 @@ const colunas: Coluna[] = [
   },
   {
     nome: "Negociação",
-    header: "bg-accent-amber",
+    header: "bg-accent-amber text-on-primary",
     accent: "border-l-accent-amber",
     cards: [
       { nome: "Conversa #288 · Thiago R.", iniciais: "TR", grad: "from-accent-amber to-primary", contexto: "Ajustando condições de fechamento", tempo: "há 3d", valor: "R$ 4.000" },
@@ -81,7 +81,7 @@ const pilares: { icon: LucideIcon; titulo: string; desc: string }[] = [
 
 function Avatar({ iniciais, grad }: { iniciais: string; grad: string }) {
   return (
-    <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${grad} text-[10px] font-bold text-white`}>
+    <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${grad} text-[10px] font-bold text-on-primary`}>
       {iniciais}
     </span>
   );
@@ -161,7 +161,7 @@ export default function CrmKanban() {
           <div className="flex gap-4 overflow-x-auto pb-2 [scrollbar-color:rgba(255,255,255,0.15)_transparent] [scrollbar-width:thin]">
             {colunas.map((col, ci) => (
               <div key={col.nome} className="flex w-[250px] shrink-0 flex-col">
-                <div className={`flex items-center gap-2 rounded-lg ${col.header} px-3 py-2 text-white`}>
+                <div className={`flex items-center gap-2 rounded-lg ${col.header} px-3 py-2`}>
                   <span className="text-sm font-semibold">{col.nome}</span>
                   <span className="rounded-full bg-white/25 px-1.5 text-xs font-semibold">{col.cards.length}</span>
                   <span className="ml-auto flex items-center gap-1.5 opacity-80">

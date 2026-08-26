@@ -12,7 +12,10 @@ type Solucao = {
   href: string;
   desc: string;
   badge?: string;
+  /* Duas cores por solução porque o mesmo card é usado em fundo claro e
+     escuro: o tom que fica legível no escuro dá 2,14:1 no branco. */
   text: string;
+  textClaro: string;
   bg: string;
   bar: string;
 };
@@ -24,6 +27,7 @@ const solucoes: Solucao[] = [
     href: "/assistente-ia",
     desc: "Atende, qualifica, agenda e cobra no seu WhatsApp 24h por dia, com a linguagem da sua marca.",
     text: "text-primary",
+    textClaro: "text-primary-text",
     bg: "bg-primary/10",
     bar: "from-primary to-[#00d4a0]",
   },
@@ -33,6 +37,7 @@ const solucoes: Solucao[] = [
     href: "/#crm-kanban",
     desc: "Organize leads, conversas e vendas num funil visual, tudo integrado ao seu WhatsApp.",
     text: "text-accent-blue",
+    textClaro: "text-accent-blue-dark",
     bg: "bg-accent-blue/10",
     bar: "from-accent-blue to-[#00d4ff]",
   },
@@ -42,6 +47,7 @@ const solucoes: Solucao[] = [
     href: "/api-oficial",
     desc: "WhatsApp verificado pela Meta, sem o risco de bloqueio das APIs não oficiais. Cuidamos de toda a implementação por você.",
     text: "text-accent-amber",
+    textClaro: "text-accent-amber-dark",
     bg: "bg-accent-amber/10",
     bar: "from-accent-amber to-[#fbbf24]",
   },
@@ -52,6 +58,7 @@ const solucoes: Solucao[] = [
     badge: "Novo",
     desc: "Campanhas para toda a sua base via API Oficial, com relatórios de entrega e leitura em tempo real.",
     text: "text-accent-purple",
+    textClaro: "text-accent-purple-dark",
     bg: "bg-accent-purple/10",
     bar: "from-accent-purple to-[#d480ff]",
   },
@@ -74,6 +81,7 @@ const theme: Record<Variant, { card: string; titulo: string; desc: string }> = {
     `omit` esconde o card da própria página (evita link para si mesma). */
 export function SolucaoGrid({ variant = "light", omit }: { variant?: Variant; omit?: string }) {
   const t = theme[variant];
+  const cor = (s: Solucao) => (variant === "light" ? s.textClaro : s.text);
   const lista = omit ? solucoes.filter((s) => s.href !== omit) : solucoes;
   return (
     <div className={`grid grid-cols-1 gap-6 sm:grid-cols-2 ${lista.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"}`}>
@@ -95,12 +103,12 @@ export function SolucaoGrid({ variant = "light", omit }: { variant?: Variant; om
 
             <div className="mb-5 flex items-center justify-between">
               <span
-                className={`flex h-14 w-14 items-center justify-center rounded-2xl ${s.bg} ${s.text} transition-transform duration-300 group-hover:scale-110`}
+                className={`flex h-14 w-14 items-center justify-center rounded-2xl ${s.bg} ${cor(s)} transition-transform duration-300 group-hover:scale-110`}
               >
                 <s.icon aria-hidden="true" className="h-7 w-7" />
               </span>
               {s.badge && (
-                <span className={`rounded-full ${s.bg} ${s.text} px-3 py-1 text-xs font-semibold tracking-wide`}>
+                <span className={`rounded-full ${s.bg} ${cor(s)} px-3 py-1 text-xs font-semibold tracking-wide`}>
                   {s.badge}
                 </span>
               )}
@@ -109,7 +117,7 @@ export function SolucaoGrid({ variant = "light", omit }: { variant?: Variant; om
             <h3 className={`text-xl font-bold ${t.titulo}`}>{s.nome}</h3>
             <p className={`mt-3 flex-1 text-sm leading-relaxed ${t.desc}`}>{s.desc}</p>
 
-            <span className={`mt-5 inline-flex items-center gap-1.5 text-sm font-semibold ${s.text}`}>
+            <span className={`mt-5 inline-flex items-center gap-1.5 text-sm font-semibold ${cor(s)}`}>
               Saiba mais
               <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </span>

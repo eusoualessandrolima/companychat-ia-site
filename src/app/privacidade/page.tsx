@@ -85,7 +85,7 @@ export default function PrivacidadePage() {
             para{" "}
             <a
               href={email}
-              className="text-primary underline underline-offset-4"
+              className="text-primary-text underline underline-offset-4"
             >
               {EMAIL_CONTATO}
             </a>{" "}
@@ -94,7 +94,7 @@ export default function PrivacidadePage() {
               href={whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary underline underline-offset-4"
+              className="text-primary-text underline underline-offset-4"
             >
               +55 64 9305-4630
             </a>
@@ -198,7 +198,7 @@ export default function PrivacidadePage() {
               href="https://www.facebook.com/adpreferences/ad_settings"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary underline underline-offset-4"
+              className="text-primary-text underline underline-offset-4"
             >
               preferências de anúncios da Meta
             </a>{" "}
@@ -266,7 +266,7 @@ export default function PrivacidadePage() {
             Para exercer qualquer um deles, escreva para{" "}
             <a
               href={email}
-              className="text-primary underline underline-offset-4"
+              className="text-primary-text underline underline-offset-4"
             >
               {EMAIL_CONTATO}
             </a>{" "}
@@ -275,7 +275,7 @@ export default function PrivacidadePage() {
               href={whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary underline underline-offset-4"
+              className="text-primary-text underline underline-offset-4"
             >
               WhatsApp +55 64 9305-4630
             </a>
@@ -313,7 +313,9 @@ export default function PrivacidadePage() {
               href={whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary underline underline-offset-4"
+              /* Este bloco é o único da página em superfície escura, então o
+                 verde aqui é o claro: o `primary-text` daria 2,35:1. */
+              className="text-dark-link underline underline-offset-4"
             >
               Fale com a gente no WhatsApp
             </a>

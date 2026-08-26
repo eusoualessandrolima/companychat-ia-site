@@ -72,7 +72,7 @@ export default function Janela24h() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            A janela de <span className="text-primary">24 horas</span>
+            A janela de <span className="text-primary-text">24 horas</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
             É a regra mais importante da API Oficial. Entender a janela é entender

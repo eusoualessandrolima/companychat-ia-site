@@ -72,7 +72,7 @@ export default function Fluxo() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            Da lista ao resultado em <span className="text-primary">4 passos</span>
+            Da lista ao resultado em <span className="text-primary-text">4 passos</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
             Um fluxo simples: você importa, monta a campanha, dispara e acompanha.

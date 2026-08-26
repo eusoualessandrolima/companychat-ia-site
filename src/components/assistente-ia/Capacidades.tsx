@@ -20,7 +20,7 @@ type Capacidade = {
   cor: { text: string; bg: string; barra: string; borda: string };
 };
 
-const primary = { text: "text-primary", bg: "bg-primary/10", barra: "bg-primary", borda: "border-primary/20" };
+const primary = { text: "text-primary-text", bg: "bg-primary/10", barra: "bg-primary", borda: "border-primary/20" };
 const blue = { text: "text-accent-blue", bg: "bg-accent-blue/10", barra: "bg-accent-blue", borda: "border-accent-blue/20" };
 const purple = { text: "text-accent-purple", bg: "bg-accent-purple/10", barra: "bg-accent-purple", borda: "border-accent-purple/20" };
 const amber = { text: "text-accent-amber", bg: "bg-accent-amber/10", barra: "bg-accent-amber", borda: "border-accent-amber/20" };
@@ -88,7 +88,7 @@ export default function Capacidades() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            O que o assistente <span className="text-primary">faz por você</span>
+            O que o assistente <span className="text-primary-text">faz por você</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
             Muito além de responder pergunta frequente. Ele opera o atendimento

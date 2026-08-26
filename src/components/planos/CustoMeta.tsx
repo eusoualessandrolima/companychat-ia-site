@@ -29,7 +29,7 @@ export default function CustoMeta() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            Transparência sobre o <span className="text-primary">custo das mensagens</span>
+            Transparência sobre o <span className="text-primary-text">custo das mensagens</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
             Preferimos que você saiba disso antes de fechar, e não na primeira fatura.
@@ -46,7 +46,7 @@ export default function CustoMeta() {
           <div className="grid grid-cols-1 gap-px bg-card-border md:grid-cols-2">
             {linhas.map((l) => (
               <div key={l.titulo} className="bg-card p-8">
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary-text">
                   <l.icon aria-hidden="true" className="h-6 w-6" />
                 </span>
                 <h3 className="mt-5 text-lg font-bold text-foreground">{l.titulo}</h3>
@@ -57,7 +57,7 @@ export default function CustoMeta() {
 
           <div className="flex flex-col items-center gap-5 border-t border-card-border bg-section px-8 py-8 sm:flex-row sm:justify-between">
             <div className="flex items-start gap-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary-text">
                 <Calculator aria-hidden="true" className="h-5 w-5" />
               </span>
               <div>
@@ -71,7 +71,7 @@ export default function CustoMeta() {
 
             <Link
               href="/api-oficial#calculadora"
-              className="group flex w-full shrink-0 items-center justify-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-6 py-3 font-semibold text-primary transition-all hover:bg-primary hover:text-white sm:w-auto"
+              className="group flex w-full shrink-0 items-center justify-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-6 py-3 font-semibold text-primary-text transition-all hover:bg-primary hover:text-white sm:w-auto"
             >
               Abrir a calculadora
               <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

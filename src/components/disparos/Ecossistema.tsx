@@ -8,7 +8,7 @@ const pilares = [
     icon: Bot,
     nome: "Agente de IA",
     desc: "Atende, qualifica e responde seus clientes no WhatsApp 24h por dia, sem pausa.",
-    cor: "text-primary",
+    cor: "text-primary-text",
     bg: "bg-primary/10",
     borda: "border-primary/20",
   },
@@ -43,7 +43,7 @@ export default function Ecossistema() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            Três ferramentas, um <span className="text-primary">ecossistema</span>
+            Três ferramentas, um <span className="text-primary-text">ecossistema</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
             O disparo em massa não vive sozinho. Ele conversa com o agente de IA e com
@@ -68,7 +68,7 @@ export default function Ecossistema() {
                 </span>
                 <h3 className="mt-5 text-xl font-bold text-foreground">{p.nome}</h3>
                 {p.destaque && (
-                  <span className="mt-2 rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
+                  <span className="mt-2 rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-semibold text-primary-text">
                     Novo
                   </span>
                 )}

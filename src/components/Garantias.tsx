@@ -64,7 +64,7 @@ export default function Garantias() {
         >
           <h2 className="text-3xl font-bold md:text-4xl">
             O que você pode esperar da{" "}
-            <span className="text-primary">CompanyChat</span>
+            <span className="text-primary-text">CompanyChat</span>
           </h2>
         </motion.div>
 
@@ -78,7 +78,7 @@ export default function Garantias() {
               transition={{ duration: 0.45, delay: (i % 3) * 0.08 }}
               className="rounded-2xl border border-card-border bg-card p-7 shadow-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md"
             >
-              <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-primary-light text-primary">
+              <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-primary-light text-primary-text">
                 <g.icon aria-hidden="true" className="h-5 w-5" />
               </div>
               <h3 className="text-lg font-bold text-foreground">{g.titulo}</h3>

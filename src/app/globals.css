@@ -1,32 +1,80 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────
+   Paleta oficial da marca — Guia de Paleta CompanyChat v1.0 (18/08/2026).
+   Os nomes dos tokens são os do projeto; os valores vêm do guia. O logotipo
+   em `/public/brand/` já usava estas cores (#00C896 e #00A77B); o resto do
+   site tinha ficado numa paleta anterior, e era ela que reprovava em
+   contraste. Cada par abaixo foi medido: nenhum texto fica abaixo de 4,5:1
+   e nenhum componente de UI abaixo de 3:1.
+   ───────────────────────────────────────────────────────────── */
 @theme inline {
-  /* ── Light palette ── */
-  --color-background: #fafafa;
-  --color-foreground: #09090b;
-  --color-primary: #00ab7a;
-  --color-primary-light: #e6f9f2;
-  --color-primary-dark: #008c63;
-  /* Texto sobre o verde da marca. Branco dava 2,95:1 e reprovava em AA; este
-     quase-preto dá 6,45:1 sobre `primary` e 4,95:1 sobre `primary-dark` (o
-     hover), sem mexer no verde. É o mesmo par do mockup da identidade v2. */
-  --color-on-primary: #06120f;
-  --color-primary-glow: rgba(0, 171, 122, 0.2);
-  --color-section: #f4f4f5;
-  --color-card: #ffffff;
-  --color-card-border: rgba(0, 0, 0, 0.06);
-  --color-text-secondary: #71717a;
-  --color-accent-blue: #3b82f6;
-  --color-accent-purple: #8b5cf6;
-  --color-accent-amber: #f59e0b;
+  /* ── Modo claro ── */
+  --color-background: #f5f7f6; /* neutral.50 */
+  --color-foreground: #071011; /* brand.ink — 17,89:1 sobre background */
+  --color-primary: #00c896; /* green.500 — CTA e preenchimento */
+  --color-primary-light: #e9fbf5; /* green.50 */
+  --color-primary-dark: #00a77b; /* green.600 — hover */
 
-  /* ── Dark palette ── */
-  --color-dark-base: #09090b;
-  --color-dark-surface: #111114;
-  --color-dark-elevated: #18181b;
-  --color-dark-border: rgba(255, 255, 255, 0.07);
-  --color-dark-text: #fafafa;
-  --color-dark-muted: #a1a1aa;
+  /* O verde da marca **como texto** é outro tom, e essa é a regra que o guia
+     já traz na página 4: "em botões verdes vivos (500/600), usar texto
+     #071011; para texto branco, usar green.700 ou mais escuro". Aqui vale o
+     inverso — verde escrito sobre fundo claro.
+
+     green.800 e não green.700: o 700 dá 4,22:1 sobre `section`, e reprovaria
+     justamente na seção alternada que o site mais usa. O 800 passa em todos
+     os quatro fundos claros, de 6,46:1 a 7,64:1, sem exceção por superfície. */
+  --color-primary-text: #075f4c; /* green.800 */
+
+  /* Texto sobre o verde vivo: 8,89:1 no botão, 6,24:1 no hover. */
+  --color-on-primary: #071011;
+  --color-primary-glow: rgba(0, 200, 150, 0.2);
+
+  --color-section: #e9edeb; /* neutral.100 */
+  --color-card: #ffffff; /* neutral.0 */
+  --color-card-border: #dce2df; /* neutral.200 — divisores e cartões */
+
+  /* Borda de campo de formulário é componente de UI e precisa de 3:1 contra o
+     que o cerca (WCAG 1.4.11) — `card-border` serve para divisor, mas dá
+     1,31:1 e some quando o input tem o mesmo preenchimento do cartão. */
+  --color-field-border: #707b76; /* neutral.500 — 4,39:1 sobre o cartão */
+
+  --color-text-secondary: #505b57; /* neutral.600 — 5,98:1 sobre section */
+
+  /* Acentos dos cards de solução e do mockup de CRM. Eles vivem quase sempre
+     em superfície escura, e são usados nos dois papéis: como texto e como
+     preenchimento de etiqueta.
+
+     Por isso são tons **claros** com `on-primary` por cima quando preenchidos
+     — a mesma regra que o guia dá para o verde na página 4. Medido: cada um
+     passa como texto sobre o escuro (6,59 a 10,74:1) e como fundo de etiqueta
+     com o texto escuro (7,07 a 11,53:1). Escurecê-los para funcionar com
+     texto branco quebraria o uso principal, que é texto sobre o escuro. */
+  --color-accent-blue: #38bdf8;
+  --color-accent-purple: #a78bfa;
+  --color-accent-amber: #fbbf24;
+
+  /* Os mesmos acentos para quando o componente é reaproveitado em superfície
+     clara — `NossasSolucoes` e `Servicos` existem nas duas variantes, e o tom
+     que funciona no escuro é ilegível no branco (o azul claro dá 2,14:1).
+     Estes passam de 4,94:1 a 7,10:1 sobre o cartão. */
+  --color-accent-blue-dark: #0b6fa4;
+  --color-accent-purple-dark: #6d28d9;
+  --color-accent-amber-dark: #a95d00;
+
+  /* Semânticas do guia (página 6), para superfície clara. */
+  --color-accent-success: #087a5b;
+  --color-accent-error: #c73546;
+
+  /* ── Modo escuro ── */
+  --color-dark-base: #071011; /* dark.surface.page */
+  --color-dark-surface: #0f1917; /* dark.surface.1 */
+  --color-dark-elevated: #1d2925; /* dark.surface.2 */
+  --color-dark-border: #35403c; /* dark.border — divisores */
+  --color-dark-field-border: #707b76; /* 4,08:1 sobre dark-surface */
+  --color-dark-text: #f5f7f6; /* 17,89:1 sobre dark-base */
+  --color-dark-muted: #c7d0cc; /* 12,21:1 sobre dark-base */
+  --color-dark-link: #70e8c6; /* green.300 — 12,87:1 */
 
   /* ── Fonts ── */
   --font-sans: var(--font-outfit), system-ui, sans-serif;
@@ -82,9 +130,23 @@ input:focus-visible,
 textarea:focus-visible,
 select:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid var(--color-primary);
+  /* `primary-text` e não `primary`: o verde vivo dá 2,16:1 contra o cartão
+     branco e o anel praticamente desaparecia. Este dá 7,64:1, bem acima dos
+     3:1 que o indicador de foco exige. */
+  outline: 2px solid var(--color-primary-text);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* No escuro o mesmo verde escuro sumiria: ali o anel usa o tom claro. */
+.bg-dark-base a:focus-visible,
+.bg-dark-base button:focus-visible,
+.bg-dark-surface a:focus-visible,
+.bg-dark-surface button:focus-visible,
+.bg-dark-surface input:focus-visible,
+.bg-dark-surface select:focus-visible,
+.bg-dark-surface textarea:focus-visible {
+  outline-color: var(--color-dark-link);
 }
 
 /* Grain texture overlay - premium feel */

@@ -78,7 +78,7 @@ function FAQItem({
       >
         <span className="pr-4 font-medium text-foreground">{pergunta}</span>
         <ChevronDown
-          className={`h-5 w-5 shrink-0 text-primary transition-transform ${
+          className={`h-5 w-5 shrink-0 text-primary-text transition-transform ${
             open ? "rotate-180" : ""
           }`}
           aria-hidden="true"
@@ -101,7 +101,7 @@ function FAQItem({
               {href && (
                 <>
                   {" "}
-                  <Link href={href} className="font-semibold text-primary hover:underline">
+                  <Link href={href} className="font-semibold text-primary-text hover:underline">
                     {linkLabel}
                   </Link>
                 </>
@@ -126,7 +126,7 @@ export default function FAQ() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            Perguntas <span className="text-primary">Frequentes</span>
+            Perguntas <span className="text-primary-text">Frequentes</span>
           </h2>
           <p className="mt-4 text-text-secondary">
             Tire suas dúvidas sobre nossos serviços e planos.

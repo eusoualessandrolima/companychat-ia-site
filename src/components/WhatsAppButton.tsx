@@ -145,10 +145,15 @@ export default function WhatsAppButton() {
             aberto ? "" : "animate-breath-glow"
           }`}
         >
+          {/* Ícone em `on-primary` e não em branco: o verde do WhatsApp é
+              claro, e branco por cima dá 1,98:1 — o mínimo para componente de
+              UI é 3:1. Este par dá 9,70:1. O verde da marca não muda: é
+              reconhecimento, e a regra da página 4 do guia é exatamente esta —
+              sobre verde vivo, texto escuro. */}
           {aberto ? (
-            <X aria-hidden="true" className="h-6 w-6 text-white" />
+            <X aria-hidden="true" className="h-6 w-6 text-on-primary" />
           ) : (
-            <WhatsAppIcon className="h-7 w-7 text-white" />
+            <WhatsAppIcon className="h-7 w-7 text-on-primary" />
           )}
         </button>
       </div>

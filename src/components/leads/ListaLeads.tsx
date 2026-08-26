@@ -321,7 +321,7 @@ export default function ListaLeads({ leads }: { leads: Lead[] }) {
                         href={whats}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-semibold text-white transition-transform hover:scale-[1.03]"
+                        className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-semibold text-on-primary transition-transform hover:scale-[1.03]"
                       >
                         <WhatsAppIcon className="h-4 w-4" />
                         {lead.telefone}

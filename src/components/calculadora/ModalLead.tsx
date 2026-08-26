@@ -330,7 +330,7 @@ export default function ModalLead({
                 window.fbq?.("track", "Contact");
                 registrar({ clicouWhatsapp: true });
               }}
-              className="animate-breath-glow mt-7 flex w-full items-center justify-center gap-2.5 rounded-full bg-[#25D366] px-8 py-4 text-lg font-semibold text-white transition-transform hover:scale-[1.02]"
+              className="animate-breath-glow mt-7 flex w-full items-center justify-center gap-2.5 rounded-full bg-[#25D366] px-8 py-4 text-lg font-semibold text-on-primary transition-transform hover:scale-[1.02]"
             >
               <WhatsAppIcon className="h-5 w-5" />
               Falar com um especialista

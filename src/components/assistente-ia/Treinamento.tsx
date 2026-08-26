@@ -59,7 +59,7 @@ export default function Treinamento() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            Do zero ao assistente atendendo em <span className="text-primary">7 dias</span>
+            Do zero ao assistente atendendo em <span className="text-primary-text">7 dias</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
             Você não precisa saber de tecnologia nem escrever um prompt. Quem treina,

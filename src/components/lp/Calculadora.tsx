@@ -86,12 +86,12 @@ export default function Calculadora({ config }: { config: Config }) {
         </p>
 
         <div className="mt-5 border-t border-card-border pt-5">
-          <p className="flex items-center gap-2 text-sm font-semibold text-primary">
+          <p className="flex items-center gap-2 text-sm font-semibold text-primary-text">
             <TrendingUp aria-hidden="true" className="h-4 w-4" />
             Ganho possível com {config.possivel.conv1}% de {config.nomeConv1} e{" "}
             {config.possivel.conv2}% de {config.nomeConv2}
           </p>
-          <p className="mt-1 text-4xl font-bold text-primary">
+          <p className="mt-1 text-4xl font-bold text-primary-text">
             {moeda.format(resultado.ganho)}
             <span className="text-base font-medium text-text-secondary">/mês</span>
           </p>

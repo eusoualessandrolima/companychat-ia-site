@@ -127,7 +127,7 @@ export default function PorteEmpresa() {
                 </div>
 
                 <div className="p-8 md:p-10">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-primary-light px-3.5 py-1.5 text-xs font-semibold text-primary-dark">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-primary-light px-3.5 py-1.5 text-xs font-semibold text-primary-text">
                     <p.icone aria-hidden="true" className="h-3.5 w-3.5" />
                     {p.etiqueta}
                   </span>
@@ -158,7 +158,7 @@ export default function PorteEmpresa() {
                     href={p.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-dark"
+                    className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary-text transition-colors hover:text-primary"
                   >
                     {p.cta}
                     <ArrowRight

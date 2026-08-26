@@ -13,8 +13,8 @@ const servicos = [
       bg: "bg-[#0092ff]/10",
       border: "border-[#0092ff]/15",
       hoverBorder: "hover:border-[#0092ff]/30",
-      text: "text-[#0092ff]",
-      badgeBg: "bg-[#0092ff]/10",
+      text: "text-[#0a5f8f]",
+      badgeBg: "bg-[#0a5f8f]/10",
       gradientBar: "bg-gradient-to-r from-[#0092ff] to-[#00d4ff]",
     },
     itens: [
@@ -33,7 +33,7 @@ const servicos = [
       bg: "bg-primary/10",
       border: "border-primary/15",
       hoverBorder: "hover:border-primary/30",
-      text: "text-primary",
+      text: "text-primary-text",
       badgeBg: "bg-primary-light",
       gradientBar: "bg-gradient-to-r from-primary to-[#00d4a0]",
     },
@@ -53,8 +53,8 @@ const servicos = [
       bg: "bg-[#a941f3]/10",
       border: "border-[#a941f3]/15",
       hoverBorder: "hover:border-[#a941f3]/30",
-      text: "text-[#a941f3]",
-      badgeBg: "bg-[#a941f3]/10",
+      text: "text-[#6d28d9]",
+      badgeBg: "bg-[#6d28d9]/10",
       gradientBar: "bg-gradient-to-r from-[#a941f3] to-[#d480ff]",
     },
     itens: [
@@ -79,7 +79,7 @@ export default function Servicos() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            Nossos <span className="text-primary">Serviços</span>
+            Nossos <span className="text-primary-text">Serviços</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
             Soluções tecnológicas de alto impacto para simplificar seus
@@ -143,7 +143,7 @@ export default function Servicos() {
           className="mt-24 text-center"
         >
           <h3 className="text-2xl font-bold text-foreground md:text-3xl">
-            Explore nossas <span className="text-primary">soluções</span>
+            Explore nossas <span className="text-primary-text">soluções</span>
           </h3>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
             Quatro ferramentas que trabalham juntas no seu WhatsApp. Conheça cada uma em detalhes.

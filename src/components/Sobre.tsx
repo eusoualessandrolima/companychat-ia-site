@@ -33,7 +33,7 @@ export default function Sobre() {
             transition={{ duration: 0.5 }}
           >
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-              Sobre a <span className="text-primary">CompanyChat</span>
+              Sobre a <span className="text-primary-text">CompanyChat</span>
             </h2>
             <p className="mt-6 leading-relaxed text-text-secondary">
               A CompanyChat nasceu para impulsionar empresas a alcançarem seu potencial máximo,
@@ -58,7 +58,7 @@ export default function Sobre() {
                 key={i}
                 className="group flex gap-4 rounded-2xl border border-card-border bg-card p-6 shadow-sm transition-all hover:border-primary/25 hover:shadow-md"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-light text-primary transition-colors group-hover:bg-primary/20">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-light text-primary-text transition-colors group-hover:bg-primary/20">
                   <v.icon aria-hidden="true" className="h-6 w-6" />
                 </div>
                 <div>

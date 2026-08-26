@@ -214,11 +214,11 @@ export default function Nichos() {
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <span className="inline-flex items-center rounded-full bg-primary-light px-4 py-1.5 text-xs font-semibold tracking-[0.12em] text-primary-dark uppercase">
+          <span className="inline-flex items-center rounded-full bg-primary-light px-4 py-1.5 text-xs font-semibold tracking-[0.12em] text-primary-text uppercase">
             Segmentos atendidos
           </span>
           <h2 className="mt-5 text-3xl font-bold md:text-4xl">
-            Soluções para <span className="text-primary">diferentes</span> segmentos
+            Soluções para <span className="text-primary-text">diferentes</span> segmentos
           </h2>
           <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-text-secondary">
             Cada área tem desafios próprios de atendimento, vendas e relacionamento.
@@ -258,7 +258,7 @@ export default function Nichos() {
                 <h3 className="text-lg font-bold text-foreground">{n.titulo}</h3>
                 <ArrowRight
                   aria-hidden="true"
-                  className="mt-1 h-5 w-5 shrink-0 text-text-secondary transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary"
+                  className="mt-1 h-5 w-5 shrink-0 text-text-secondary transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary-text"
                 />
               </div>
 
@@ -267,7 +267,7 @@ export default function Nichos() {
               </p>
 
               {/* No desktop o CTA se revela no card sob o cursor; no toque fica sempre visível */}
-              <span className="mt-auto flex items-center gap-2 pt-5 text-sm font-semibold text-primary transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100 md:group-focus-visible:opacity-100">
+              <span className="mt-auto flex items-center gap-2 pt-5 text-sm font-semibold text-primary-text transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100 md:group-focus-visible:opacity-100">
                 Falar sobre {n.titulo}
                 <ArrowRight aria-hidden="true" className="h-4 w-4" />
               </span>
@@ -282,7 +282,7 @@ export default function Nichos() {
             type="button"
             onClick={() => irPara(-1)}
             aria-label="Ver segmentos anteriores"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-card-border bg-card text-foreground shadow-sm transition-all hover:border-primary/40 hover:text-primary hover:shadow-md"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-card-border bg-card text-foreground shadow-sm transition-all hover:border-primary/40 hover:text-primary-text hover:shadow-md"
           >
             <ChevronLeft aria-hidden="true" className="h-5 w-5" />
           </button>
@@ -290,7 +290,7 @@ export default function Nichos() {
             type="button"
             onClick={() => irPara(1)}
             aria-label="Ver próximos segmentos"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-card-border bg-card text-foreground shadow-sm transition-all hover:border-primary/40 hover:text-primary hover:shadow-md"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-card-border bg-card text-foreground shadow-sm transition-all hover:border-primary/40 hover:text-primary-text hover:shadow-md"
           >
             <ChevronRight aria-hidden="true" className="h-5 w-5" />
           </button>
@@ -308,7 +308,7 @@ export default function Nichos() {
           </a>
           <a
             href="#planos"
-            className="inline-flex items-center gap-2 rounded-full border border-card-border bg-card px-7 py-3.5 text-sm font-semibold text-foreground transition-all hover:border-primary/40 hover:text-primary"
+            className="inline-flex items-center gap-2 rounded-full border border-card-border bg-card px-7 py-3.5 text-sm font-semibold text-foreground transition-all hover:border-primary/40 hover:text-primary-text"
           >
             Ver planos
             <ArrowRight aria-hidden="true" className="h-4 w-4" />

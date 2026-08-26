@@ -33,7 +33,7 @@ export default function Solucao() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            A solução que faz a <span className="text-primary">diferença</span>
+            A solução que faz a <span className="text-primary-text">diferença</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
             Qualifique seus leads, atenda e venda todos os dias de forma inteligente
@@ -81,7 +81,7 @@ export default function Solucao() {
             >
               <span
                 aria-hidden="true"
-                className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15 text-sm font-bold text-primary"
+                className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/15 text-sm font-bold text-primary-text"
               >
                 C
               </span>

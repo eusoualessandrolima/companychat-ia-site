@@ -18,7 +18,7 @@ export default function Contato() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            Pronto para <span className="text-primary">transformar</span> seu
+            Pronto para <span className="text-primary-text">transformar</span> seu
             atendimento?
           </h2>
           <p className="mt-4 text-text-secondary">
@@ -52,7 +52,7 @@ export default function Contato() {
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"
+              className="inline-flex items-center gap-1.5 font-semibold text-primary-text hover:underline"
             >
               <WhatsAppIcon className="h-4 w-4" />
               Chamar no WhatsApp
@@ -61,7 +61,7 @@ export default function Contato() {
 
           <p className="mt-3 text-sm text-text-secondary">
             Prefere ver os valores antes?{" "}
-            <Link href="/planos" className="font-semibold text-primary hover:underline">
+            <Link href="/planos" className="font-semibold text-primary-text hover:underline">
               Conheça os planos
             </Link>
           </p>

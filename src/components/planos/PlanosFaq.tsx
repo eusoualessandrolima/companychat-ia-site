@@ -63,7 +63,7 @@ function Item({ pergunta, resposta, idx }: { pergunta: string; resposta: string;
       >
         <span className="pr-4 font-medium text-foreground">{pergunta}</span>
         <ChevronDown
-          className={`h-5 w-5 shrink-0 text-primary transition-transform ${open ? "rotate-180" : ""}`}
+          className={`h-5 w-5 shrink-0 text-primary-text transition-transform ${open ? "rotate-180" : ""}`}
           aria-hidden="true"
         />
       </button>
@@ -99,7 +99,7 @@ export default function PlanosFaq() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            Dúvidas sobre <span className="text-primary">planos e valores</span>
+            Dúvidas sobre <span className="text-primary-text">planos e valores</span>
           </h2>
           <p className="mt-4 text-text-secondary">O que mais perguntam antes de fechar.</p>
         </motion.div>

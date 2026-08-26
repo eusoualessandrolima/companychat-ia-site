@@ -16,7 +16,7 @@ export default function Categorias() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            As 3 categorias <span className="text-primary">cobradas</span>
+            As 3 categorias <span className="text-primary-text">cobradas</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
             A Meta cobra por template enviado, e o valor muda conforme a categoria.

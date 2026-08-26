@@ -53,7 +53,7 @@ function Item({ pergunta, resposta, idx }: { pergunta: string; resposta: string;
       >
         <span className="pr-4 font-medium text-foreground">{pergunta}</span>
         <ChevronDown
-          className={`h-5 w-5 shrink-0 text-primary transition-transform ${open ? "rotate-180" : ""}`}
+          className={`h-5 w-5 shrink-0 text-primary-text transition-transform ${open ? "rotate-180" : ""}`}
           aria-hidden="true"
         />
       </button>
@@ -89,7 +89,7 @@ export default function DisparoFaq() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            Dúvidas sobre <span className="text-primary">disparo em massa</span>
+            Dúvidas sobre <span className="text-primary-text">disparo em massa</span>
           </h2>
           <p className="mt-4 text-text-secondary">As perguntas que mais recebemos dos clientes.</p>
         </motion.div>
