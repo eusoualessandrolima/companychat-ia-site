@@ -108,6 +108,41 @@ export async function POST(requisicao: Request) {
   const telefone = texto(corpo.telefone, 20);
   const digitos = telefone?.replace(/\D/g, "") ?? "";
 
+  const origem = sanitizarOrigem(corpo.origem);
+
+  /* Prova do consentimento (LGPD).
+   *
+   * A política publicada em `/privacidade` promete, textualmente, guardar "a
+   * data, a hora e a versão do texto que você aceitou". Até 26/08/2026 a
+   * candidatura de `/10-empresas` validava o checkbox só no navegador e não o
+   * enviava: não havia registro nenhum, e um POST direto aqui gravava o lead
+   * sem consentimento algum. Agora o servidor recusa.
+   *
+   * A exigência vale só para o envio da candidatura em si. O `sendBeacon` que
+   * marca "clicou no WhatsApp" reenvia o mesmo lead **já consentido** apenas
+   * para atualizar essa flag, e não carrega o aceite de novo — cobrá-lo ali
+   * apagaria a medição sem proteger nada.
+   *
+   * O aceite vai dentro de `origem` (que é `jsonb`) e não em coluna nova: não
+   * exige migração no banco de produção, aparece no painel e no CSV, e é
+   * reversível. Quando houver janela para migrar, o par certo são colunas
+   * próprias, como em `teste_gratis` (`consentimento_em`, `_versao`). */
+  const ehCandidatura = origem.tipo === "candidatura";
+  const soMarcandoWhatsApp = corpo.clicouWhatsapp === true;
+
+  if (ehCandidatura && !soMarcandoWhatsApp) {
+    if (corpo.consentimento !== true) {
+      return NextResponse.json(
+        { ok: false, erro: "consentimento obrigatório" },
+        { status: 422 }
+      );
+    }
+    origem.consentimento = "true";
+    origem.consentimento_versao = texto(corpo.consentimentoVersao, 40) ?? "";
+    origem.consentimento_em =
+      texto(corpo.consentimentoEm, 40) ?? new Date().toISOString();
+  }
+
   const lead = {
     id,
     nome: texto(corpo.nome),
@@ -124,7 +159,7 @@ export async function POST(requisicao: Request) {
     etapa: typeof corpo.etapa === "number" ? Math.min(Math.max(corpo.etapa, 0), 99) : 0,
     concluido: corpo.concluido === true,
     clicou_whatsapp: corpo.clicouWhatsapp === true,
-    origem: sanitizarOrigem(corpo.origem),
+    origem,
   };
 
   const { gravado, inserido } = await salvarLead(lead);
