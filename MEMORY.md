@@ -200,15 +200,26 @@ Caminho comercial principal do site. Detalhes de operação em `docs/funil-teste
 
 LP de campanha com um objetivo só: candidatura para a seleção de 10 empresas que
 recebem a implantação gratuita de um assistente de IA. Sem menu, sem calculadora e
-mais curta que as LPs de nicho — hero → o que a IA poderá fazer → o que será entregue
-→ por que estamos fazendo isso → para quem é → formulário → FAQ → CTA final.
+mais curta que as LPs de nicho.
+
+**Redesenhada em 2026-08-26** (UX/UI + CRO + arquitetura). Ordem das seções hoje:
+hero → percepção de valor (única seção clara) → jornada em 4 passos → bento de
+capacidades → timeline da entrega → para quem é / para quem não é → quem está por
+trás → como funciona a seleção → formulário (2 etapas) → FAQ → fechamento.
 
 | Arquivo | Descrição |
 |---------|-----------|
 | `src/app/10-empresas/page.tsx` | Rota, metadados/OG, `noindex` e o Pixel global (`<MetaPixel />`, sem variável própria) |
-| `src/components/dez-empresas/Campanha.tsx` | A landing inteira (client), com as seções e os CTAs |
-| `src/components/dez-empresas/FormularioCandidatura.tsx` | Formulário de 10 campos, validação, estados e pós-envio sem recarregar |
+| `src/app/10-empresas/error.tsx` | Boundary da rota: erro de runtime não derruba mais a campanha inteira |
+| `src/components/dez-empresas/Campanha.tsx` | **Server Component**: só compõe as seções |
+| `src/components/dez-empresas/Hero.tsx` | Hero, mock do WhatsApp e as etiquetas de resultado |
+| `src/components/dez-empresas/Secao*.tsx` | Uma por seção, todas Server Components |
+| `src/components/dez-empresas/Moldura.tsx` | Cabeçalho e rodapé |
+| `src/components/dez-empresas/CtaAncora.tsx` · `LinkWhatsApp.tsx` · `MedidorDePagina.tsx` | As três ilhas de cliente (só analytics) |
+| `src/components/dez-empresas/FormularioCandidatura.tsx` | Formulário de 8 campos em 2 etapas de interface, com 1 POST |
 | `src/components/dez-empresas/conteudo.ts` | Toda a copy, incluindo o FAQ com a regra comercial da campanha |
+| `src/components/comum/Revelar.tsx` · `Rotulo.tsx` · `FundoAurora.tsx` | Primitivas compartilhadas com as LPs de nicho (antes duplicadas byte a byte) |
+| `src/components/icones/WhatsAppIcon.tsx` | SVG isolado, sem `"use client"` |
 | `src/lib/origem.ts` | Saneia o `origem` (jsonb) de qualquer lead: teto de chaves e de tamanho |
 | `tests/campanha-10-empresas.mjs` | Verificação no navegador (`npm run test:campanha10`) |
 | `tests/unidade/origem.test.mjs` | Testes do saneamento da origem |
@@ -236,6 +247,34 @@ Decisões desta LP:
   separadamente, com valor apresentado antes; a participação não gera contratação
   automática. Proibido na copy: "gratuito para sempre" e qualquer integração ou
   recurso que ainda não exista.
+
+#### Redesign de 2026-08-26 — decisões
+
+- **A escassez virou o `<h1>`.** Antes o título era "Atenda seus clientes com mais
+  eficiência e agilidade" — a mesma frase da `/teste-gratis` — e "10 empresas" vivia
+  num badge de 12px. Numa página cujo argumento é a seleção, a seleção não pode estar
+  no menor tipo da tela.
+- **Sem âncora de preço riscado.** O briefing previa "~~R$ X.XXX~~ → R$ 0", mas o site
+  parou de publicar valor em 26/08 (preço sai no diagnóstico). O card mostra "R$ 0 ·
+  Implantação inicial 100% gratuita", sem número inventado.
+- **Uma seção clara no meio do escuro** (`.superficie-areia`), na percepção de valor.
+  A página passava seis seções escuras sem quebra de temperatura.
+- **Formulário em 2 etapas, não 3.** Só na interface: um POST, um `id` de lead. Wizard
+  de 3 passos numa LP curta anuncia "isto vai demorar" antes de a pessoa ver o fim.
+- **Botão principal é sempre `type="submit"`.** Alternar entre `button` e `submit`
+  conforme a etapa criou um bug silencioso: o React reaproveita o nó e troca só o
+  atributo, então o mesmo clique que avançava também submetia, e a etapa 2 nascia com
+  os 5 campos em vermelho. Coberto por teste de regressão.
+- **Framer Motion saiu da rota.** `Revelar` virou CSS (`animation-timeline: view()`
+  dentro de `@supports`), e a página deixou de ter um chunk privado de 140 KB. JS da
+  rota: 246 KB → 202 KB gzip. Elementos com `opacity:0` no HTML do servidor: 32 → 0.
+- **`@media print` desliga a revelação.** Sem rolagem, animação ancorada na rolagem
+  nunca sai do quadro inicial: um Ctrl+P saía com seis seções em branco.
+- **Consentimento agora é gravado** (`consentimento`, `_versao`, `_em` dentro de
+  `origem`), e o servidor recusa candidatura sem ele. A política publicada já
+  prometia esse registro desde sempre; o código não cumpria.
+- **Honeypot `empresaWebsite`** passou a existir neste formulário. A API já checava o
+  campo — era esta página que não o renderizava, o que deixava a proteção inerte.
 - **Hero fora do `Revelar`.** O `Revelar` (motion com `initial opacity 0`) sai no
   HTML do servidor já invisível e só acende na hidratação. Como o `<h1>` é o
   elemento de LCP, isso custava **5,2 s de LCP no Lighthouse mobile** (91% em
