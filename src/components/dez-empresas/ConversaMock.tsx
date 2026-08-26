@@ -31,8 +31,14 @@ import { conversa, etiquetasHero } from "./conteudo";
 export default function ConversaMock() {
   return (
     <div aria-hidden="true" className="relative">
-      {/* Aura do mockup: brilho verde atrás do aparelho, sem tocar o conteúdo. */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[115%] w-[125%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,220,163,0.20),rgba(0,220,163,0)_67%)] blur-[10px]" />
+      {/* Aura do mockup: brilho verde atrás do aparelho.
+          Medida em `rem` e limitada a `100%`, e não em `125%` da coluna: a
+          125% ela dava 569px numa `<section>` de 1152px que já tinha o
+          telefone encostado à direita, e os últimos 24px do brilho batiam no
+          `overflow-x: clip` da seção. O corte aparecia como uma linha vertical
+          reta ao lado do aparelho — brilho não tem borda reta, e era isso que
+          denunciava o defeito. 27rem é a medida do mockup original (430px). */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[30rem] w-[min(27rem,100%)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,220,163,0.20),rgba(0,220,163,0)_67%)] blur-[10px]" />
 
       {/* Moldura. A perspectiva é a do mockup, com o ângulo reduzido de 5° para
           3°: a 5° a borda esquerda do aparelho passava do contêiner nas
@@ -49,7 +55,13 @@ export default function ConversaMock() {
 
           {/* Cabeçalho do WhatsApp */}
           <div className="grid grid-cols-[34px_1fr_auto] items-center gap-[9px] bg-[#202c33] px-[13px] py-[11px]">
-            <Simbolo className="h-[34px] w-[34px] rounded-full" />
+            {/* O símbolo é 440×460 — mais alto que largo. Forçado num quadrado
+                de 34px com `rounded-full`, o balão ficava esticado e as pontas
+                saíam pelo recorte do círculo. Agora o círculo é o contêiner e
+                o símbolo entra dentro dele, inteiro, com folga. */}
+            <span className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[#0b141a]">
+              <Simbolo className="h-[19px] w-auto" />
+            </span>
             <div className="min-w-0">
               <p className="truncate text-[0.8125rem] font-semibold text-[#f2f4f3]">
                 {conversa.contato}
