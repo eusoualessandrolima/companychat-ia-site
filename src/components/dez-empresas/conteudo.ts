@@ -96,7 +96,7 @@ export const capacidades: {
   complemento: string;
   itens: { icone: LucideIcon; texto: string }[];
 } = {
-  titulo: "Escolha como a IA poderá ajudar sua empresa",
+  titulo: "Veja como a IA pode ajudar sua empresa",
   complemento:
     "O fluxo será adaptado ao segmento, ao atendimento e aos objetivos da empresa selecionada.",
   itens: [
