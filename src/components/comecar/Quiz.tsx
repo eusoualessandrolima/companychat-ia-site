@@ -246,14 +246,14 @@ function Fundo() {
       <div
         className="absolute -top-40 -left-40 h-[600px] w-[600px] rounded-full opacity-[0.12]"
         style={{
-          background: "radial-gradient(circle, #00ab7a 0%, #0092ff 50%, transparent 70%)",
+          background: "radial-gradient(circle, #00c896 0%, #0092ff 50%, transparent 70%)",
           animation: "blob-float 14s ease-in-out infinite",
         }}
       />
       <div
         className="absolute -bottom-48 -right-32 h-[560px] w-[560px] rounded-full opacity-[0.10]"
         style={{
-          background: "radial-gradient(circle, #8b5cf6 0%, #00ab7a 60%, transparent 70%)",
+          background: "radial-gradient(circle, #a78bfa 0%, #00c896 60%, transparent 70%)",
           animation: "blob-float-slow 18s ease-in-out infinite",
         }}
       />

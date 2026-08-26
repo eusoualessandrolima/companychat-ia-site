@@ -94,7 +94,7 @@ export default function TesteGratis() {
             className="absolute -left-40 -top-40 h-[620px] w-[620px] rounded-full opacity-[0.10]"
             style={{
               background:
-                "radial-gradient(circle, #00ab7a 0%, #0092ff 50%, transparent 70%)",
+                "radial-gradient(circle, #00c896 0%, #0092ff 50%, transparent 70%)",
             }}
           />
         </div>

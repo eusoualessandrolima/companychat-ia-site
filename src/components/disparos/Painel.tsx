@@ -23,7 +23,7 @@ export default function Painel() {
       <div className="pointer-events-none absolute inset-0">
         <div
           className="absolute -top-32 right-0 h-[500px] w-[500px] rounded-full opacity-[0.08]"
-          style={{ background: "radial-gradient(circle, #00ab7a 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, #00c896 0%, transparent 70%)" }}
         />
       </div>
 

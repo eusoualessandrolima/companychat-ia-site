@@ -161,7 +161,7 @@ function Fundo() {
         className="absolute -top-40 -left-40 h-[600px] w-[600px] rounded-full opacity-[0.12]"
         style={{
           background:
-            "radial-gradient(circle, #00ab7a 0%, #0092ff 50%, transparent 70%)",
+            "radial-gradient(circle, #00c896 0%, #0092ff 50%, transparent 70%)",
           animation: "blob-float 14s ease-in-out infinite",
         }}
       />
@@ -222,7 +222,7 @@ export default function Campanha() {
             <div>
               {/* Escassez declarada, sem contador: são 10 vagas fixas, e não
                 existe fonte de dados de "restantes" para mostrar. */}
-              <div className="flex w-fit items-center gap-2.5 rounded-full border border-primary/25 bg-primary/[0.08] px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary shadow-[0_0_24px_-6px_rgba(0,171,122,0.45)] backdrop-blur-sm sm:text-sm">
+              <div className="flex w-fit items-center gap-2.5 rounded-full border border-primary/25 bg-primary/[0.08] px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary shadow-[0_0_24px_-6px_rgba(0, 200, 150,0.45)] backdrop-blur-sm sm:text-sm">
                 <span
                   aria-hidden="true"
                   className="relative flex h-2 w-2 shrink-0 items-center justify-center"

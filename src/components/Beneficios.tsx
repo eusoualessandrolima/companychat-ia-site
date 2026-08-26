@@ -163,7 +163,7 @@ export default function Beneficios() {
                   </div>
                   <span className="text-sm font-medium text-dark-text">{item.ia}</span>
                 </div>
-                <Bar pct={item.pcIA} color="#00ab7a" label="Eficiência" triggered={triggered} />
+                <Bar pct={item.pcIA} color="#00c896" label="Eficiência" triggered={triggered} />
               </div>
             </motion.div>
           ))}

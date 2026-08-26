@@ -17,7 +17,7 @@ export default function CompanyAiCta() {
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-1/2 h-[520px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.10] blur-[150px]"
-        style={{ background: "radial-gradient(ellipse, #00ab7a 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse, #00c896 0%, transparent 70%)" }}
       />
 
       <motion.div

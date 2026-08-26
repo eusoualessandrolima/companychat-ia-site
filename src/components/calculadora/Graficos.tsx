@@ -10,10 +10,19 @@ import {
 } from "@/components/calculadora/calculo";
 
 /* Paleta das séries. Fora dos tokens de propósito: são cores de dado, não de
-   interface, e precisam ficar estáveis mesmo se a marca mudar de tom. */
+   interface, e precisam ficar estáveis mesmo se a marca mudar de tom.
+ *
+ * O verde foi atualizado uma vez, na adoção da paleta oficial, porque o valor
+ * antigo tinha deixado de existir em qualquer lugar do site e o gráfico ficava
+ * ao lado da interface com um verde que não era mais o da marca. Continua
+ * literal, e não token, justamente para não acompanhar mudanças futuras.
+ *
+ * O que separa as três séries é matiz, não luminância — verde, vermelho e
+ * cinza têm entre si só 1,28:1 e 1,75:1. Quem não distingue cor depende da
+ * legenda e do rótulo, que por isso não podem sair. */
 const COR_ATUAL = "#a1a1aa";
 const COR_FUTURO = "#f87171";
-const COR_HIBRIDO = "#00ab7a";
+const COR_HIBRIDO = "#00c896";
 
 const GRADE = "rgba(255,255,255,0.08)";
 const EIXO = "#a1a1aa";

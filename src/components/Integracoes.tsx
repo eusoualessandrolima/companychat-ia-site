@@ -28,8 +28,8 @@ const R_IN  = 118;
 const R_OUT = 192;
 
 const PARTICLES = [
-  { r: R_IN,  dur: 7,  start: 0,   sz: 4, clr: "rgba(0,171,122,0.85)",  dir: "cw"  },
-  { r: R_IN,  dur: 11, start: 180, sz: 3, clr: "rgba(0,171,122,0.45)",  dir: "cw"  },
+  { r: R_IN,  dur: 7,  start: 0,   sz: 4, clr: "rgba(0, 200, 150,0.85)",  dir: "cw"  },
+  { r: R_IN,  dur: 11, start: 180, sz: 3, clr: "rgba(0, 200, 150,0.45)",  dir: "cw"  },
   { r: R_OUT, dur: 13, start: 60,  sz: 4, clr: "rgba(59,130,246,0.75)", dir: "ccw" },
   { r: R_OUT, dur: 19, start: 240, sz: 3, clr: "rgba(59,130,246,0.4)",  dir: "ccw" },
 ] as const;
@@ -196,7 +196,7 @@ function OrbitalDiagram() {
         <circle
           cx={CX} cy={CX} r={R_IN}
           fill="none"
-          stroke="rgba(0,171,122,0.22)"
+          stroke="rgba(0, 200, 150,0.22)"
           strokeWidth={1}
           strokeDasharray="4 6"
           style={{
@@ -301,7 +301,7 @@ function OrbitalDiagram() {
               left: -40,
               top: -40,
               borderRadius: "50%",
-              border: "1px solid rgba(0,171,122,0.35)",
+              border: "1px solid rgba(0, 200, 150,0.35)",
               animation: `pulse-ring 3s cubic-bezier(0,0,0.2,1) ${i * 1}s infinite`,
             }}
           />
@@ -314,11 +314,11 @@ function OrbitalDiagram() {
             left: -36,
             top: -36,
             borderRadius: "50%",
-            background: "radial-gradient(circle at 38% 32%, rgba(0,171,122,0.24), rgba(0,171,122,0.07))",
-            border: "1px solid rgba(0,171,122,0.45)",
+            background: "radial-gradient(circle at 38% 32%, rgba(0, 200, 150,0.24), rgba(0, 200, 150,0.07))",
+            border: "1px solid rgba(0, 200, 150,0.45)",
             backdropFilter: "blur(16px)",
             WebkitBackdropFilter: "blur(16px)",
-            boxShadow: "0 0 40px rgba(0,171,122,0.12), inset 0 1px 0 rgba(255,255,255,0.1)",
+            boxShadow: "0 0 40px rgba(0, 200, 150,0.12), inset 0 1px 0 rgba(255,255,255,0.1)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -329,7 +329,7 @@ function OrbitalDiagram() {
             style={{
               fontSize: 9,
               fontWeight: 700,
-              color: "#00ab7a",
+              color: "#00c896",
               lineHeight: 1.3,
               textAlign: "center",
             }}
@@ -372,7 +372,7 @@ export default function Integracoes() {
           position: "absolute",
           inset: 0,
           pointerEvents: "none",
-          background: `radial-gradient(600px circle at ${mousePos.x}% ${mousePos.y}%, rgba(0,171,122,0.055), transparent 55%)`,
+          background: `radial-gradient(600px circle at ${mousePos.x}% ${mousePos.y}%, rgba(0, 200, 150,0.055), transparent 55%)`,
           transition: "background 0.4s ease",
         }}
       />
@@ -387,7 +387,7 @@ export default function Integracoes() {
           height: 500,
           transform: "translate(-50%,-50%)",
           borderRadius: "50%",
-          background: "radial-gradient(ellipse, rgba(0,171,122,0.035) 0%, transparent 65%)",
+          background: "radial-gradient(ellipse, rgba(0, 200, 150,0.035) 0%, transparent 65%)",
           pointerEvents: "none",
         }}
       />
@@ -411,7 +411,7 @@ export default function Integracoes() {
         style={{
           position: "absolute",
           top: 0, left: 0, right: 0, height: 1,
-          background: "linear-gradient(90deg, transparent 10%, rgba(0,171,122,0.28) 50%, transparent 90%)",
+          background: "linear-gradient(90deg, transparent 10%, rgba(0, 200, 150,0.28) 50%, transparent 90%)",
           pointerEvents: "none",
         }}
       />
@@ -440,8 +440,8 @@ export default function Integracoes() {
               transition={{ duration: 0.5 }}
               className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5"
               style={{
-                background: "rgba(0,171,122,0.09)",
-                border: "1px solid rgba(0,171,122,0.28)",
+                background: "rgba(0, 200, 150,0.09)",
+                border: "1px solid rgba(0, 200, 150,0.28)",
               }}
             >
               <span className="h-1.5 w-1.5 rounded-full bg-primary animate-dot-ping" />
@@ -449,7 +449,7 @@ export default function Integracoes() {
                 style={{
                   fontSize: 11,
                   fontWeight: 700,
-                  color: "#00ab7a",
+                  color: "#00c896",
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
                 }}

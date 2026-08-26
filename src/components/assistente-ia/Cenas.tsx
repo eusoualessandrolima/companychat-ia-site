@@ -152,7 +152,7 @@ export default function Cenas() {
       <div className="pointer-events-none absolute inset-0">
         <div
           className="absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full opacity-[0.07]"
-          style={{ background: "radial-gradient(circle, #00ab7a 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, #00c896 0%, transparent 70%)" }}
         />
       </div>
 

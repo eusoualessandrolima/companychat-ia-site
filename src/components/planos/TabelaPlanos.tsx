@@ -13,7 +13,7 @@ export default function TabelaPlanos() {
         <div
           className="absolute -top-32 left-1/2 h-[700px] w-[700px] -translate-x-1/2 rounded-full opacity-[0.10]"
           style={{
-            background: "radial-gradient(circle, #00ab7a 0%, #0092ff 50%, transparent 70%)",
+            background: "radial-gradient(circle, #00c896 0%, #0092ff 50%, transparent 70%)",
             animation: "blob-float 16s ease-in-out infinite",
           }}
         />

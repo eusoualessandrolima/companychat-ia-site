@@ -12,7 +12,7 @@ export default function AgenteCta() {
       <div className="pointer-events-none absolute inset-0">
         <div
           className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.12]"
-          style={{ background: "radial-gradient(circle, #00ab7a 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, #00c896 0%, transparent 70%)" }}
         />
       </div>
 

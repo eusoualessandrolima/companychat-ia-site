@@ -16,7 +16,7 @@ export default function CompanyAi() {
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -bottom-40 left-1/4 h-[520px] w-[820px] -translate-x-1/2 rounded-full opacity-[0.09] blur-[150px]"
-        style={{ background: "radial-gradient(ellipse, #00ab7a 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse, #00c896 0%, transparent 70%)" }}
       />
 
       <div className="relative mx-auto max-w-6xl px-4">
@@ -84,7 +84,7 @@ export default function CompanyAi() {
                 className="pointer-events-none absolute inset-0 opacity-70 transition-opacity duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:opacity-100"
                 style={{
                   background:
-                    "radial-gradient(circle at 50% 0%, rgba(0,171,122,0.15) 0%, transparent 65%)",
+                    "radial-gradient(circle at 50% 0%, rgba(0, 200, 150,0.15) 0%, transparent 65%)",
                 }}
               />
               <div className="relative flex gap-5">
@@ -119,7 +119,7 @@ export default function CompanyAi() {
                   className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:opacity-100"
                   style={{
                     background:
-                      "radial-gradient(circle at 50% 0%, rgba(0,171,122,0.13) 0%, transparent 65%)",
+                      "radial-gradient(circle at 50% 0%, rgba(0, 200, 150,0.13) 0%, transparent 65%)",
                   }}
                 />
                 <div className="relative">

@@ -40,7 +40,7 @@ export default function OqueConstruimos() {
             className="pointer-events-none absolute inset-0 opacity-70 transition-opacity duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:opacity-100"
             style={{
               background:
-                "radial-gradient(circle at 50% 0%, rgba(0,171,122,0.16) 0%, transparent 62%)",
+                "radial-gradient(circle at 50% 0%, rgba(0, 200, 150,0.16) 0%, transparent 62%)",
             }}
           />
 
@@ -91,7 +91,7 @@ export default function OqueConstruimos() {
                 className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:opacity-100"
                 style={{
                   background:
-                    "radial-gradient(circle at 50% 0%, rgba(0,171,122,0.13) 0%, transparent 65%)",
+                    "radial-gradient(circle at 50% 0%, rgba(0, 200, 150,0.13) 0%, transparent 65%)",
                 }}
               />
 

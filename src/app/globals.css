@@ -160,8 +160,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::selection {
-  background: rgba(0, 171, 122, 0.25);
-  color: #09090b;
+  background: rgba(0, 200, 150, 0.25);
+  color: #071011;
 }
 
 /* Keyboard focus ring: verde da marca, consistente e só no foco por teclado.
@@ -222,8 +222,8 @@ body::before {
    é um motion.button com whileTap, e uma animação CSS de transform
    sobrescreveria o feedback de toque do Framer Motion. */
 @keyframes cta-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 171, 122, 0.5), 0 12px 32px rgba(0, 171, 122, 0.28); }
-  50%       { box-shadow: 0 0 0 16px rgba(0, 171, 122, 0), 0 12px 32px rgba(0, 171, 122, 0.28); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 200, 150, 0.5), 0 12px 32px rgba(0, 200, 150, 0.28); }
+  50%       { box-shadow: 0 0 0 16px rgba(0, 200, 150, 0), 0 12px 32px rgba(0, 200, 150, 0.28); }
 }
 
 @keyframes blob-float {
@@ -395,12 +395,12 @@ body::before {
      sem emenda visível. */
   background-image: linear-gradient(
     100deg,
-    #00ab7a 0%,
+    #00c896 0%,
     #00d4a0 22%,
     #22d3ee 46%,
-    #3b82f6 68%,
+    #38bdf8 68%,
     #00d4a0 86%,
-    #00ab7a 100%
+    #00c896 100%
   );
   background-size: 150% 100%;
   background-position: 0% 50%;
@@ -450,7 +450,7 @@ body::before {
   }
   .cartao-realce:hover {
     transform: translateY(-2px);
-    border-color: rgba(0, 171, 122, 0.35);
+    border-color: rgba(0, 200, 150, 0.35);
   }
 }
 
@@ -464,22 +464,22 @@ body::before {
    turquesa. O texto continua sendo o quase-preto `on-primary`, que dá 6,45:1
    sobre o verde e mais ainda sobre o turquesa, que é mais claro. */
 .botao-marca {
-  background-image: linear-gradient(135deg, #00ab7a 0%, #00c78f 55%, #00d4a0 100%);
-  box-shadow: 0 10px 30px rgba(0, 171, 122, 0.28), 0 0 0 0 rgba(0, 212, 160, 0.4);
+  background-image: linear-gradient(135deg, #00c896 0%, #00c78f 55%, #00d4a0 100%);
+  box-shadow: 0 10px 30px rgba(0, 200, 150, 0.28), 0 0 0 0 rgba(0, 212, 160, 0.4);
   transition: box-shadow 0.25s ease, filter 0.25s ease;
 }
 .botao-marca:hover {
   filter: brightness(1.06);
-  box-shadow: 0 14px 38px rgba(0, 171, 122, 0.36), 0 0 0 6px rgba(0, 212, 160, 0.12);
+  box-shadow: 0 14px 38px rgba(0, 200, 150, 0.36), 0 0 0 6px rgba(0, 212, 160, 0.12);
 }
 .botao-marca:active {
   filter: brightness(0.97);
-  box-shadow: 0 6px 18px rgba(0, 171, 122, 0.3);
+  box-shadow: 0 6px 18px rgba(0, 200, 150, 0.3);
 }
 
 /* Gradient text */
 .text-gradient-primary {
-  background: linear-gradient(135deg, #00ab7a 0%, #00d4a0 45%, #3b82f6 100%);
+  background: linear-gradient(135deg, #00c896 0%, #00d4a0 45%, #38bdf8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -494,7 +494,7 @@ body::before {
   position: absolute;
   inset: -2px;
   border-radius: 9999px;
-  background: linear-gradient(135deg, #00ab7a, #3b82f6, #8b5cf6, #00ab7a);
+  background: linear-gradient(135deg, #00c896, #38bdf8, #a78bfa, #00c896);
   background-size: 300% 300%;
   animation: gradient-border 4s ease infinite;
   opacity: 0;
@@ -516,7 +516,7 @@ body::before {
   inset: 0;
   border-radius: inherit;
   padding: 1.5px;
-  background: linear-gradient(120deg, #00ab7a, #00d4a0, #3b82f6, #8b5cf6, #00ab7a);
+  background: linear-gradient(120deg, #00c896, #00d4a0, #38bdf8, #a78bfa, #00c896);
   background-size: 300% 300%;
   animation: gradient-border 4.5s ease infinite;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -530,7 +530,7 @@ body::before {
   position: absolute;
   inset: -3px;
   border-radius: inherit;
-  background: linear-gradient(120deg, #00ab7a, #3b82f6, #8b5cf6, #00ab7a);
+  background: linear-gradient(120deg, #00c896, #38bdf8, #a78bfa, #00c896);
   background-size: 300% 300%;
   animation: gradient-border 4.5s ease infinite;
   opacity: 0.35;
