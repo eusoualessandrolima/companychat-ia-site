@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { AlertTriangle } from "lucide-react";
 import { bancoConfigurado, listarLeads } from "@/lib/leads";
-import { estaAutenticado, painelConfigurado } from "@/lib/painel";
+import { MINIMO_SENHA, estaAutenticado, painelConfigurado } from "@/lib/painel";
 import FormSenha from "@/components/leads/FormSenha";
 import ListaLeads from "@/components/leads/ListaLeads";
 
@@ -36,7 +36,7 @@ export default async function Leads() {
     return (
       <Aviso
         titulo="Painel sem senha"
-        texto="Cadastre a variável PAINEL_LEADS_SENHA (mínimo 6 caracteres) no ambiente para liberar o acesso."
+        texto={`Cadastre a variável PAINEL_LEADS_SENHA com no mínimo ${MINIMO_SENHA} caracteres no ambiente para liberar o acesso. Esta senha é a única barreira entre a internet e a base de leads: use um valor aleatório de um gerenciador de senhas.`}
       />
     );
   }

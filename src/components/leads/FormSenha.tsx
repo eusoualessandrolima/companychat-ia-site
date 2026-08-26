@@ -28,11 +28,19 @@ export default function FormSenha() {
         return;
       }
 
-      setErro(
-        resposta.status === 503
-          ? "O painel ainda não tem senha configurada."
-          : "Senha incorreta."
-      );
+      if (resposta.status === 429) {
+        /* O `Retry-After` vem em segundos; arredondar para cima em minutos
+           evita prometer "tente em 1 segundo" quando faltam 90. */
+        const espera = Number(resposta.headers.get("Retry-After")) || 0;
+        const minutos = Math.max(1, Math.ceil(espera / 60));
+        setErro(
+          `Muitas tentativas. Aguarde ${minutos} ${minutos === 1 ? "minuto" : "minutos"} e tente de novo.`
+        );
+      } else if (resposta.status === 503) {
+        setErro("O painel ainda não tem senha configurada.");
+      } else {
+        setErro("Senha incorreta.");
+      }
     } catch {
       setErro("Não foi possível entrar agora. Tente novamente.");
     }
