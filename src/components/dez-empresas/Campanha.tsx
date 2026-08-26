@@ -2,16 +2,16 @@
 
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Check, Info, X } from "lucide-react";
+import { ArrowRight, Check, X } from "lucide-react";
 import Logo from "@/components/Logo";
 import { WHATSAPP_NUMBER, WhatsAppIcon } from "@/components/WhatsAppButton";
 import { evento, urlInicial } from "@/lib/analytics";
+import ConversaMock from "./ConversaMock";
 import FormularioCandidatura from "./FormularioCandidatura";
 import {
   ANCORA_FORMULARIO,
   CAMPANHA_ENCERRADA,
   capacidades,
-  condicoes,
   ctaFinal,
   encerramento,
   entrega,
@@ -130,7 +130,9 @@ function Encerrada() {
         href={`https://wa.me/${WHATSAPP_NUMBER}`}
         target="_blank"
         rel="noopener noreferrer"
-        onClick={() => evento("campanha10_whatsapp_clicked", { local: "encerrada" })}
+        onClick={() =>
+          evento("campanha10_whatsapp_clicked", { local: "encerrada" })
+        }
         className="mt-8 inline-flex items-center justify-center gap-2.5 rounded-full bg-primary px-7 py-3.5 font-semibold text-on-primary transition-colors hover:bg-primary-dark"
       >
         <WhatsAppIcon className="h-5 w-5" />
@@ -186,7 +188,9 @@ export default function Campanha() {
         <Logo dark />
         <a
           href={`#${ANCORA_FORMULARIO}`}
-          onClick={() => evento("campanha10_cta_clicked", { local: "cabecalho" })}
+          onClick={() =>
+            evento("campanha10_cta_clicked", { local: "cabecalho" })
+          }
           className="inline-flex min-h-11 items-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-colors hover:bg-primary-dark"
         >
           Candidatar
@@ -206,47 +210,59 @@ export default function Campanha() {
               (91% em render delay) e deixava o topo da página em branco para
               quem chega com conexão ruim — justamente o tráfego de anúncio.
               A animação de entrada segue valendo da segunda dobra em diante. */}
-          {/* 58rem = 928px. A medida sai da fonte, não do gosto: no teto de
-              64px, "mais eficiência e agilidade" ocupa 868px. Um container de
-              864px estouraria por 4px e quebraria a linha do degradê em duas,
-              desfazendo a composição. */}
-          <div className="max-w-[58rem]">
-            {/* Escassez declarada, sem contador: são 10 vagas fixas, e não
-                existe fonte de dados de "restantes" para mostrar. */}
-            <div className="flex w-fit items-center gap-2.5 rounded-full border border-primary/25 bg-primary/[0.08] px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary shadow-[0_0_24px_-6px_rgba(0,171,122,0.45)] backdrop-blur-sm sm:text-sm">
-              <span
-                aria-hidden="true"
-                className="relative flex h-2 w-2 shrink-0 items-center justify-center"
-              >
-                <span className="animate-dot-ping absolute h-2 w-2 rounded-full bg-primary" />
-                <span className="h-2 w-2 rounded-full bg-primary" />
-              </span>
-              {hero.badge}
-            </div>
+          {/* Duas colunas a partir de `lg`: a promessa à esquerda, o produto
+              à direita. Abaixo disso o mock desce, porque em coluna estreita
+              ele viraria um cartão apertado competindo com o CTA.
 
-            {/* Um H1 só, três linhas em bloco: as quebras do desktop são as do
+              O texto perde largura, então o teto da fonte cai de 64px para
+              56px — medida, não estimada: é o maior tamanho em que "mais
+              eficiência e agilidade" continua cabendo numa linha só na coluna
+              da esquerda. */}
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+            <div>
+              {/* Escassez declarada, sem contador: são 10 vagas fixas, e não
+                existe fonte de dados de "restantes" para mostrar. */}
+              <div className="flex w-fit items-center gap-2.5 rounded-full border border-primary/25 bg-primary/[0.08] px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary shadow-[0_0_24px_-6px_rgba(0,171,122,0.45)] backdrop-blur-sm sm:text-sm">
+                <span
+                  aria-hidden="true"
+                  className="relative flex h-2 w-2 shrink-0 items-center justify-center"
+                >
+                  <span className="animate-dot-ping absolute h-2 w-2 rounded-full bg-primary" />
+                  <span className="h-2 w-2 rounded-full bg-primary" />
+                </span>
+                {hero.badge}
+              </div>
+
+              {/* Um H1 só, três linhas em bloco: as quebras do desktop são as do
                 conteúdo, não do acaso da largura. `text-balance` fica de fora
                 de propósito — ele reequilibraria as linhas e desfaria isso. */}
-            {/* Teto de 4rem (64px) e não os 5.5rem sugeridos: a 88px a última
+              {/* Teto de 4rem (64px) e não os 5.5rem sugeridos: a 88px a última
                 linha pediria 1056px de largura e quebraria em duas, o que
                 contraria as quebras definidas para o desktop. 64px é o maior
                 tamanho em que as três frases cabem cada uma na sua linha. */}
-            <h1 className="mt-8 text-[clamp(2.15rem,5.6vw,4rem)] font-extrabold uppercase leading-[0.98] tracking-[-0.03em] max-[360px]:mt-5">
-              <span className="block">{hero.titulo.linha1}</span>
-              <span className="headline-gradiente block">{hero.titulo.destaque}</span>
-            </h1>
+              <h1 className="mt-8 text-[clamp(2.15rem,4.6vw,3.5rem)] font-extrabold uppercase leading-[1] tracking-[-0.03em] max-[360px]:mt-5">
+                <span className="block">{hero.titulo.linha1}</span>
+                <span className="headline-gradiente block">
+                  {hero.titulo.destaque}
+                </span>
+              </h1>
 
-            {/* Em ≤360px o texto encolhe meio ponto e fecha o entrelinhas —
+              {/* Em ≤360px o texto encolhe meio ponto e fecha o entrelinhas —
                 a frase continua inteira, só ocupa menos altura. */}
-            <p className="mt-7 max-w-2xl text-[clamp(1rem,1.4vw,1.185rem)] leading-relaxed text-dark-muted max-[360px]:mt-4 max-[360px]:text-[0.9375rem] max-[360px]:leading-[1.45]">
-              {hero.subtitulo}
-            </p>
-
-            <div className="mt-9 flex flex-col items-start gap-4 max-[360px]:mt-6 max-[360px]:gap-2.5">
-              <CTA rotulo={hero.cta} local="hero" />
-              <p className="text-sm text-dark-muted max-[360px]:text-xs">
-                {hero.microcopy}
+              <p className="mt-7 max-w-2xl text-[clamp(1rem,1.4vw,1.185rem)] leading-relaxed text-dark-muted max-[360px]:mt-4 max-[360px]:text-[0.9375rem] max-[360px]:leading-[1.45]">
+                {hero.subtitulo}
               </p>
+
+              <div className="mt-9 flex flex-col items-start gap-4 max-[360px]:mt-6 max-[360px]:gap-2.5">
+                <CTA rotulo={hero.cta} local="hero" />
+                <p className="text-sm text-dark-muted max-[360px]:text-xs">
+                  {hero.microcopy}
+                </p>
+              </div>
+            </div>
+
+            <div className="lg:pl-4">
+              <ConversaMock />
             </div>
           </div>
         </section>
@@ -263,17 +279,43 @@ export default function Campanha() {
               </Revelar>
             </div>
 
-            <ul className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {capacidades.itens.map((item, i) => (
+            {/* Nove cards idênticos numa grade 3×3 é a assinatura visual de
+                template: sem hierarquia, o olho não sabe onde pousar. Os três
+                primeiros — os que a campanha mais vende — ganham corpo; os
+                outros seis viram linhas compactas. Mesma informação, uma
+                leitura em vez de um mosaico. */}
+            <ul className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {capacidades.itens.slice(0, 3).map((item, i) => (
                 <RevelarItem
                   key={item.texto}
-                  atraso={Math.min(i, 5) * 0.05}
-                  className="glass-card-dark flex h-full items-start gap-3.5 rounded-2xl p-5"
+                  atraso={i * 0.06}
+                  className="cartao-realce group flex h-full flex-col gap-4 rounded-2xl border border-dark-border bg-dark-elevated p-6"
                 >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                    <item.icone aria-hidden="true" className="h-5 w-5 text-primary" />
+                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
+                    <item.icone
+                      aria-hidden="true"
+                      className="h-6 w-6 text-primary"
+                    />
                   </span>
-                  <span className="mt-1.5 text-[15px] font-medium leading-snug">
+                  <span className="text-[17px] font-bold leading-snug">
+                    {item.texto}
+                  </span>
+                </RevelarItem>
+              ))}
+            </ul>
+
+            <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {capacidades.itens.slice(3).map((item, i) => (
+                <RevelarItem
+                  key={item.texto}
+                  atraso={Math.min(i, 3) * 0.04}
+                  className="cartao-realce group flex items-center gap-3 rounded-xl border border-dark-border/70 bg-dark-surface/60 px-4 py-3"
+                >
+                  <item.icone
+                    aria-hidden="true"
+                    className="h-[18px] w-[18px] shrink-0 text-primary/80"
+                  />
+                  <span className="text-[15px] leading-snug text-dark-text/90">
                     {item.texto}
                   </span>
                 </RevelarItem>
@@ -303,21 +345,61 @@ export default function Campanha() {
               </Revelar>
             </div>
 
-            <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2">
-              {entrega.itens.map((item, i) => (
-                <Revelar key={item.titulo} atraso={Math.min(i, 4) * 0.06}>
-                  <div className="h-full rounded-2xl border border-dark-border bg-dark-surface p-6">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
-                      <item.icone aria-hidden="true" className="h-5 w-5 text-primary" />
-                    </div>
-                    <h3 className="mt-4 font-bold">{item.titulo}</h3>
-                    <p className="mt-2 text-[15px] leading-relaxed text-dark-muted">
+            {/* Isto é um processo, com ordem: diagnóstico antes de configurar,
+                configuração antes de acompanhar. Numerado, o bloco conta essa
+                sequência; em grade de cards, virava uma segunda mesa de peças
+                soltas logo depois da primeira. O número é `aria-hidden` porque
+                a ordem é visual, não semântica: para o leitor de tela a lista
+                ordenada já diz isso. */}
+            {/* Os quatro primeiros passos levam descrição: são o que a
+                empresa não sabe e precisa entender antes de decidir. Os quatro
+                últimos são consequência, e viram linha — o bloco sai de 1.065px
+                para pouco mais da metade, logo antes do formulário, que é onde
+                atrito custa candidatura. */}
+            <ol className="mt-12 grid grid-cols-1 gap-x-10 gap-y-1 sm:grid-cols-2">
+              {entrega.itens.slice(0, 4).map((item, i) => (
+                <RevelarItem
+                  key={item.titulo}
+                  atraso={Math.min(i, 3) * 0.05}
+                  className="group flex gap-5 border-t border-dark-border py-5"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="font-display text-[26px] font-bold leading-none text-primary/25 transition-colors duration-150 group-hover:text-primary/60"
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="flex items-center gap-2 font-bold leading-snug">
+                      <item.icone
+                        aria-hidden="true"
+                        className="h-[18px] w-[18px] shrink-0 text-primary"
+                      />
+                      {item.titulo}
+                    </h3>
+                    <p className="mt-1.5 text-[15px] leading-relaxed text-dark-muted">
                       {item.descricao}
                     </p>
                   </div>
-                </Revelar>
+                </RevelarItem>
               ))}
-            </div>
+            </ol>
+
+            <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-3 border-t border-dark-border pt-6">
+              {entrega.itens.slice(4).map((item, i) => (
+                <RevelarItem
+                  key={item.titulo}
+                  atraso={Math.min(i, 3) * 0.04}
+                  className="flex items-center gap-2.5 text-[15px] text-dark-text/90"
+                >
+                  <item.icone
+                    aria-hidden="true"
+                    className="h-[18px] w-[18px] shrink-0 text-primary/80"
+                  />
+                  {item.titulo}
+                </RevelarItem>
+              ))}
+            </ul>
 
             <Revelar atraso={0.1}>
               <p className="mt-8 text-[15px] leading-relaxed text-dark-muted">
@@ -349,7 +431,10 @@ export default function Campanha() {
                   className="flex items-start gap-3 text-[15px] leading-snug sm:text-base"
                 >
                   <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15">
-                    <Check aria-hidden="true" className="h-3 w-3 text-primary" />
+                    <Check
+                      aria-hidden="true"
+                      className="h-3 w-3 text-primary"
+                    />
                   </span>
                   {item}
                 </RevelarItem>
@@ -358,7 +443,10 @@ export default function Campanha() {
 
             <Revelar atraso={0.1}>
               <div className="mt-8 flex items-start gap-3.5 rounded-2xl border border-dark-border bg-dark-surface p-5">
-                <X aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-dark-muted" />
+                <X
+                  aria-hidden="true"
+                  className="mt-0.5 h-5 w-5 shrink-0 text-dark-muted"
+                />
                 <p className="text-[15px] leading-relaxed text-dark-muted">
                   {perfil.exclusao}
                 </p>
@@ -376,34 +464,6 @@ export default function Campanha() {
             <Revelar>
               {CAMPANHA_ENCERRADA ? <Encerrada /> : <FormularioCandidatura />}
             </Revelar>
-
-            {/* As condições ficam logo abaixo do formulário, e não numa seção
-                própria: é aqui que a pessoa decide se preenche, e é aqui que
-                ela precisa saber prazo, escopo e o que acontece depois. */}
-            {!CAMPANHA_ENCERRADA && (
-              <Revelar atraso={0.1}>
-                <div className="mt-8 rounded-2xl border border-dark-border bg-dark-base/40 p-6 sm:p-7">
-                  <h3 className="flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.16em] text-primary">
-                    <Info aria-hidden="true" className="h-4 w-4 shrink-0" />
-                    {condicoes.titulo}
-                  </h3>
-                  <ul className="mt-5 space-y-3">
-                    {condicoes.itens.map((item) => (
-                      <li
-                        key={item}
-                        className="flex items-start gap-3 text-[15px] leading-relaxed text-dark-muted"
-                      >
-                        <span
-                          aria-hidden="true"
-                          className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-primary/70"
-                        />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Revelar>
-            )}
           </div>
         </section>
 
@@ -412,7 +472,10 @@ export default function Campanha() {
           <div className="mx-auto max-w-2xl px-[clamp(1rem,4vw,2rem)] text-center">
             <Revelar>
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
-                <ctaFinal.icone aria-hidden="true" className="h-6 w-6 text-primary" />
+                <ctaFinal.icone
+                  aria-hidden="true"
+                  className="h-6 w-6 text-primary"
+                />
               </div>
               <h2 className="mt-6 text-[clamp(26px,3.8vw,42px)] font-bold leading-[1.1] tracking-[-0.02em]">
                 {ctaFinal.titulo}
@@ -433,13 +496,16 @@ export default function Campanha() {
         <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 px-[clamp(1rem,4vw,2rem)] text-center">
           <Logo dark />
           <p className="text-sm text-dark-muted">
-            © {new Date().getFullYear()} CompanyChat. Todos os direitos reservados.
+            © {new Date().getFullYear()} CompanyChat. Todos os direitos
+            reservados.
           </p>
           <a
             href={`https://wa.me/${WHATSAPP_NUMBER}`}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => evento("campanha10_whatsapp_clicked", { local: "rodape" })}
+            onClick={() =>
+              evento("campanha10_whatsapp_clicked", { local: "rodape" })
+            }
             className="flex items-center gap-2 text-sm text-dark-muted transition-colors hover:text-dark-text"
           >
             <WhatsAppIcon className="h-4 w-4 text-[#25D366]" />

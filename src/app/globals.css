@@ -433,6 +433,33 @@ body::before {
   }
 }
 
+/* Cartões da campanha: a borda acende e o bloco sobe 2px no ponteiro.
+ *
+ * 150ms porque é micro-interação — o gesto se repete muitas vezes na mesma
+ * visita, e o que se repete tem de ser curto. Só `transform` e cor de borda:
+ * nada que force o navegador a recalcular layout, nada que mexa no CLS.
+ *
+ * `@media (hover: hover)` mantém o efeito longe do celular, onde "hover" vira
+ * o estado preso depois do toque. */
+@media (hover: hover) {
+  .cartao-realce {
+    transition:
+      transform 0.15s ease-out,
+      border-color 0.15s ease-out,
+      background-color 0.15s ease-out;
+  }
+  .cartao-realce:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 171, 122, 0.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cartao-realce:hover {
+    transform: none;
+  }
+}
+
 /* Botão principal da campanha: mesmo verde da marca, em degradê para o
    turquesa. O texto continua sendo o quase-preto `on-primary`, que dá 6,45:1
    sobre o verde e mais ainda sobre o turquesa, que é mais claro. */

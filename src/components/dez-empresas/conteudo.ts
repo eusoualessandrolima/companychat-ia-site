@@ -11,6 +11,7 @@ import {
   MessagesSquare,
   Repeat2,
   ShoppingBag,
+  Smartphone,
   Sparkles,
   Target,
   UserCheck,
@@ -75,9 +76,9 @@ export const SEO = {
 export const hero = {
   badge: "Seleção exclusiva • Apenas 10 empresas",
 
-  /* Duas linhas: a ação e o ganho. O degradê da marca fica na segunda, que é
-     onde está o benefício, e não no verbo. As duas metades têm largura
-     parecida, então no celular nenhuma palavra sobra órfã numa linha. */
+  /* Duas linhas: a ação e o ganho, com o degradê da marca no benefício.
+     Mesma frase da `/teste-gratis` — decisão do dono, ciente de que as duas
+     páginas passam a abrir igual. */
   titulo: {
     linha1: "Atenda seus clientes com",
     destaque: "mais eficiência e agilidade",
@@ -90,6 +91,31 @@ export const hero = {
   cta: "Quero participar da seleção",
   microcopy: "Candidatura gratuita • Leva menos de 2 minutos",
 };
+
+/* A conversa do mock ao lado do hero.
+ *
+ * Cada balão foi escrito contra o que a plataforma realmente faz: a IA
+ * pergunta para qualificar, entende o porte e oferece horário. Ela não promete
+ * preço, não fecha negócio e não inventa integração — o mesmo limite que vale
+ * para a Jade no WhatsApp de verdade. */
+export const conversa = {
+  contato: "CompanyChat",
+  estado: "online agora",
+  rodape: "Conversa ilustrativa",
+  baloes: [
+    { de: "cliente", texto: "Vocês atendem em Goiânia?" },
+    {
+      de: "ia",
+      texto: "Atendemos sim! Me conta rapidinho: é para a sua empresa ou uso pessoal?",
+    },
+    { de: "cliente", texto: "Empresa. Somos 4 no atendimento." },
+    {
+      de: "ia",
+      texto:
+        "Perfeito. Consigo te mostrar como ficaria no seu WhatsApp. Prefere hoje à tarde ou amanhã de manhã?",
+    },
+  ],
+} as const;
 
 export const capacidades: {
   titulo: string;
@@ -158,7 +184,10 @@ export const entrega: {
         "Atendimento, qualificação, vendas, agendamento, follow-up ou suporte: cada etapa definida, com o que a IA resolve sozinha e o que vai para uma pessoa.",
     },
     {
-      icone: MessagesSquare,
+      /* Ícone do próprio WhatsApp, e não outro balão genérico: este item
+         repetia o `MessagesSquare` de "Mapeamento das principais conversas",
+         e ícone repetido na mesma lista denuncia catálogo, não intenção. */
+      icone: Smartphone,
       titulo: "Integração com o WhatsApp",
       descricao:
         "A operação rodando no WhatsApp, planejada conforme a viabilidade técnica de cada empresa.",
@@ -211,10 +240,10 @@ export const perfil = {
 
 /* As condições que valem para quem se candidata.
  *
- * Estavam no FAQ, que saiu da página. Sem elas, a pessoa preenchia dez campos
- * sem saber por quanto tempo a inscrição fica aberta, o que exatamente é
- * gratuito nem o que acontece depois. Voltam aqui em lista curta, ao lado do
- * formulário, que é onde a decisão acontece, e não em acordeão.
+ * Fora da página desde 2026-08-26, a pedido do dono: entraram ao lado do
+ * formulário e saíram na mesma sessão. Continuam aqui porque são a fonte das
+ * respostas da Jade — hoje é ela quem explica prazo, escopo e o que acontece
+ * depois, já que a página não explica mais.
  *
  * Mesmo texto das respostas que a Jade dá no WhatsApp
  * (`docs/jade-campanha-10-empresas.md`): se um mudar, o outro muda junto. */
