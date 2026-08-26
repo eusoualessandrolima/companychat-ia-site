@@ -114,12 +114,15 @@ export default function TesteGratis() {
                 Teste sem custo e sem compromisso
               </p>
 
-              <h1 className="text-[clamp(34px,4.4vw,52px)] font-bold leading-[1.05] tracking-[-0.03em] text-dark-text">
-                {/* Caixa alta escrita à mão, não `uppercase`: o texto precisa
-                    chegar assim no HTML, inclusive para quem copia a página ou
-                    lê sem CSS. A segunda palavra mantém o gradiente que já
-                    existia, para o título não trocar de identidade. */}
-                TESTE <span className="text-gradient-primary">GRATUITAMENTE</span>
+              <h1 className="text-[clamp(34px,4.6vw,56px)] font-bold leading-[1.06] tracking-[-0.03em] text-dark-text">
+                {/* Caixa normal, e não a caixa alta de antes: a frase tem 51
+                    caracteres e, em versal, viraria um bloco pesado que rouba a
+                    atenção do formulário ao lado. O degradê fica no benefício,
+                    não no verbo. */}
+                Atenda seus clientes com{" "}
+                <span className="text-gradient-primary">
+                  mais eficiência e agilidade
+                </span>
               </h1>
 
               <p className="mt-5 max-w-xl text-[clamp(16px,1.7vw,19px)] leading-relaxed text-dark-muted">
