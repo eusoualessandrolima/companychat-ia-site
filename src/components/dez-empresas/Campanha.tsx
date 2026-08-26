@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, ArrowRight, Check, Info, X } from "lucide-react";
+import { ArrowRight, Check, X } from "lucide-react";
 import Logo from "@/components/Logo";
 import { WHATSAPP_NUMBER, WhatsAppIcon } from "@/components/WhatsAppButton";
 import { evento, urlInicial } from "@/lib/analytics";
@@ -14,9 +14,7 @@ import {
   ctaFinal,
   encerramento,
   entrega,
-  faq,
   hero,
-  motivo,
   perfil,
 } from "./conteudo";
 
@@ -333,35 +331,8 @@ export default function Campanha() {
           </div>
         </section>
 
-        {/* ─── Por que estamos fazendo isso ────────────── */}
-        <section className="border-y border-dark-border bg-dark-surface py-16 sm:py-20">
-          <div className="mx-auto max-w-3xl px-[clamp(1rem,4vw,2rem)]">
-            <Revelar>
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
-                <motivo.icone aria-hidden="true" className="h-6 w-6 text-primary" />
-              </div>
-              <h2 className="mt-6 text-[clamp(26px,3.6vw,40px)] font-bold leading-[1.12] tracking-[-0.02em]">
-                {motivo.titulo}
-              </h2>
-              <p className="mt-5 leading-relaxed text-dark-muted">{motivo.texto}</p>
-            </Revelar>
-
-            <Revelar atraso={0.1}>
-              <div className="mt-8 flex items-start gap-3.5 rounded-2xl border border-accent-amber/30 bg-accent-amber/[0.07] p-5">
-                <Info
-                  aria-hidden="true"
-                  className="mt-0.5 h-5 w-5 shrink-0 text-accent-amber"
-                />
-                <p className="text-[15px] leading-relaxed text-dark-text/90">
-                  {motivo.aviso}
-                </p>
-              </div>
-            </Revelar>
-          </div>
-        </section>
-
         {/* ─── Para quem é ─────────────────────────────── */}
-        <section className="py-16 sm:py-20">
+        <section className="border-y border-dark-border bg-dark-surface py-16 sm:py-20">
           <div className="mx-auto max-w-3xl px-[clamp(1rem,4vw,2rem)]">
             <Revelar>
               <Rotulo>Perfil da seleção</Rotulo>
@@ -408,41 +379,8 @@ export default function Campanha() {
           </div>
         </section>
 
-        {/* ─── FAQ ─────────────────────────────────────── */}
-        <section className="py-16 sm:py-20">
-          <div className="mx-auto max-w-3xl px-[clamp(1rem,4vw,2rem)]">
-            <div className="text-center">
-              <Revelar>
-                <Rotulo>Perguntas frequentes</Rotulo>
-                <h2 className="text-[clamp(26px,3.6vw,40px)] font-bold leading-[1.12] tracking-[-0.02em]">
-                  {faq.titulo}
-                </h2>
-              </Revelar>
-            </div>
-
-            <div className="mt-10 space-y-3">
-              {faq.itens.map((item, i) => (
-                <Revelar key={item.pergunta} atraso={Math.min(i, 5) * 0.05}>
-                  <details className="group rounded-2xl border border-dark-border bg-dark-surface open:border-primary/30">
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-semibold [&::-webkit-details-marker]:hidden">
-                      {item.pergunta}
-                      <ArrowDown
-                        aria-hidden="true"
-                        className="h-4 w-4 shrink-0 text-primary transition-transform group-open:rotate-180"
-                      />
-                    </summary>
-                    <p className="px-5 pb-5 text-[15px] leading-relaxed text-dark-muted">
-                      {item.resposta}
-                    </p>
-                  </details>
-                </Revelar>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* ─── CTA final ───────────────────────────────── */}
-        <section className="border-t border-dark-border bg-dark-surface py-16 sm:py-20">
+        <section className="py-16 sm:py-20">
           <div className="mx-auto max-w-2xl px-[clamp(1rem,4vw,2rem)] text-center">
             <Revelar>
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">

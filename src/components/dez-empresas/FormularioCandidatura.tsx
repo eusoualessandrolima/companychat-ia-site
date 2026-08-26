@@ -186,13 +186,13 @@ export default function FormularioCandidatura() {
     if (campos.cidade.trim().length < 3) {
       encontrados.cidade = "Informe a cidade e o estado";
     }
-    if (!campos.volume) encontrados.volume = "Escolha uma faixa";
+    if (!campos.volume) encontrados.volume = "Escolha a faixa de contatos";
     if (campos.problema.trim().length < 10) {
-      encontrados.problema = "Conte em poucas linhas o que trava hoje";
+      encontrados.problema = "Descreva o principal problema do atendimento";
     }
     if (!campos.objetivo) encontrados.objetivo = "Escolha o objetivo principal";
     if (campos.motivo.trim().length < 10) {
-      encontrados.motivo = "Este campo ajuda a nossa equipe na seleção";
+      encontrados.motivo = "Conte por que a sua empresa deveria ser selecionada";
     }
     if (!campos.consentimento) {
       encontrados.consentimento = "É preciso concordar para enviar a candidatura";

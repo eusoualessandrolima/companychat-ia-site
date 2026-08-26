@@ -90,7 +90,7 @@ export const hero = {
   },
 
   subtitulo:
-    "A CompanyChat vai selecionar 10 empresas para receber gratuitamente a implantação inicial de um Assistente de IA personalizado no WhatsApp — capaz de atender, qualificar e acompanhar clientes 24 horas por dia.",
+    "A CompanyChat vai selecionar 10 empresas para receber gratuitamente a implantação inicial de um Assistente de IA personalizado no WhatsApp, capaz de atender, qualificar e acompanhar clientes 24 horas por dia.",
   /* Rótulo curto de propósito: em 320px "Quero candidatar minha empresa"
      ocupava duas linhas e esticava o botão para 80px. */
   cta: "Quero participar da seleção",
@@ -178,10 +178,19 @@ export const entrega: {
       icone: LineChart,
       titulo: "Acompanhamento inicial da operação",
       descricao:
-        "Nosso time acompanha o começo da operação e ajusta o que precisar de ajuste.",
+        "Nosso time acompanha o começo da operação e ajusta o que for necessário.",
     },
   ],
 };
+
+/* ─── Fora da página desde 2026-08-26 ───────────────────────────────────
+ *
+ * `motivo` e `faq` deixaram de ser renderizados: as duas seções saíram da LP
+ * a pedido do dono. Os textos continuam aqui porque são a fonte das respostas
+ * da Jade (`docs/jade-campanha-10-empresas.md`) — ela responde no WhatsApp o
+ * que a página não explica mais. Apagar daqui faria a base do agente e o site
+ * divergirem, que é o problema que este arquivo existe para evitar.
+ * Para trazer qualquer uma de volta, basta voltar a seção em `Campanha.tsx`. */
 
 export const motivo = {
   titulo: "Uma oportunidade ganha-ganha",
@@ -221,7 +230,7 @@ export const formulario = {
   sucesso: {
     titulo: "Candidatura recebida!",
     mensagem:
-      "Obrigado pelo interesse em participar. Nossa equipe irá analisar as informações e responder pelo WhatsApp ou e-mail informados — tanto quem for selecionado quanto quem não for.",
+      "Obrigado pelo interesse em participar. Nossa equipe irá analisar as informações e responder pelo WhatsApp ou e-mail informados, tanto quem for selecionado quanto quem não for.",
     complemento:
       "Enquanto isso, você pode conhecer a IA da CompanyChat funcionando no WhatsApp.",
     botao: "Testar a IA no WhatsApp",
@@ -292,7 +301,7 @@ export const faq = {
     {
       pergunta: "O que exatamente é gratuito?",
       resposta:
-        "A implantação de um fluxo principal de automação — atendimento, qualificação, vendas, agendamento, follow-up ou suporte, conforme o caso da empresa. Junto vêm o diagnóstico do atendimento, a configuração do assistente, a personalização para o segmento, a integração disponível, a organização dos contatos no CRM e o acompanhamento inicial da operação.",
+        "A implantação de um fluxo principal de automação: atendimento, qualificação, vendas, agendamento, follow-up ou suporte, conforme o caso da empresa. Junto vêm o diagnóstico do atendimento, a configuração do assistente, a personalização para o segmento, a integração disponível, a organização dos contatos no CRM e o acompanhamento inicial da operação.",
     },
     {
       pergunta: "E o que fica fora desse escopo?",
