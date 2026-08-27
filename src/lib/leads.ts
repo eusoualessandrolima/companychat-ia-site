@@ -22,6 +22,9 @@ export type Lead = {
   origem: Record<string, string>;
   criado_em: string;
   atualizado_em: string;
+  /** Quando o lead chegou ao CRM. Nulo num lead contatável é divergência:
+   *  ele está no painel e não virou card. Ver `marcarEntregaNoCrm`. */
+  crm_entregue_em: string | null;
 };
 
 /** Grava ou atualiza o lead. Chamado a cada etapa do quiz, então a linha
@@ -98,6 +101,39 @@ export async function salvarLead(lead: {
   } catch (erro) {
     console.error("Falha ao gravar lead no Postgres:", erro);
     return { ok: true, gravado: false, inserido: false };
+  }
+}
+
+/** Carimba a entrega do lead no CRM.
+ *
+ *  Existe porque a entrega acontece fora do caminho da resposta (`after()`),
+ *  onde um `false` não tinha para onde ir: a falha virava um `console.error`
+ *  em logs que ninguém coleta, e o lead ficava no painel sem nunca virar card.
+ *  Com o carimbo, a divergência entre painel e CRM passa a ser uma consulta —
+ *  ver o rodapé de `db/leads_site.sql`.
+ *
+ *  Não sobrescreve um carimbo anterior: um lead entra no webhook mais de uma
+ *  vez (ao nascer e ao clicar no WhatsApp), e o que interessa é a primeira
+ *  entrega bem-sucedida, não a última.
+ *
+ *  Falha aqui é engolida de propósito. Este código roda depois de a resposta
+ *  já ter saído; lançar não avisaria ninguém e derrubaria o `after()`. O custo
+ *  de não carimbar é um falso positivo na consulta de divergência — que leva a
+ *  reenviar um lead que o CRM já tem, e o CRM é idempotente pelo `id`. */
+export async function marcarEntregaNoCrm(id: string): Promise<void> {
+  const conexao = pool();
+  if (!conexao) return;
+
+  try {
+    await conexao.query(
+      `update leads_site
+          set crm_entregue_em = now()
+        where id = $1
+          and crm_entregue_em is null`,
+      [id]
+    );
+  } catch (erro) {
+    console.error("Falha ao carimbar entrega do lead no CRM:", erro);
   }
 }
 
