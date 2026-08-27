@@ -1,5 +1,6 @@
 import { after } from "next/server";
 import { NextResponse } from "next/server";
+import { avaliarAceite } from "@/lib/aceite";
 import { salvarLead } from "@/lib/leads";
 import { sanitizarOrigem } from "@/lib/origem";
 import { consumir, ipDaRequisicao } from "@/lib/rate-limit";
@@ -110,38 +111,27 @@ export async function POST(requisicao: Request) {
 
   const origem = sanitizarOrigem(corpo.origem);
 
-  /* Prova do consentimento (LGPD).
+  /* Prova do consentimento (LGPD). A regra e o histórico moram em
+   * `src/lib/aceite.ts`, onde os testes de unidade alcançam.
    *
-   * A política publicada em `/privacidade` promete, textualmente, guardar "a
-   * data, a hora e a versão do texto que você aceitou". Até 26/08/2026 a
-   * candidatura de `/10-empresas` validava o checkbox só no navegador e não o
-   * enviava: não havia registro nenhum, e um POST direto aqui gravava o lead
-   * sem consentimento algum. Agora o servidor recusa.
-   *
-   * A exigência vale só para o envio da candidatura em si. O `sendBeacon` que
-   * marca "clicou no WhatsApp" reenvia o mesmo lead **já consentido** apenas
-   * para atualizar essa flag, e não carrega o aceite de novo — cobrá-lo ali
-   * apagaria a medição sem proteger nada.
-   *
-   * O aceite vai dentro de `origem` (que é `jsonb`) e não em coluna nova: não
+   * O aceite vai dentro de `origem` (que é `jsonb`) e não em colunas novas: não
    * exige migração no banco de produção, aparece no painel e no CSV, e é
    * reversível. Quando houver janela para migrar, o par certo são colunas
    * próprias, como em `teste_gratis` (`consentimento_em`, `_versao`). */
-  const ehCandidatura = origem.tipo === "candidatura";
-  const soMarcandoWhatsApp = corpo.clicouWhatsapp === true;
+  const aceite = avaliarAceite(
+    origem.tipo,
+    corpo,
+    corpo.clicouWhatsapp === true
+  );
 
-  if (ehCandidatura && !soMarcandoWhatsApp) {
-    if (corpo.consentimento !== true) {
-      return NextResponse.json(
-        { ok: false, erro: "consentimento obrigatório" },
-        { status: 422 }
-      );
-    }
-    origem.consentimento = "true";
-    origem.consentimento_versao = texto(corpo.consentimentoVersao, 40) ?? "";
-    origem.consentimento_em =
-      texto(corpo.consentimentoEm, 40) ?? new Date().toISOString();
+  if (aceite.situacao === "ausente") {
+    return NextResponse.json(
+      { ok: false, erro: "consentimento obrigatório" },
+      { status: 422 }
+    );
   }
+
+  if (aceite.situacao === "registrado") Object.assign(origem, aceite.campos);
 
   const lead = {
     id,

@@ -13,6 +13,7 @@ import {
   User,
 } from "lucide-react";
 import { WHATSAPP_NUMBER, WhatsAppIcon } from "@/components/WhatsAppButton";
+import { CONSENTIMENTO_VERSAO } from "@/components/lp/consentimento";
 import type { LPConteudo } from "@/components/lp/tipos";
 
 type Config = LPConteudo["form"];
@@ -99,11 +100,27 @@ export default function FormularioLead({
     }
     coletado.pagina = window.location.pathname;
     if (document.referrer) coletado.referrer = document.referrer;
+    /* `tipo` é o que faz o servidor exigir e gravar o aceite: sem ele o POST
+       destas LPs passava sem consentimento nenhum. Ver `consentimento.ts`. */
+    coletado.tipo = "lp";
     origem.current = coletado;
   }, []);
 
   async function registrar(extras: { clicouWhatsapp?: boolean } = {}) {
     if (!idLead.current) idLead.current = crypto.randomUUID();
+
+    /* Prova do consentimento (LGPD). Nesta LP o aceite é o próprio envio — é o
+     * que o aviso embaixo do botão diz —, então a data e a hora são as do
+     * clique. Vai só no envio do formulário: o `sendBeacon` que marca "clicou
+     * no WhatsApp" reenvia um lead **já consentido** para atualizar a flag, e
+     * cobrar o aceite ali apagaria a medição sem proteger nada. */
+    const aceite = extras.clicouWhatsapp
+      ? {}
+      : {
+          consentimento: true,
+          consentimentoVersao: CONSENTIMENTO_VERSAO,
+          consentimentoEm: new Date().toISOString(),
+        };
 
     /* etapa 1 + concluido: na régua do painel /leads, contato completo que
        terminou o fluxo: aqui o formulário é o fluxo inteiro. O segmento
@@ -115,6 +132,7 @@ export default function FormularioLead({
       telefone: campos.telefone,
       etapa: 1,
       concluido: true,
+      ...aceite,
       ...extras,
       origem: { ...origem.current, segmento: campos.segmento },
     });
