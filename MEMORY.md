@@ -1460,10 +1460,32 @@ Coolify), painel em `https://coolify.companychatia.com.br`, aplicação id 3, uu
 Auditoria ponta a ponta da LP em produção, do link público ao CRM. Relatório completo
 em `auditoria-lp-empresas-2026-08-27/RELATORIO.md`, fora do repositório.
 
-**Veredito: INCONCLUSIVO PARA E2E.** O caminho `LP → banco → painel` está comprovado —
-dois leads reais entraram no dia da auditoria, íntegros e sem duplicidade. A etapa
-final, **lead no CRM**, não foi comprovada: falta acesso ao `crm.companychatia.com.br`.
-Ausência de evidência não vira PASS.
+**Veredito: PASS COM RESSALVAS.** O caminho `LP → banco → painel → CRM` está comprovado
+ponta a ponta, e com os **dois leads reais** do dia em vez de um lead sintético. Eles
+estão em `portal.companychatia.com.br/negocios`, coluna **Lead novo**, um card cada,
+origem `/lp-empresas` e segmento idênticos ao banco. `13:20:04 UTC` no banco = `10:20`
+no comentário do CRM: **sincronização abaixo de um minuto**.
+
+**A idempotência do receptor foi comprovada na prática**, e não por leitura de código:
+cada lead dispara **dois** POSTs (nascer e clicar no WhatsApp) e virou **um** card, com
+os dois eventos como comentários separados. Isso encerra a dúvida que estava registrada
+como "não verificável".
+
+**O que ainda falta para um PASS limpo:** os dois leads entraram às 09:19 e 10:20, e o
+deploy das correções foi às 14:57 — ou seja, **o E2E comprovado é o do código anterior**.
+O payload novo é aditivo (`consentimento*` e `origem.tipo`), a expectativa é que nada
+quebre, mas expectativa não é evidência. Um lead de teste com UTMs depois do deploy fecha
+isso e, de quebra, responde se as UTMs chegam ao card — hoje o comentário mostra só
+página e segmento, e os dois leads reais vieram sem UTM, então não dá para distinguir
+"descarta" de "não havia".
+
+**O CRM não tem responsável, tags nem campanha no card.** Os campos são mensalidade,
+implementação, produto, conexões de WhatsApp, contato e comentários. Não é perda de dado
+no caminho — é ausência de funcionalidade.
+
+**Dois cards de teste antigos poluem o funil:** `TESTE CLAUDE APAGAR` e `TESTE Claude
+Code`. O contador anuncia 6 negócios onde há 4 reais. Não foram removidos — excluir
+registro alheio exige autorização específica.
 
 **O que a LP faz certo, verificado e não presumido:** ela não mente. Forçando a rota a
 responder `entregue: false`, a tela mostra erro em vez de sucesso e **não dispara**
@@ -1531,9 +1553,12 @@ quase transparente é a segunda metade dela.
 - [ ] **Webhook do CRM sem retry** — uma tentativa, 8 s de timeout. `crm_entregue_em`
       mostra quem ficou para trás; falta o reprocessador que reenvia. O receptor é
       idempotente pelo `id`, então reenviar é seguro
-- [ ] **Fechar o E2E da `/lp-empresas`** — falta acesso ao `crm.companychatia.com.br`,
-      um telefone de teste da equipe e a confirmação de que as automações de WhatsApp
-      estão desligadas para o lead de QA
+- [ ] **Um lead de teste com UTMs depois do deploy de 27/08** — é o único item que
+      separa o PASS COM RESSALVAS de um PASS limpo. Responde duas perguntas de uma vez:
+      se o payload novo (`consentimento*` + `origem.tipo`) continua sendo aceito pelo
+      receptor, e se as UTMs aparecem no card. Falta o telefone da equipe e a confirmação
+      de que as automações de WhatsApp estão desligadas para o lead de QA
+- [ ] **Limpar `TESTE CLAUDE APAGAR` e `TESTE Claude Code`** da coluna Lead novo
 - [ ] **Tirar o `.env.local` de cima do banco de produção** — hoje só o firewall separa
       um `npm run dev` da base real de leads
 - [x] ~~Favicon, manifest e ícones 404 em produção~~ → era build antigo; resolvido com o
