@@ -1,7 +1,7 @@
 import { after } from "next/server";
 import { NextResponse } from "next/server";
 import { avaliarAceite } from "@/lib/aceite";
-import { salvarLead } from "@/lib/leads";
+import { marcarEntregaNoCrm, salvarLead } from "@/lib/leads";
 import { sanitizarOrigem } from "@/lib/origem";
 import { consumir, ipDaRequisicao } from "@/lib/rate-limit";
 import { corpoGrandeDemais, respostaCorpoGrande } from "@/lib/corpo";
@@ -165,13 +165,27 @@ export async function POST(requisicao: Request) {
    * - banco gravou  → `entregue` já é verdade, o webhook vai para o `after()`
    *                   e a pessoa não espera por ele;
    * - banco falhou  → esperamos a resposta do webhook, porque é ela que decide
-   *                   entre "recebemos" e "tente de novo". */
+   *                   entre "recebemos" e "tente de novo".
+   *
+   * No caminho de cima o desfecho é carimbado em `crm_entregue_em`. Sem isso, o
+   * `after()` descartava o resultado e uma falha de entrega ficava invisível:
+   * lead no painel, nenhum card no CRM, nenhum erro em lugar nenhum. Com o
+   * carimbo, "quem ficou para trás" vira consulta — e reenviar é seguro,
+   * porque o receptor é idempotente pelo `id` do lead.
+   *
+   * No caminho de baixo não há o que carimbar: a linha não existe. O lead só
+   * existe no CRM, e é isso que `entregue` comunica. */
   let noWebhook = false;
   const vaiParaOCrm = contatavel(lead) && marcoDoLead(lead, inserido);
 
   if (vaiParaOCrm) {
-    if (gravado) after(() => entregarNoWebhook(lead));
-    else noWebhook = await entregarNoWebhook(lead);
+    if (gravado) {
+      after(async () => {
+        if (await entregarNoWebhook(lead)) await marcarEntregaNoCrm(lead.id);
+      });
+    } else {
+      noWebhook = await entregarNoWebhook(lead);
+    }
   }
 
   /* `entregue`: o lead chegou a algum lugar de onde dá para recuperá-lo — o
