@@ -1474,10 +1474,16 @@ como "não verificável".
 **O que ainda falta para um PASS limpo:** os dois leads entraram às 09:19 e 10:20, e o
 deploy das correções foi às 14:57 — ou seja, **o E2E comprovado é o do código anterior**.
 O payload novo é aditivo (`consentimento*` e `origem.tipo`), a expectativa é que nada
-quebre, mas expectativa não é evidência. Um lead de teste com UTMs depois do deploy fecha
-isso e, de quebra, responde se as UTMs chegam ao card — hoje o comentário mostra só
-página e segmento, e os dois leads reais vieram sem UTM, então não dá para distinguir
-"descarta" de "não havia".
+quebre, mas expectativa não é evidência. Um lead de teste com UTMs depois do deploy fecha isso.
+
+**As UTMs chegam ao card do CRM, mas só duas das quatro.** Descoberto sem gastar lead:
+dois cards antigos de teste da `/10-empresas` foram enviados com UTM, e o comentário
+deles traz `• Campanha: selecao10` (de `utm_campaign`) e `• Origem: teste-lead` (de
+`utm_source`). **`utm_medium`, `utm_content` e `fbclid` não aparecem** — ficam só no
+`origem` do banco. Quem montar campanha contando com `utm_medium` no card vai procurar
+por algo que não existe. Ressalva: os dois cards vieram da candidatura, e o formato do
+comentário difere entre as superfícies — o ramo das LPs de anúncio ainda não foi
+observado com UTM.
 
 **O CRM não tem responsável, tags nem campanha no card.** Os campos são mensalidade,
 implementação, produto, conexões de WhatsApp, contato e comentários. Não é perda de dado
