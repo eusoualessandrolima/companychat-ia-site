@@ -1455,6 +1455,65 @@ Coolify), painel em `https://coolify.companychatia.com.br`, aplicação id 3, uu
 
 ---
 
+### 2026-08-27 — Auditoria da `/lp-empresas`: o consentimento que não existia e a entrega cega ao CRM
+
+Auditoria ponta a ponta da LP em produção, do link público ao CRM. Relatório completo
+em `auditoria-lp-empresas-2026-08-27/RELATORIO.md`, fora do repositório.
+
+**Veredito: INCONCLUSIVO PARA E2E.** O caminho `LP → banco → painel` está comprovado —
+dois leads reais entraram no dia da auditoria, íntegros e sem duplicidade. A etapa
+final, **lead no CRM**, não foi comprovada: falta acesso ao `crm.companychatia.com.br`.
+Ausência de evidência não vira PASS.
+
+**O que a LP faz certo, verificado e não presumido:** ela não mente. Forçando a rota a
+responder `entregue: false`, a tela mostra erro em vez de sucesso e **não dispara**
+`fbq('track','Lead')`. Testado com um stub de `fetch` que captura e descarta — nenhum
+byte sai para o servidor e nenhum lead é criado. É o teste mais barato do funil e o que
+mais protege o orçamento de anúncio; vale repetir a cada mudança no formulário.
+
+**Dois achados ALTOS, ambos corrigidos e publicados** (`ba83e4f` e `fa9dcf4`):
+
+- **O consentimento das LPs de anúncio nunca existiu.** A guarda criada em 26/08 para a
+  candidatura era condicionada a `origem.tipo === "candidatura"`; as LPs não mandavam
+  `tipo` nenhum e passavam direto, enquanto `/privacidade` prometia guardar "a data, a
+  hora e a versão do texto que você aceitou". Os dois leads que já estavam no banco têm
+  `origem = {pagina, segmento}` e mais nada. **A regra foi para `src/lib/aceite.ts`** —
+  `test:unidade` só compila `src/lib/`, e regra que não pode ser testada é regra que se
+  perde na próxima superfície nova. Foi literalmente o que aconteceu aqui.
+- **A entrega no CRM era cega.** Com o banco gravando, o webhook saía por `after()` e o
+  resultado era descartado: falhar ali não produzia nada além de um `console.error` em
+  logs que ninguém coleta — o container tinha 4 linhas em 72 h. Lead no painel, nenhum
+  card, ninguém sabe. Agora `crm_entregue_em` carimba a primeira entrega, e nulo num
+  lead contatável significa exatamente uma coisa. A consulta de divergência está no
+  rodapé de `db/leads_site.sql`.
+
+**Ainda aberto:** o webhook do CRM continua com **uma tentativa só**, sem retry (o
+carimbo torna a perda visível, não a evita). Os 3 leads antigos seguem sem aceite e sem
+carimbo — a primeira consulta de divergência traz falsos positivos até normalizar.
+
+**`.env.local` aponta para o banco de produção** (`72.60.152.110:5435/leads_site`).
+Qualquer `npm run dev` ou `db:verificar` escreve na base real de leads. O que segura hoje
+é o firewall — a porta não responde de fora, verificado. Não é a configuração.
+
+**`NEXT_PUBLIC_META_PIXEL_ID_EMPRESAS` não existe no Coolify**, então a `/lp-empresas`
+cai no Pixel global (`2435925136900956`, confirmado na requisição para
+`facebook.com/tr/`). Medição existe; separação por campanha, não. Coerente com a decisão
+de 25/08 para a `/10-empresas` — se for a mesma decisão aqui, o parâmetro sai do código.
+
+**Contraste da LP: sem problema, ao contrário do que a varredura sugeriu.** Os CTAs usam
+texto escuro `rgb(7,16,17)` sobre o verde `rgb(0,200,150)` = **8,89:1**, folgado no AA.
+O 2,95:1 anotado nas convenções é do estilo antigo (branco sobre `#00ab7a`) e não vale
+para esta LP. Um heurístico que subia a árvore parando em `glass-card-dark`
+(`rgba(255,255,255,0.04)`) acusou 30 falsos positivos — a nota das convenções sobre medir
+contraste com canvas em vez de parse de string continua valendo, e a armadilha do fundo
+quase transparente é a segunda metade dela.
+
+**A branch `redesign/10-empresas` está obsoleta:** o PR #1 foi mergeado por rebase, e
+`main` já tem todo o conteúdo dela com hashes diferentes. Trabalho novo sai de
+`origin/main`, não dela.
+
+---
+
 ## Próximos Passos
 
 ### Deploy (o automático está quebrado)
@@ -1464,8 +1523,19 @@ Coolify), painel em `https://coolify.companychatia.com.br`, aplicação id 3, uu
       `https://coolify.companychatia.com.br/webhooks/source/github/events/manual`,
       evento `push`; o secret já existe no Coolify (aplicação id 3, Configuration →
       Webhooks). Adiado por decisão do dono em 2026-08-26
-- [ ] **Mergear o PR #1** (`redesign/10-empresas` → `main`) e **disparar o deploy à mão
-      logo depois** — sem o webhook, o merge sozinho não publica nada
+- [x] ~~Mergear o PR #1~~ → mergeado por rebase em 2026-08-26; a branch
+      `redesign/10-empresas` ficou obsoleta e `main` tem todo o conteúdo dela
+- [x] ~~PR #2 (auditoria da `/lp-empresas`)~~ → mergeado e publicado em 2026-08-27.
+      Deploy manual via `queue_application_deployment` no tinker do container `coolify`
+      (não existe `app:deploy` no artisan da 4.3.11); container ativo em `fa9dcf4`
+- [ ] **Webhook do CRM sem retry** — uma tentativa, 8 s de timeout. `crm_entregue_em`
+      mostra quem ficou para trás; falta o reprocessador que reenvia. O receptor é
+      idempotente pelo `id`, então reenviar é seguro
+- [ ] **Fechar o E2E da `/lp-empresas`** — falta acesso ao `crm.companychatia.com.br`,
+      um telefone de teste da equipe e a confirmação de que as automações de WhatsApp
+      estão desligadas para o lead de QA
+- [ ] **Tirar o `.env.local` de cima do banco de produção** — hoje só o firewall separa
+      um `npm run dev` da base real de leads
 - [x] ~~Favicon, manifest e ícones 404 em produção~~ → era build antigo; resolvido com o
       deploy manual de `036546b` em 2026-08-26
 
