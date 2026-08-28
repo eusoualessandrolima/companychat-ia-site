@@ -1471,19 +1471,25 @@ cada lead dispara **dois** POSTs (nascer e clicar no WhatsApp) e virou **um** ca
 os dois eventos como comentários separados. Isso encerra a dúvida que estava registrada
 como "não verificável".
 
-**O que ainda falta para um PASS limpo:** os dois leads entraram às 09:19 e 10:20, e o
-deploy das correções foi às 14:57 — ou seja, **o E2E comprovado é o do código anterior**.
-O payload novo é aditivo (`consentimento*` e `origem.tipo`), a expectativa é que nada
-quebre, mas expectativa não é evidência. Um lead de teste com UTMs depois do deploy fecha isso.
+**Fechado em 28/08 06:14 com um lead de teste controlado** — telefone da própria
+CompanyChat, autorizado pelo dono, envio único, sem clicar no botão do WhatsApp (nenhuma
+mensagem disparada). O caminho inteiro percorrido no código publicado, com as UTMs reais
+da campanha do Instagram:
 
-**As UTMs chegam ao card do CRM, mas só duas das quatro.** Descoberto sem gastar lead:
-dois cards antigos de teste da `/10-empresas` foram enviados com UTM, e o comentário
-deles traz `• Campanha: selecao10` (de `utm_campaign`) e `• Origem: teste-lead` (de
-`utm_source`). **`utm_medium`, `utm_content` e `fbclid` não aparecem** — ficam só no
-`origem` do banco. Quem montar campanha contando com `utm_medium` no card vai procurar
-por algo que não existe. Ressalva: os dois cards vieram da candidatura, e o formato do
-comentário difere entre as superfícies — o ramo das LPs de anúncio ainda não foi
-observado com UTM.
+- payload com `consentimento*` e `origem.tipo: "lp"` **aceito pelo receptor sem
+  degradação** — a mudança aditiva não quebrou o CRM;
+- banco gravou o aceite completo (`consentimento`, `_em`, `_versao`);
+- **`crm_entregue_em` carimbado 1,55 s depois** — as duas correções comprovadas em
+  produção com lead real, não só em ambiente de teste;
+- card único na coluna Lead novo, com `• Origem: instagram` e `• Campanha: perfil`.
+
+**As UTMs chegam ao card do CRM, mas só duas das quatro.** `utm_source` vira "Origem" e
+`utm_campaign` vira "Campanha". **`utm_medium`, `utm_content` e `fbclid` não aparecem** —
+ficam só no `origem` do banco e no painel `/leads`. Quem montar campanha contando com
+`utm_medium` no card vai procurar por algo que não existe; para distinguir ponto de
+contato dentro do mesmo canal, codifique no `utm_source` (`instagram-bio`). Vale para as
+duas superfícies: primeiro observado em dois cards antigos da `/10-empresas`, depois
+confirmado no ramo das LPs com o lead de teste.
 
 **O CRM não tem responsável, tags nem campanha no card.** Os campos são mensalidade,
 implementação, produto, conexões de WhatsApp, contato e comentários. Não é perda de dado
@@ -1559,12 +1565,11 @@ quase transparente é a segunda metade dela.
 - [ ] **Webhook do CRM sem retry** — uma tentativa, 8 s de timeout. `crm_entregue_em`
       mostra quem ficou para trás; falta o reprocessador que reenvia. O receptor é
       idempotente pelo `id`, então reenviar é seguro
-- [ ] **Um lead de teste com UTMs depois do deploy de 27/08** — é o único item que
-      separa o PASS COM RESSALVAS de um PASS limpo. Responde duas perguntas de uma vez:
-      se o payload novo (`consentimento*` + `origem.tipo`) continua sendo aceito pelo
-      receptor, e se as UTMs aparecem no card. Falta o telefone da equipe e a confirmação
-      de que as automações de WhatsApp estão desligadas para o lead de QA
-- [ ] **Limpar `TESTE CLAUDE APAGAR` e `TESTE Claude Code`** da coluna Lead novo
+- [x] ~~Lead de teste com UTMs depois do deploy~~ → feito em 28/08 06:14; passou em tudo
+- [ ] **Limpar três cards de teste** da coluna Lead novo: `TESTE CLAUDE APAGAR`,
+      `TESTE Claude Code` e `TESTE QA LP EMPRESAS 28-08 0613` (id `aa973601…`, este
+      também no banco `leads_site`). Com eles, o CRM anuncia 8 negócios onde há 4 reais —
+      topo de funil dobrado. Exige "pode apagar" explícito do dono
 - [ ] **Tirar o `.env.local` de cima do banco de produção** — hoje só o firewall separa
       um `npm run dev` da base real de leads
 - [x] ~~Favicon, manifest e ícones 404 em produção~~ → era build antigo; resolvido com o
