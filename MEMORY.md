@@ -1486,6 +1486,14 @@ Coolify), painel em `https://coolify.companychatia.com.br`, aplicação id 3, uu
   · `npm test` ✓ 121/121 · `test:teste-gratis` ✓ · `test:campanha10` ✓ · `test:responsivo`
   ✓ 25 viewports · zero rolagem lateral e zero erro de console em `/`, `/agente-ia`,
   `/10-empresas` e `/company-ai` em 320/375/390/768/1024/1440px · 308 conferido por `curl`.
+- **Publicado no mesmo dia.** PR #3 mergeado por rebase (`d8a3f0b`), deploy manual
+  disparado pelo Coolify (`queue_application_deployment` via tinker, deployment `f1ow2g1`,
+  ~100 s até `finished`) — o webhook do GitHub continua sem existir, então todo push em
+  `main` ainda exige este passo. Em produção: `/agente-ia` 200, `/assistente-ia` 308 →
+  `/agente-ia`, sitemap com a URL nova, `<title>Agente de IA para WhatsApp | CompanyChat</title>`,
+  og:title da campanha em "10 Empresas, 10 Agentes de IA". As únicas ocorrências de
+  "assistente" no HTML público são a meta keyword e os dois `?origem=` de analytics — as
+  três que foram mantidas de propósito. Nenhum texto visível.
 
 ---
 
@@ -1593,7 +1601,7 @@ quase transparente é a segunda metade dela.
       fala em "10 Assistentes de IA" e a página agora diz "10 Agentes de IA". A UTM não
       mudou, então a atribuição segue intacta; o que fica desalinhado é a mensagem
 - [ ] Reenviar o `sitemap.xml` no Search Console e acompanhar a troca de `/assistente-ia`
-      por `/agente-ia` no índice
+      por `/agente-ia` no índice (já no ar desde 2026-08-29; o 308 cobre o período de troca)
 - [ ] Conferir se algum link externo publicado (bio do Instagram, materiais, e-mails)
       aponta para `/assistente-ia` — o 308 cobre, mas vale atualizar na fonte
 
