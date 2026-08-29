@@ -28,7 +28,7 @@ const cenas: Cena[] = [
     numero: "01",
     titulo: "Responde no ritmo de gente",
     texto:
-      "Seu cliente manda três mensagens seguidas e ainda um áudio. O assistente espera ele terminar, entende tudo junto e responde como uma pessoa responderia.",
+      "Seu cliente manda três mensagens seguidas e ainda um áudio. O agente espera ele terminar, entende tudo junto e responde como uma pessoa responderia.",
     itens: [
       "Espera o cliente terminar de escrever antes de responder",
       "Transcreve áudios e lê fotos, prints e documentos",
@@ -49,7 +49,7 @@ const cenas: Cena[] = [
     numero: "02",
     titulo: "Resolve, não fica só informando",
     texto:
-      "Agendar, cobrar, mover o lead: o assistente usa as ferramentas do seu negócio de verdade. Ele gera o link de pagamento e, quando o cliente paga, retoma a conversa sozinho.",
+      "Agendar, cobrar, mover o lead: o agente usa as ferramentas do seu negócio de verdade. Ele gera o link de pagamento e, quando o cliente paga, retoma a conversa sozinho.",
     itens: [
       "Agenda, remarca e cancela direto na sua agenda",
       "Monta orçamento e envia link de pagamento na conversa",
@@ -75,7 +75,7 @@ const cenas: Cena[] = [
     numero: "03",
     titulo: "Fala do seu negócio, sem inventar",
     texto:
-      "As respostas saem do material que você entregou: catálogo, tabela de preços, políticas e o jeito da casa. Quando o assistente não tem certeza, ele confirma com o time em vez de chutar.",
+      "As respostas saem do material que você entregou: catálogo, tabela de preços, políticas e o jeito da casa. Quando o agente não tem certeza, ele confirma com o time em vez de chutar.",
     itens: [
       "Treinado com seu catálogo, seus preços e suas regras",
       "Aceita PDF, Word, planilha e o conteúdo do seu site",
@@ -96,10 +96,10 @@ const cenas: Cena[] = [
     numero: "04",
     titulo: "Sabe a hora de chamar uma pessoa",
     texto:
-      "Caso delicado, negociação ou cliente irritado? O assistente encerra com educação, deixa um resumo do que aconteceu e entrega para a pessoa certa do seu time.",
+      "Caso delicado, negociação ou cliente irritado? O agente encerra com educação, deixa um resumo do que aconteceu e entrega para a pessoa certa do seu time.",
     itens: [
       "Transfere para a pessoa ou o time certo, com resumo do caso",
-      "Enquanto um humano atende, o assistente fica em silêncio",
+      "Enquanto um humano atende, o agente fica em silêncio",
       "Devolve para a IA com um clique, sem perder o histórico",
       "Regras claras do que ele nunca decide sozinho",
     ],
@@ -115,14 +115,14 @@ const cenas: Cena[] = [
         linhas: ["Pagamento em 27/07, acesso bloqueado", "Segunda ocorrência do cliente", "Prioridade alta"],
       },
       { t: "sistema", texto: "Conversa transferida para Ana · Financeiro", icon: UserCheck },
-      { t: "sistema", texto: "Assistente em silêncio enquanto o time atende", icon: Clock },
+      { t: "sistema", texto: "Agente em silêncio enquanto o time atende", icon: Clock },
     ],
   },
   {
     numero: "05",
     titulo: "Não deixa o cliente esfriar",
     texto:
-      "Sumiu no meio da conversa? O assistente retoma em etapas, só dentro do seu horário de atendimento, e sabe a hora de parar de insistir. Lembretes de agendamento saem sozinhos.",
+      "Sumiu no meio da conversa? O agente retoma em etapas, só dentro do seu horário de atendimento, e sabe a hora de parar de insistir. Lembretes de agendamento saem sozinhos.",
     itens: [
       "Retoma quem sumiu, em etapas e sem soar insistente",
       "Lembretes de agendamento com confirmação de presença",
@@ -166,11 +166,11 @@ export default function Cenas() {
         >
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Na prática</p>
           <h2 className="mt-4 text-3xl font-bold text-dark-text md:text-4xl">
-            Veja o assistente <span className="text-gradient-primary">trabalhando</span>
+            Veja o agente <span className="text-gradient-primary">trabalhando</span>
           </h2>
           <p className="mt-4 text-dark-muted">
             Cinco situações do dia a dia de quem atende no WhatsApp. As conversas abaixo
-            são exemplos do que o seu assistente faz depois de treinado.
+            são exemplos do que o seu agente de IA faz depois de treinado.
           </p>
         </motion.div>
 

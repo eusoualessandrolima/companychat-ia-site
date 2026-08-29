@@ -3,7 +3,7 @@ import MetaPixel from "@/components/comecar/MetaPixel";
 import Campanha from "@/components/dez-empresas/Campanha";
 import { SEO } from "@/components/dez-empresas/conteudo";
 
-/* Campanha "10 Empresas, 10 Assistentes de IA".
+/* Campanha "10 Empresas, 10 Agentes de IA".
  *
  * `noindex`, como as LPs de nicho: a campanha é temporária e uma página de
  * seleção encerrada indexada envelhece mal no resultado de busca. Por isso ela
@@ -20,13 +20,13 @@ const IMAGEM_SOCIAL = {
   url: "/opengraph-image",
   width: 1200,
   height: 630,
-  alt: "CompanyChat: 10 empresas, 10 assistentes de IA no WhatsApp",
+  alt: "CompanyChat: 10 empresas, 10 agentes de IA no WhatsApp",
 };
 export const metadata: Metadata = {
   title: SEO.title,
   description: SEO.description,
   keywords: [
-    "assistente de IA no WhatsApp",
+    "agente de IA no WhatsApp",
     "implantação gratuita de IA",
     "seleção de empresas IA",
     "atendimento com inteligência artificial",

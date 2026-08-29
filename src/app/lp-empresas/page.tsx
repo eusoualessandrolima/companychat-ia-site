@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   keywords: [
     "IA para atendimento no WhatsApp",
     "atendimento automatizado para empresas",
-    "assistente de IA para vendas",
+    "agente de IA para vendas",
   ],
   openGraph: {
     title: "IA que atende e vende no WhatsApp da sua empresa | CompanyChat",

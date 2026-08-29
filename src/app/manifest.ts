@@ -10,7 +10,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "CompanyChat",
     short_name: "CompanyChat",
     description:
-      "Automação de atendimento no WhatsApp com IA: assistente 24/7, API Oficial, disparo em massa e CRM.",
+      "Automação de atendimento no WhatsApp com IA: agente de IA 24/7, API Oficial, disparo em massa e CRM.",
     lang: "pt-BR",
     start_url: "/",
     display: "standalone",

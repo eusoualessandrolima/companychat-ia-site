@@ -110,12 +110,12 @@ export default function Beneficios() {
           className="text-center"
         >
           <h2
-            aria-label="Atendimento Humano vs Assistente IA"
+            aria-label="Atendimento Humano vs Agente de IA"
             className="text-3xl font-bold tracking-tight text-dark-text md:text-4xl"
           >
             Atendimento Humano{" "}
             <span className="text-dark-muted">vs</span>{" "}
-            <span className="text-gradient-primary">Assistente IA</span>
+            <span className="text-gradient-primary">Agente de IA</span>
           </h2>
           <p className="mt-4 text-dark-muted">
             Veja por que empresas estão migrando para atendimento inteligente.

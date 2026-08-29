@@ -358,7 +358,7 @@ export default function Formulario({ copy }: { copy: CopyDoFunil }) {
           rotulo="WhatsApp com código do país"
           icone={Phone}
           erro={erros.whatsapp}
-          ajuda="É neste número que o nosso assistente vai chamar você."
+          ajuda="É neste número que o nosso agente de IA vai chamar você."
           obrigatorio
         >
           <input

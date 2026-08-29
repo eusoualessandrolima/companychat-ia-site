@@ -182,7 +182,7 @@ Roteiro da conversa, na ordem, uma pergunta por vez:
 
 Regras do agente:
 
-- identificar-se como assistente virtual da CompanyChat, sem fingir ser pessoa;
+- identificar-se como agente de IA da CompanyChat, sem fingir ser pessoa;
 - não inventar preço, integração ou funcionalidade (a base de conhecimento é a
   fonte, e ela vem do conteúdo deste site);
 - transferir para humano em pedido explícito, baixa confiança, negociação,

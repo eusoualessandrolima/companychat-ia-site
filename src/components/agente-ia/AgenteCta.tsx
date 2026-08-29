@@ -28,7 +28,7 @@ export default function AgenteCta() {
         </h2>
         <p className="mx-auto mt-5 max-w-xl text-dark-muted">
           Conte como funciona o seu atendimento hoje e a gente mostra, na prática, o que
-          o assistente resolveria sozinho a partir de amanhã.
+          o agente de IA resolveria sozinho a partir de amanhã.
         </p>
 
         <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">

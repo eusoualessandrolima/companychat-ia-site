@@ -10,7 +10,7 @@ import { CTA_LABEL_CURTO } from "@/lib/cta";
 import { loginLink } from "./WhatsAppButton";
 
 const navLinks = [
-  { href: "/assistente-ia", label: "Assistente IA" },
+  { href: "/agente-ia",     label: "Agente de IA" },
   { href: "/company-ai",    label: "Company AI" },
   { href: "#servicos",      label: "Serviços",   desktop: "hidden xl:block" },
   { href: "#beneficios",    label: "Benefícios", desktop: "hidden lg:block" },

@@ -56,7 +56,7 @@ export default function AgenteHero() {
             className="mx-auto mb-8 flex w-fit items-center gap-2.5 rounded-full border border-dark-border bg-dark-surface px-4 py-2 text-sm font-medium text-dark-muted lg:mx-0"
           >
             <Bot aria-hidden="true" className="h-4 w-4 text-primary" />
-            Assistente de IA treinado no seu negócio
+            Agente de IA treinado no seu negócio
           </motion.div>
 
           <motion.h1
@@ -93,14 +93,14 @@ export default function AgenteHero() {
                 className="group flex w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-primary px-8 py-4 font-semibold text-on-primary shadow-xl shadow-primary/30 transition-all hover:bg-primary-dark hover:shadow-2xl hover:shadow-primary/40 sm:w-auto"
               >
                 <MessageCircle aria-hidden="true" className="h-4 w-4" />
-                Quero meu assistente
+                Quero meu agente de IA
               </CtaTesteGratis>
             </div>
             <a
               href="#cenas"
               className="flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-full border border-dark-border bg-dark-surface px-8 py-4 font-semibold text-dark-text transition-all hover:border-primary/40 hover:text-primary sm:w-auto"
             >
-              Ver o assistente atendendo
+              Ver o agente atendendo
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </a>
           </motion.div>

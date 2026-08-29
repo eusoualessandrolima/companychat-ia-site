@@ -159,7 +159,7 @@ Mesmo padrão visual das outras páginas internas e reaproveita `ApiHeader`, `No
 | Origem | `Origem.tsx` | Por que a Company AI existe: narrativa do YouTube + citação do fundador |
 | OqueConstruimos | `OqueConstruimos.tsx` | Quatro frentes de construção, alimentado por `company-ai-data.ts` |
 | ComoTrabalhamos | `ComoTrabalhamos.tsx` | Conversa, desenho, construção, entrega e ajuste |
-| CompanyAiCta | `CompanyAiCta.tsx` | CTA final (WhatsApp + cross-link para `/assistente-ia`) |
+| CompanyAiCta | `CompanyAiCta.tsx` | CTA final (WhatsApp + cross-link para `/agente-ia`) |
 | company-ai-data | `company-ai-data.ts` | Fonte única das quatro frentes (home e página) |
 
 ### Calculadora de impacto — `components/calculadora/` (rota `/calculadora`)
@@ -196,10 +196,10 @@ Caminho comercial principal do site. Detalhes de operação em `docs/funil-teste
 | `db/teste_gratis.sql` | DDL das três tabelas |
 | `tests/unidade/` + `tests/teste-gratis.mjs` + `tests/banco-teste-gratis.mjs` | Testes |
 
-### Campanha "10 Empresas, 10 Assistentes de IA" — rota `/10-empresas` (2026-08-25)
+### Campanha "10 Empresas, 10 Agentes de IA" — rota `/10-empresas` (2026-08-25)
 
 LP de campanha com um objetivo só: candidatura para a seleção de 10 empresas que
-recebem a implantação gratuita de um assistente de IA. Sem menu, sem calculadora e
+recebem a implantação gratuita de um agente de IA. Sem menu, sem calculadora e
 mais curta que as LPs de nicho.
 
 **Redesenhada em 2026-08-26** (UX/UI + CRO + arquitetura). Ordem das seções hoje:
@@ -1455,6 +1455,40 @@ Coolify), painel em `https://coolify.companychatia.com.br`, aplicação id 3, uu
 
 ---
 
+### 2026-08-29 — "Assistente de IA" vira "Agente de IA" em todo o site
+
+- **Por quê:** o produto não responde mensagem, ele executa. Agenda, remarca, monta
+  orçamento, envia link de pagamento, move card no CRM Kanban, consulta e registra dados
+  por integração, transfere para o time e retoma a conversa sozinho. "Assistente" descreve
+  quem reage a pedido; "agente" descreve quem usa ferramenta e completa fluxo — que é o
+  que a própria `/agente-ia` já mostrava em cinco cenas enquanto o badge do hero dizia
+  "Assistente de IA treinado no seu negócio".
+- **Rota renomeada:** `/assistente-ia` → `/agente-ia`, com **308 permanente** de
+  `/assistente-ia` em `next.config.ts` (mesmo padrão de `/comecar2` e `/planos`; o Google
+  trata 308 como 301 para transferência de sinal). Diretórios `src/app/assistente-ia/` e
+  `src/components/assistente-ia/` movidos por `git mv` para `agente-ia/`.
+- **Alcance:** nav do Header, Footer (link + descrição da marca), `NossasSolucoes`,
+  `ComoFunciona`, `Servicos`, `Beneficios`, `FAQ`, `Garantias`, `Integracoes`, `Nichos`,
+  `PorteEmpresa`, `Contato`, `StructuredData`, `layout.tsx`, `manifest.ts`, `sitemap.ts`,
+  `/privacidade`, `/teste-gratis`, `/comecar`, `/lp-empresas`, a campanha `/10-empresas`
+  inteira e as três bases de conhecimento da Jade em `docs/`.
+- **O que NÃO mudou, de propósito:**
+  - `IDENTIFICACAO.campanha = "10-empresas-10-assistentes"` — UTM em produção, gravada em
+    `leads_site.origem` e lida pelo CRM. Trocar fragmentaria a atribuição da campanha em
+    dois valores no meio da veiculação.
+  - `local="hero-assistente-ia"` e `local="cta-assistente-ia"` — viram `?origem=` e o
+    evento `free_trial_cta_clicked`. Mesma razão: continuidade de relatório.
+  - A keyword `"assistente de IA para WhatsApp"` continua em `/agente-ia`, atrás das novas.
+    A marca comunica "agente", mas quem busca ainda digita "assistente" e "chatbot".
+- **Copy revista, não só substituída:** onde o texto limitava o produto a responder, ele
+  passou a citar o que o agente executa (FAQ da home, `company-ai-data.ts`, Footer).
+- **Verificação:** `npm run build` ✓ (rota `/agente-ia` prerenderizada) · `npm run lint` ✓
+  · `npm test` ✓ 121/121 · `test:teste-gratis` ✓ · `test:campanha10` ✓ · `test:responsivo`
+  ✓ 25 viewports · zero rolagem lateral e zero erro de console em `/`, `/agente-ia`,
+  `/10-empresas` e `/company-ai` em 320/375/390/768/1024/1440px · 308 conferido por `curl`.
+
+---
+
 ### 2026-08-27 — Auditoria da `/lp-empresas`: o consentimento que não existia e a entrega cega ao CRM
 
 Auditoria ponta a ponta da LP em produção, do link público ao CRM. Relatório completo
@@ -1550,6 +1584,19 @@ quase transparente é a segunda metade dela.
 
 ## Próximos Passos
 
+### Nomenclatura "Agente de IA" (2026-08-29)
+
+- [ ] **Atualizar a base da Jade** — os documentos 6, 7, 9 e 13 ainda dizem "assistente".
+      O documento 7 passa a se chamar **Agente de IA**. Site e base divergentes já
+      causaram problema real antes
+- [ ] **Revisar os criativos do Meta Ads da `/10-empresas`** — o anúncio em veiculação
+      fala em "10 Assistentes de IA" e a página agora diz "10 Agentes de IA". A UTM não
+      mudou, então a atribuição segue intacta; o que fica desalinhado é a mensagem
+- [ ] Reenviar o `sitemap.xml` no Search Console e acompanhar a troca de `/assistente-ia`
+      por `/agente-ia` no índice
+- [ ] Conferir se algum link externo publicado (bio do Instagram, materiais, e-mails)
+      aponta para `/assistente-ia` — o 308 cobre, mas vale atualizar na fonte
+
 ### Deploy (o automático está quebrado)
 
 - [ ] **Criar o webhook no GitHub** — enquanto não existir, todo merge em `main` exige
@@ -1635,8 +1682,8 @@ quase transparente é a segunda metade dela.
 - [x] ~~Commit + push da Company AI~~ → `88a65f4`, no ar em 2026-07-30
 - [x] ~~Atualizar a base da Jade com a Company AI~~ → documento 13 criado, `READY`, 4 chunks
 
-- [ ] Commit + push da página `/assistente-ia` (via @devops) → deploy automático no Vercel
-- [ ] Avaliar se as cenas de `/assistente-ia` merecem animação de digitação ao vivo (hoje entram por `whileInView`, sem simulação de tempo real)
+- [ ] Commit + push da página `/agente-ia` (via @devops) → deploy automático no Vercel
+- [ ] Avaliar se as cenas de `/agente-ia` merecem animação de digitação ao vivo (hoje entram por `whileInView`, sem simulação de tempo real)
 - [ ] Commit + push das correções da auditoria de 2026-07-14 (via @devops) → deploy automático no Vercel
 - [ ] Verificar visualmente a home, a `/api-oficial` e a nova `/disparos` no navegador após o deploy (hero em ~1024px, mock do painel, responsividade do dashboard recriado)
 - [ ] Trocar os números ilustrativos do painel em `/disparos` por prints/dados reais se quiser (hoje são exemplos)

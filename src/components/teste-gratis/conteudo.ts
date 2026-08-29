@@ -49,7 +49,7 @@ export type CopyDoFunil = {
 
 const COM_ENVIO: CopyDoFunil = {
   subtitulo:
-    "Preencha seus dados e nosso assistente entrará em contato pelo WhatsApp para entender sua operação e preparar o teste mais adequado.",
+    "Preencha seus dados e nosso agente de IA entrará em contato pelo WhatsApp para entender sua operação e preparar o teste mais adequado.",
   garantias: [
     "Contato pelo WhatsApp em alguns minutos",
     "Diagnóstico do seu atendimento sem custo",
@@ -58,7 +58,7 @@ const COM_ENVIO: CopyDoFunil = {
   etapaContato: {
     titulo: "Em alguns minutos, chamamos você no WhatsApp",
     texto:
-      "O primeiro contato parte do nosso assistente virtual, no número que você cadastrou.",
+      "O primeiro contato parte do nosso agente de IA, no número que você cadastrou.",
   },
   sucessoTexto:
     "Em alguns minutos, a CompanyChat entrará em contato com você pelo WhatsApp para continuar o atendimento.",

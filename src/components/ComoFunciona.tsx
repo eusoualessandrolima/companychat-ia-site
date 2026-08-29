@@ -15,9 +15,9 @@ const PASSOS = [
   },
   {
     num: "02",
-    titulo: "Criação do Assistente",
+    titulo: "Criação do Agente de IA",
     descricao:
-      "Desenvolvemos um assistente IA 100% personalizado com linguagem e tom da sua marca.",
+      "Desenvolvemos um agente de IA 100% personalizado com a linguagem e o tom da sua marca.",
     destaque: "IA treinada com dados do seu negócio",
   },
   {
@@ -31,7 +31,7 @@ const PASSOS = [
     num: "04",
     titulo: "Resultados",
     descricao:
-      "Seu assistente opera 24h por dia. Acompanhe métricas e receba otimizações contínuas.",
+      "Seu agente de IA opera 24h por dia. Acompanhe métricas e receba otimizações contínuas.",
     destaque: "Suporte e ajustes mensais inclusos",
   },
 ];
@@ -54,11 +54,11 @@ export default function ComoFunciona() {
               Como funciona
             </span>
             <h2
-              aria-label="Do primeiro contato ao assistente funcionando, em 4 passos simples."
+              aria-label="Do primeiro contato ao agente de IA funcionando, em 4 passos simples."
               className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-[2.6rem]"
             >
               Do primeiro contato ao{" "}
-              <span className="text-primary-text">assistente funcionando</span>,
+              <span className="text-primary-text">agente de IA funcionando</span>,
               em 4 passos simples.
             </h2>
             <p className="mt-5 leading-relaxed text-text-secondary">

@@ -1,4 +1,4 @@
-/* Verificação da campanha "10 Empresas, 10 Assistentes de IA" (`/10-empresas`)
+/* Verificação da campanha "10 Empresas, 10 Agentes de IA" (`/10-empresas`)
  * no navegador: metadados, CTAs, validação e envio do formulário, o que sai na
  * integração, responsividade e ausência de erro no console.
  *
@@ -90,7 +90,7 @@ const navegador = await chromium.launch();
   relatar(titulo.startsWith("10 empresas receberão"), `title: ${titulo}`);
 
   const og = await pagina.getAttribute('meta[property="og:title"]', "content");
-  relatar(og === "10 Empresas, 10 Assistentes de IA", `og:title: ${og}`);
+  relatar(og === "10 Empresas, 10 Agentes de IA", `og:title: ${og}`);
 
   const ogImagem = await pagina.getAttribute('meta[property="og:image"]', "content");
   relatar(Boolean(ogImagem), `og:image padrão do site: ${ogImagem}`);

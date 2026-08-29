@@ -159,7 +159,7 @@ export default function PrivacidadePage() {
           <ul className="list-disc space-y-2 pl-5">
             <li>
               Entrar em contato por WhatsApp para apresentar a solução, liberar a
-              demonstração da nossa assistente de IA e responder às suas
+              demonstração do nosso agente de IA e responder às suas
               dúvidas.
             </li>
             <li>

@@ -51,10 +51,10 @@ export default function CompanyAiCta() {
             />
           </a>
           <Link
-            href="/assistente-ia"
+            href="/agente-ia"
             className="flex items-center justify-center whitespace-nowrap rounded-full border border-white/10 px-9 py-3.5 font-semibold tracking-[-0.01em] text-dark-text transition-colors duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:border-white/25"
           >
-            Ver o assistente em ação
+            Ver o agente de IA em ação
           </Link>
         </div>
       </motion.div>

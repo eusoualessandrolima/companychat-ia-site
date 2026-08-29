@@ -41,7 +41,7 @@ const links = {
   recursos: [
     { href: "/#faq",           label: "FAQ" },
     { href: "/#como-funciona", label: "Como funciona" },
-    { href: "/assistente-ia",  label: "Assistente de IA" },
+    { href: "/agente-ia",      label: "Agente de IA" },
     { href: "/api-oficial",    label: "API Oficial" },
     { href: "/disparos",       label: "Disparo em massa" },
   ],
@@ -63,8 +63,8 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <Logo dark className="mb-4" />
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-dark-muted">
-              Assistente IA personalizado que responde, qualifica e converte clientes
-              no WhatsApp, 24h por dia, sem pausas.
+              Agente de IA personalizado que atende, qualifica, agenda e converte
+              clientes no WhatsApp, 24h por dia, sem pausas.
             </p>
 
             {/* CTA */}

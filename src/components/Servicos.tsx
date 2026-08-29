@@ -47,7 +47,7 @@ const servicos = [
   },
   {
     icon: Bot,
-    titulo: "Assistente IA Personalizado",
+    titulo: "Agente de IA Personalizado",
     badge: "Inteligência",
     cor: {
       bg: "bg-[#a941f3]/10",

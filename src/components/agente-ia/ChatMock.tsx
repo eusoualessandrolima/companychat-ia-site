@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Bot, Check, Mic, Play, type LucideIcon } from "lucide-react";
 
-/** Tipos de balão suportados nas cenas do assistente. */
+/** Tipos de balão suportados nas cenas do agente de IA. */
 export type Bolha =
   | { t: "cliente"; texto: string }
   | { t: "ia"; texto: string }
