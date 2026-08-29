@@ -12,7 +12,7 @@ import { envioWhatsappLigado } from "@/lib/teste-gratis/config";
 export const metadata: Metadata = {
   title: "Teste a CompanyChat gratuitamente | CompanyChat",
   /* Descrição neutra quanto a quem faz o contato: a página serve tanto no modo
-     com assistente quanto no modo somente captação, e metadata não é
+     com agente de IA quanto no modo somente captação, e metadata não é
      recalculada por chave de ambiente sem custo. */
   description:
     "Preencha seus dados e entramos em contato pelo WhatsApp para entender sua operação e preparar o teste mais adequado.",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Teste a CompanyChat gratuitamente",
     description:
-      "Deixe os seus dados e o nosso assistente chama você no WhatsApp para entender a sua operação e preparar o teste certo.",
+      "Deixe os seus dados e o nosso agente de IA chama você no WhatsApp para entender a sua operação e preparar o teste certo.",
     type: "website",
     locale: "pt_BR",
     siteName: "CompanyChat",

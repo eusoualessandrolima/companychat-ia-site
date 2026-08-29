@@ -16,14 +16,14 @@ const faqs = [
       "As respostas saem da base de conhecimento que montamos com o seu material: catálogo, tabela de preços e políticas. Você define os limites do que ele pode falar e, quando não tem certeza, ele confirma com uma pessoa do time em vez de arriscar uma resposta errada.",
   },
   {
-    pergunta: "Preciso da API Oficial do WhatsApp para ter o assistente?",
+    pergunta: "Preciso da API Oficial do WhatsApp para ter o agente de IA?",
     resposta:
       "Recomendamos sim. A API Oficial é o que garante número verificado, sem o risco de bloqueio das APIs não oficiais, e libera o volume de atendimento. Cuidamos de todo esse processo com a Meta por você. Na página da API Oficial você entende como funciona e simula o custo por mensagem.",
   },
   {
     pergunta: "Ele consegue passar o atendimento para a minha equipe?",
     resposta:
-      "Consegue. O assistente transfere para a pessoa ou o time certo com um resumo do que aconteceu na conversa. Enquanto o humano atende, ele fica em silêncio, e depois a conversa volta para a IA sem perder nada do histórico.",
+      "Consegue. O agente transfere para a pessoa ou o time certo com um resumo do que aconteceu na conversa. Enquanto o humano atende, ele fica em silêncio, e depois a conversa volta para a IA sem perder nada do histórico.",
   },
   {
     pergunta: "Com o que ele se integra?",
@@ -84,7 +84,7 @@ function Item({ pergunta, resposta, idx }: { pergunta: string; resposta: string;
 
 export default function AgenteFaq() {
   return (
-    <section id="faq-assistente" className="relative bg-background py-24">
+    <section id="faq-agente" className="relative bg-background py-24">
       <div className="mx-auto max-w-3xl px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -94,7 +94,7 @@ export default function AgenteFaq() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            Dúvidas sobre o <span className="text-primary-text">assistente de IA</span>
+            Dúvidas sobre o <span className="text-primary-text">agente de IA</span>
           </h2>
           <p className="mt-4 text-text-secondary">As perguntas que mais recebemos de quem vai começar.</p>
         </motion.div>

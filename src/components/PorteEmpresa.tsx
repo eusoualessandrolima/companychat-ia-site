@@ -18,7 +18,7 @@ const portes = [
     texto:
       "Organize o WhatsApp, automatize o que se repete e ganhe tempo para o que importa: vender. Com o controle que as empresas grandes têm, na agilidade que só você tem.",
     itens: [
-      "Assistente de IA atendendo 24 horas por dia",
+      "Agente de IA atendendo 24 horas por dia",
       "CRM Kanban com atendentes ilimitados",
       "Uma mensalidade, sem taxa de setup",
     ],
@@ -32,9 +32,9 @@ const portes = [
     etiqueta: "Médias empresas",
     titulo: "Controle total sobre uma operação em crescimento",
     texto:
-      "Vários assistentes, cada um com a sua função, campanhas para toda a base e visão de ponta a ponta do funil. Seu time entra quando a conversa já está qualificada.",
+      "Vários agentes de IA, cada um com a sua função, campanhas para toda a base e visão de ponta a ponta do funil. Seu time entra quando a conversa já está qualificada.",
     itens: [
-      "Vários assistentes, cada um com sua função",
+      "Vários agentes de IA, cada um com sua função",
       "Disparo em massa pela API Oficial da Meta",
       "Funil visual do primeiro contato ao fechamento",
     ],

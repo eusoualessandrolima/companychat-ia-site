@@ -1,4 +1,4 @@
-# Base de conhecimento da Jade: campanha "10 Empresas, 10 Assistentes de IA"
+# Base de conhecimento da Jade: campanha "10 Empresas, 10 Agentes de IA"
 
 Rascunho para a base da Jade, o agente que atende o WhatsApp oficial da
 CompanyChat. **Ainda não foi aplicado** — este documento aguarda aprovação.
@@ -26,14 +26,14 @@ Fonte da verdade da copy: `src/components/dez-empresas/conteudo.ts`.
 
 ## Documento
 
-**Título:** `Campanha 10 Empresas, 10 Assistentes de IA`
+**Título:** `Campanha 10 Empresas, 10 Agentes de IA`
 
 **Corpo:**
 
 ### O que é a campanha
 
 A CompanyChat vai selecionar **10 empresas** para receber a implantação inicial
-gratuita de um Assistente de IA personalizado no WhatsApp. A candidatura é feita
+gratuita de um Agente de IA personalizado no WhatsApp. A candidatura é feita
 pelo formulário da página `companychatia.com.br/10-empresas` e é **gratuita**.
 
 **Objetivo da CompanyChat:** acompanhar empresas reais usando a plataforma em
@@ -80,7 +80,7 @@ principal de automação**. O fluxo principal pode ser:
 
 - diagnóstico do atendimento atual;
 - mapeamento das principais conversas;
-- configuração do Assistente de IA;
+- configuração do Agente de IA;
 - personalização para o segmento da empresa;
 - o fluxo principal escolhido;
 - integração com o WhatsApp, conforme a viabilidade técnica de cada empresa;
@@ -137,7 +137,7 @@ participar do projeto.
 **O que exatamente é gratuito?**
 A implantação de um fluxo principal de automação — atendimento, qualificação,
 vendas, agendamento, follow-up ou suporte, conforme o caso da empresa. Junto vêm
-o diagnóstico do atendimento, a configuração do assistente, a personalização para
+o diagnóstico do atendimento, a configuração do agente de IA, a personalização para
 o segmento, a integração disponível, a organização dos contatos no CRM e o
 acompanhamento inicial da operação.
 
@@ -276,7 +276,7 @@ A página está `noindex` e fora do `sitemap.ts`, então não fica resíduo em b
 
 > A seleção das 10 empresas foi encerrada e as escolhidas já receberam contato.
 > Quem se candidatou e não foi selecionado também foi avisado. Sua empresa ainda
-> pode ter um Assistente de IA no WhatsApp pelo caminho normal: a CompanyChat
+> pode ter um Agente de IA no WhatsApp pelo caminho normal: a CompanyChat
 > apresenta as condições conforme o tamanho da operação.
 
 ---

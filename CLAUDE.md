@@ -65,7 +65,7 @@ Como atualizar (ferramentas MCP `fazer-ai`, tenant `companychat-ia`):
 | Documento | id | Conteúdo |
 |---|---|---|
 | Planos e preços | 6 | o que inclui, sob medida, regras comerciais. **Desde 2026-08-26 o site não publica valor nenhum:** preço sai no diagnóstico, caso a caso |
-| Assistente de IA | 7 | capacidades e dúvidas comuns |
+| Agente de IA | 7 | capacidades e dúvidas comuns |
 | API Oficial e custo por mensagem | 8 | janela de 24h, categorias, preços da Meta |
 | Disparo em massa e CRM Kanban | 9 | campanhas, templates, relatórios |
 | Company AI | 13 | consultoria em IA e projetos sob medida, e a diferença para o plano Sob medida |

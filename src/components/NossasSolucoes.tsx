@@ -23,8 +23,8 @@ type Solucao = {
 const solucoes: Solucao[] = [
   {
     icon: Bot,
-    nome: "Assistente de IA",
-    href: "/assistente-ia",
+    nome: "Agente de IA",
+    href: "/agente-ia",
     desc: "Atende, qualifica, agenda e cobra no seu WhatsApp 24h por dia, com a linguagem da sua marca.",
     text: "text-primary",
     textClaro: "text-primary-text",
@@ -145,7 +145,7 @@ export default function NossasSolucoes({ variant = "dark", omit }: { variant?: V
             Um <span className="text-gradient-primary">ecossistema</span> completo
           </h2>
           <p className={`mx-auto mt-4 max-w-2xl ${t.desc}`}>
-            O assistente de IA atende, o CRM organiza, a API Oficial garante o número e o
+            O agente de IA atende, o CRM organiza, a API Oficial garante o número e o
             disparo reengaja. Conheça as soluções que trabalham juntas no seu WhatsApp.
           </p>
         </motion.div>

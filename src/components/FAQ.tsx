@@ -7,9 +7,9 @@ import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
-    pergunta: "Como funciona o Assistente IA da CompanyChat?",
+    pergunta: "Como funciona o Agente de IA da CompanyChat?",
     resposta:
-      "Criamos um assistente personalizado para sua empresa usando inteligência artificial (GPT). Ele é treinado com informações do seu negócio e responde seus clientes via WhatsApp de forma natural e humanizada, 24 horas por dia.",
+      "Criamos um agente de IA personalizado para sua empresa usando inteligência artificial (GPT). Ele é treinado com as informações do seu negócio, atende seus clientes no WhatsApp de forma natural e humanizada e ainda executa o que foi configurado: qualifica, agenda, organiza o lead no CRM e chama o seu time quando o caso pede. 24 horas por dia.",
   },
   {
     pergunta: "Quanto tempo leva para implementar?",
@@ -31,7 +31,7 @@ const faqs = [
   {
     pergunta: "O que está incluso?",
     resposta:
-      "Assistente IA 100% personalizado, GPT ilimitado, call individual com especialista, suporte exclusivo, manutenção, atualizações e ajustes contínuos.",
+      "Agente de IA 100% personalizado, GPT ilimitado, call individual com especialista, suporte exclusivo, manutenção, atualizações e ajustes contínuos.",
   },
   {
     pergunta: "Posso cancelar a qualquer momento?",
@@ -44,9 +44,9 @@ const faqs = [
       "Funciona para qualquer empresa que atende clientes via WhatsApp ou chat. Temos expertise especial em escritórios de advocacia, laboratórios, academias e instituições de ensino, mas adaptamos para qualquer segmento.",
   },
   {
-    pergunta: "E se eu precisar de ajustes no assistente?",
+    pergunta: "E se eu precisar de ajustes no agente de IA?",
     resposta:
-      "Ajustes e melhorias estão inclusos no plano mensal. Conforme seu negócio evolui, otimizamos o assistente para garantir o melhor desempenho sempre.",
+      "Ajustes e melhorias estão inclusos no plano mensal. Conforme seu negócio evolui, otimizamos o agente de IA para garantir o melhor desempenho sempre.",
   },
 ];
 

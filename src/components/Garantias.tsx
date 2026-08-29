@@ -17,7 +17,7 @@ const garantias = [
     icon: PackageCheck,
     titulo: "Implantação inclusa",
     descricao:
-      "Configuramos o assistente, o CRM e a integração com o seu WhatsApp. Sem taxa de setup.",
+      "Configuramos o agente de IA, o CRM e a integração com o seu WhatsApp. Sem taxa de setup.",
   },
   {
     icon: Handshake,
@@ -29,7 +29,7 @@ const garantias = [
     icon: Rocket,
     titulo: "No ar em até 7 dias",
     descricao:
-      "Do diagnóstico ao assistente atendendo clientes, em uma semana. Sem projeto arrastado.",
+      "Do diagnóstico ao agente de IA atendendo clientes, em uma semana. Sem projeto arrastado.",
   },
   {
     icon: Unlock,
@@ -47,7 +47,7 @@ const garantias = [
     icon: RefreshCw,
     titulo: "Ajustes contínuos",
     descricao:
-      "Manutenção, atualizações e melhorias no assistente inclusas na mensalidade.",
+      "Manutenção, atualizações e melhorias no agente de IA inclusas na mensalidade.",
   },
 ];
 

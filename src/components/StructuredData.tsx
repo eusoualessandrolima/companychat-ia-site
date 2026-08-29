@@ -17,7 +17,7 @@ export default function StructuredData() {
     name: "CompanyChat",
     alternateName: "CompanyChat - Inteligência e performance de negócios",
     description:
-      "Automação de atendimento no WhatsApp com IA em Goiânia e em todo o Brasil. Assistente 24/7, API Oficial, disparo em massa e CRM integrados ao WhatsApp.",
+      "Automação de atendimento no WhatsApp com IA em Goiânia e em todo o Brasil. Agente de IA 24/7, API Oficial, disparo em massa e CRM integrados ao WhatsApp.",
     url: SITE_URL,
     telephone: `+${WHATSAPP_NUMBER}`,
     image: `${SITE_URL}/opengraph-image`,

@@ -495,7 +495,7 @@ export default function Integracoes() {
               className="text-dark-muted"
               style={{ marginTop: 20, lineHeight: 1.75 }}
             >
-              Conecte o assistente IA com as ferramentas que você já usa.
+              Conecte o agente de IA com as ferramentas que você já usa.
               Troque informações em tempo real e consiga mais conversões pelo WhatsApp.
             </motion.p>
 

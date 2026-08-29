@@ -28,7 +28,7 @@ export type EventoCliente =
   | "free_trial_form_started"
   | "free_trial_form_submitted"
   | "free_trial_form_error"
-  /* Campanha "10 Empresas, 10 Assistentes de IA" (`/10-empresas`). Prefixo
+  /* Campanha "10 Empresas, 10 Agentes de IA" (`/10-empresas`). Prefixo
      próprio para a seleção ser medida separada do funil de teste grátis. */
   | "campanha10_page_view"
   | "campanha10_cta_clicked"

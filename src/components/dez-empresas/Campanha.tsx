@@ -14,7 +14,7 @@ import SecaoSelecao from "./SecaoSelecao";
 import SecaoValor from "./SecaoValor";
 import { ANCORA_FORMULARIO, CAMPANHA_ENCERRADA } from "./conteudo";
 
-/* Landing da campanha "10 Empresas, 10 Assistentes de IA".
+/* Landing da campanha "10 Empresas, 10 Agentes de IA".
  *
  * Estrutura própria, e não a `Landing` das LPs de nicho: aquela é um funil
  * longo (calculadora, provas, marquee, antes/depois) e esta precisa ser curta,

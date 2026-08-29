@@ -17,7 +17,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-/* Campanha "10 Empresas, 10 Assistentes de IA" (`/10-empresas`).
+/* Campanha "10 Empresas, 10 Agentes de IA" (`/10-empresas`).
  *
  * Toda a copy mora aqui — inclusive as respostas do FAQ, que descrevem regra
  * comercial. Quando a condição da campanha mudar (número de vagas, escopo do
@@ -51,7 +51,7 @@ export const encerramento = {
   texto:
     "As candidaturas foram analisadas e as empresas selecionadas já receberam contato. Obrigado a todo mundo que se candidatou.",
   complemento:
-    "Sua empresa ainda pode ter um Assistente de IA no WhatsApp: fale com a gente e veja o caminho que faz sentido para o seu momento.",
+    "Sua empresa ainda pode ter um Agente de IA no WhatsApp: fale com a gente e veja o caminho que faz sentido para o seu momento.",
   botao: "Falar com a CompanyChat",
   /** Rótulo que os CTAs assumem: prometer candidatura quando a seleção
    *  acabou é levar a pessoa para uma porta fechada. */
@@ -74,12 +74,12 @@ export const IDENTIFICACAO = {
 export const CONSENTIMENTO_VERSAO = "2026-08-26";
 
 export const SEO = {
-  title: "10 empresas receberão um Assistente de IA no WhatsApp | CompanyChat",
+  title: "10 empresas receberão um Agente de IA no WhatsApp | CompanyChat",
   description:
-    "Candidate sua empresa para receber a implantação gratuita de um Assistente de IA personalizado no WhatsApp pela CompanyChat.",
-  ogTitle: "10 Empresas, 10 Assistentes de IA",
+    "Candidate sua empresa para receber a implantação gratuita de um Agente de IA personalizado no WhatsApp pela CompanyChat.",
+  ogTitle: "10 Empresas, 10 Agentes de IA",
   ogDescription:
-    "Sua empresa pode ser uma das selecionadas para receber um Assistente de IA personalizado no WhatsApp.",
+    "Sua empresa pode ser uma das selecionadas para receber um Agente de IA personalizado no WhatsApp.",
 };
 
 /* ─── Hero ──────────────────────────────────────────────────────────────
@@ -95,7 +95,7 @@ export const hero = {
 
   titulo: {
     linha1: "Sua empresa pode receber um",
-    destaque: "Assistente de IA personalizado",
+    destaque: "Agente de IA personalizado",
     linha3: "no WhatsApp",
   },
 
@@ -107,7 +107,7 @@ export const hero = {
   },
 
   subtitulo:
-    "A CompanyChat vai selecionar 10 empresas para implantar um assistente que atende, qualifica, agenda, faz follow-up e organiza as oportunidades no WhatsApp — 24 horas por dia.",
+    "A CompanyChat vai selecionar 10 empresas para implantar um agente de IA que atende, qualifica, agenda, faz follow-up e organiza as oportunidades no WhatsApp — 24 horas por dia.",
 
   cta: "Quero candidatar minha empresa",
   microcopy: "Candidatura gratuita • menos de 2 minutos",
@@ -161,11 +161,11 @@ export const valor = {
   rotulo: "O que sua empresa recebe",
   titulo: "Não é apenas um chatbot pronto",
   texto:
-    "As empresas selecionadas recebem uma implantação personalizada para a própria operação: o assistente é configurado com os produtos, os serviços, as regras e a linguagem do negócio.",
+    "As empresas selecionadas recebem uma implantação personalizada para a própria operação: o agente de IA é configurado com os produtos, os serviços, as regras e a linguagem do negócio.",
   itens: [
     "Diagnóstico da operação",
     "Mapeamento das conversas",
-    "Configuração do Assistente de IA",
+    "Configuração do Agente de IA",
     "Personalização para o segmento",
     "Integração com o WhatsApp",
     "Organização no CRM",
@@ -227,7 +227,7 @@ export const capacidades: {
   extras: { icone: LucideIcon; texto: string }[];
 } = {
   rotulo: "Possibilidades de automação",
-  titulo: "O que o assistente pode fazer pela sua empresa",
+  titulo: "O que o agente de IA pode fazer pela sua empresa",
   complemento:
     "O fluxo será adaptado ao segmento, ao atendimento e aos objetivos da empresa selecionada.",
   itens: [
@@ -307,9 +307,9 @@ export const entrega: {
     },
     {
       icone: Bot,
-      titulo: "Configuração do Assistente de IA",
+      titulo: "Configuração do Agente de IA",
       descricao:
-        "O assistente treinado com as informações do negócio: produtos, serviços, prazos e regras.",
+        "O agente de IA treinado com as informações do negócio: produtos, serviços, prazos e regras.",
     },
     {
       icone: Sparkles,
@@ -407,7 +407,7 @@ export const provaEmpresa = {
   rotulo: "Quem está por trás",
   titulo: "Tecnologia desenvolvida pela CompanyChat",
   texto:
-    "A CompanyChat é uma plataforma brasileira de atendimento no WhatsApp com Inteligência Artificial, feita para pequenas e médias empresas: assistente de IA, CRM em funil, múltiplos atendentes e integração com a API Oficial.",
+    "A CompanyChat é uma plataforma brasileira de atendimento no WhatsApp com Inteligência Artificial, feita para pequenas e médias empresas: agente de IA, CRM em funil, múltiplos atendentes e integração com a API Oficial.",
   destaque:
     "A mesma tecnologia atende o WhatsApp comercial da CompanyChat hoje.",
   metricas: [] as { numero: string; rotulo: string }[],
@@ -438,7 +438,7 @@ export const condicoes = {
     "A candidatura é gratuita e não gera compromisso.",
     "As inscrições ficam abertas por 30 dias após a publicação, ou até as 10 empresas serem selecionadas.",
     "A seleção não é automática: analisamos o perfil, a demanda de atendimento e a disponibilidade para participar do projeto.",
-    "O que é gratuito: a implantação de um fluxo principal de automação, com diagnóstico, configuração do assistente, integração disponível, organização no CRM e acompanhamento inicial.",
+    "O que é gratuito: a implantação de um fluxo principal de automação, com diagnóstico, configuração do agente de IA, integração disponível, organização no CRM e acompanhamento inicial.",
     "Automações, integrações ou fluxos adicionais são avaliados separadamente, com escopo e valor apresentados antes de qualquer execução.",
     "A participação não cria contratação automática. O período inicial são os 30 primeiros dias após a ativação da operação, e continuar depois é opcional, com as condições apresentadas previamente.",
     "Todas as candidaturas recebem retorno pelo WhatsApp informado, selecionadas ou não.",
@@ -581,7 +581,7 @@ export const faq = {
     {
       pergunta: "O que exatamente é gratuito?",
       resposta:
-        "A implantação de um fluxo principal de automação: atendimento, qualificação, vendas, agendamento, follow-up ou suporte, conforme o caso da empresa. Junto vêm o diagnóstico do atendimento, a configuração do assistente, a personalização para o segmento, a integração disponível, a organização dos contatos no CRM e o acompanhamento inicial da operação.",
+        "A implantação de um fluxo principal de automação: atendimento, qualificação, vendas, agendamento, follow-up ou suporte, conforme o caso da empresa. Junto vêm o diagnóstico do atendimento, a configuração do agente de IA, a personalização para o segmento, a integração disponível, a organização dos contatos no CRM e o acompanhamento inicial da operação.",
     },
     {
       pergunta: "E o que fica fora desse escopo?",

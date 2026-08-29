@@ -34,7 +34,7 @@ export const construcoes: Construcao[] = [
     icon: Bot,
     nome: "Atendente inteligente no WhatsApp",
     resumo: "Responde na hora, entende o cliente e só chama uma pessoa quando o caso pede.",
-    desc: "Um assistente treinado com o material do seu negócio, que responde na hora, entende o que o cliente quer e passa a conversa para uma pessoa do time quando o caso pede.",
+    desc: "Um agente de IA treinado com o material do seu negócio, que responde na hora, entende o que o cliente quer, executa o que foi configurado e passa a conversa para uma pessoa do time quando o caso pede.",
     exemplos: [
       "Tira dúvidas e qualifica quem chega",
       "Agenda, confirma e lembra o cliente",

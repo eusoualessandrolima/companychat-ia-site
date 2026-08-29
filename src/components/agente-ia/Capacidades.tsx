@@ -88,7 +88,7 @@ export default function Capacidades() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            O que o assistente <span className="text-primary-text">faz por você</span>
+            O que o agente de IA <span className="text-primary-text">faz por você</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
             Muito além de responder pergunta frequente. Ele opera o atendimento

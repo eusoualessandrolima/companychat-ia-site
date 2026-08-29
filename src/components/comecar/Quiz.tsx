@@ -174,7 +174,7 @@ const ETAPAS: Etapa[] = [
   },
 ];
 
-/* O que o assistente faz, na linguagem do cliente. Tudo já está em
+/* O que o agente de IA faz, na linguagem do cliente. Tudo já está em
    `Capacidades.tsx`: nenhuma promessa nova. */
 const BENEFICIOS = [
   "Responde na hora, 24 horas por dia, inclusive fim de semana",
@@ -213,7 +213,7 @@ function mascararTelefone(valor: string) {
  *  lado já sabe tudo o que a pessoa acabou de responder. */
 function montarLink(r: Respostas) {
   const texto = [
-    "Oi! Respondi as perguntas no site e quero saber como funciona o assistente de IA.",
+    "Oi! Respondi as perguntas no site e quero saber como funciona o agente de IA.",
     "",
     `Nome: ${r.nome.trim()}`,
     `Empresa: ${r.empresa.trim()}`,

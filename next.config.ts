@@ -76,6 +76,15 @@ const nextConfig: NextConfig = {
         destination: "/lp-saude",
         permanent: true,
       },
+      /* A página do produto nasceu como /assistente-ia e virou /agente-ia quando
+         a marca passou a comunicar "agente de IA" — o produto executa ações
+         (agenda, cobra, move o lead no CRM), não só responde. A URL antiga está
+         indexada e já saiu em link e anúncio, então o 301 preserva o SEO. */
+      {
+        source: "/assistente-ia",
+        destination: "/agente-ia",
+        permanent: true,
+      },
       /* A página de planos saiu do ar: o preço agora é definido no diagnóstico,
          caso a caso, e nenhum valor é publicado. Quem chegar por link antigo,
          anúncio ou resultado de busca cai no formulário de contato em vez de

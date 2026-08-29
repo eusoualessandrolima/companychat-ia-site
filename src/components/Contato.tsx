@@ -24,7 +24,7 @@ export default function Contato() {
             Entre em contato e descubra como a IA pode revolucionar sua empresa.
           </p>
           <p className="mx-auto mt-3 max-w-md text-text-secondary">
-            Deixe os seus dados e o nosso assistente chama você no WhatsApp em
+            Deixe os seus dados e o nosso agente de IA chama você no WhatsApp em
             alguns minutos para entender a sua operação.
           </p>
 

@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   ),
   title: "Automação de WhatsApp com IA em Goiânia | CompanyChat",
   description:
-    "Automação de atendimento no WhatsApp com IA em Goiânia e todo o Brasil. Assistente 24/7, API Oficial, disparo em massa e CRM. Fale conosco pelo WhatsApp.",
+    "Automação de atendimento no WhatsApp com IA em Goiânia e todo o Brasil. Agente de IA 24/7, API Oficial, disparo em massa e CRM. Fale conosco pelo WhatsApp.",
   alternates: { canonical: "/" },
   keywords: [
     "automação Goiânia",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Automação de WhatsApp com IA em Goiânia | CompanyChat",
     description:
-      "Assistente IA 24/7, API Oficial, disparo em massa e CRM no WhatsApp. Atendemos Goiânia e todo o Brasil, 100% online.",
+      "Agente de IA 24/7, API Oficial, disparo em massa e CRM no WhatsApp. Atendemos Goiânia e todo o Brasil, 100% online.",
     type: "website",
     locale: "pt_BR",
     siteName: "CompanyChat",

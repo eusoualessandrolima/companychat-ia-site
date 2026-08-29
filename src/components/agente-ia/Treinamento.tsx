@@ -17,13 +17,13 @@ const etapas: Etapa[] = [
     icon: ClipboardList,
     titulo: "Entendemos seu negócio",
     prazo: "1 reunião",
-    desc: "Como você vende, o que mais te perguntam, o que o atendimento nunca pode prometer. Sai daqui o roteiro do seu assistente.",
+    desc: "Como você vende, o que mais te perguntam, o que o atendimento nunca pode prometer. Sai daqui o roteiro do seu agente de IA.",
     cor: "text-primary",
     barra: "bg-primary",
   },
   {
     icon: GraduationCap,
-    titulo: "Treinamos o assistente",
+    titulo: "Treinamos o agente",
     prazo: "2 a 3 dias",
     desc: "Catálogo, tabela de preços, políticas e o tom de voz da sua marca viram a base de conhecimento. As integrações são conectadas.",
     cor: "text-accent-blue",
@@ -41,7 +41,7 @@ const etapas: Etapa[] = [
     icon: Rocket,
     titulo: "Colocamos no ar",
     prazo: "no 7º dia",
-    desc: "O assistente entra no seu número oficial e começa a atender. A gente acompanha as primeiras conversas e segue ajustando.",
+    desc: "O agente entra no seu número oficial e começa a atender. A gente acompanha as primeiras conversas e segue ajustando.",
     cor: "text-accent-amber",
     barra: "bg-accent-amber",
   },
@@ -59,7 +59,7 @@ export default function Treinamento() {
           className="text-center"
         >
           <h2 className="text-3xl font-bold md:text-4xl">
-            Do zero ao assistente atendendo em <span className="text-primary-text">7 dias</span>
+            Do zero ao agente de IA atendendo em <span className="text-primary-text">7 dias</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-text-secondary">
             Você não precisa saber de tecnologia nem escrever um prompt. Quem treina,
@@ -98,7 +98,7 @@ export default function Treinamento() {
           </ol>
 
           <p className="mt-10 border-t border-dark-border pt-6 text-center text-sm text-dark-muted">
-            Depois de no ar, o assistente continua evoluindo: novas perguntas viram base
+            Depois de no ar, o agente continua evoluindo: novas perguntas viram base
             de conhecimento e você acompanha tudo pelo painel.
           </p>
         </motion.div>

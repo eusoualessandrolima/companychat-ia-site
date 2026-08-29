@@ -223,7 +223,7 @@ export default function Nichos() {
           <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-text-secondary">
             Cada área tem desafios próprios de atendimento, vendas e relacionamento.
             Com a CompanyChat, sua empresa organiza o WhatsApp, automatiza processos
-            e adapta o assistente ao seu fluxo para entregar um atendimento mais ágil,
+            e adapta o agente de IA ao seu fluxo para entregar um atendimento mais ágil,
             organizado e eficiente.
           </p>
         </motion.div>
