@@ -1455,6 +1455,50 @@ Coolify), painel em `https://coolify.companychatia.com.br`, aplicação id 3, uu
 
 ---
 
+### 2026-08-30 — A base da Jade estava informando um preço que o site tirou do ar
+
+Fui atualizar a nomenclatura na base de conhecimento e encontrei uma divergência maior que a
+nomenclatura: **o documento "Planos e preços" dizia "Plano CompanyChat IA Pro: R$ 497 por mês".**
+O site removeu todo valor em 2026-08-26; a base estava parada em 30/07. **Por 34 dias a Jade
+informou no WhatsApp um preço que a empresa tinha decidido não publicar mais.**
+
+É a segunda vez que site e base divergem em condição comercial — a primeira foi a implantação
+cobrada na base e inclusa no site. O padrão é o mesmo: o site muda, a base não, e ninguém percebe
+porque nada quebra.
+
+- **Decisão do dono:** alinhar com o site. O documento passou a dizer que preço e escopo saem no
+  diagnóstico, caso a caso, e instrui a Jade a **não citar valor de memória** — se o cliente
+  mencionar um preço de material antigo, ela não confirma nem nega, conduz para o diagnóstico.
+- **Documentos hoje** (base id 1): `8` Planos e preços · `9` Agente de IA · `3` API Oficial ·
+  `4` Disparo e CRM · `10` Company AI. Os antigos `1` e `2` foram deletados com seus chunks.
+- **Company AI criado.** O `MEMORY.md` afirmava "documento 13 criado, READY, 4 chunks" desde
+  julho — **ele não existia na base.** Agora existe (id 10, 4 chunks).
+- **Os ids do `CLAUDE.md` estavam errados** (6, 7, 8, 9, 13; os reais eram 1-4). Corrigido, com o
+  aviso de que ids mudam a cada substituição e devem ser conferidos antes de mexer.
+- **Docs 3 e 4 não foram tocados:** não continham "assistente" (o 4 já usava "agente de IA").
+
+**Três armadilhas registradas para a próxima vez:**
+1. **Não existe update de documento.** Substituir é criar o novo, esperar `READY`, deletar o velho.
+   Nessa ordem — o inverso deixa a Jade sem base.
+2. **Nunca escrever direto no Postgres.** O RAG lê `knowledge_chunks` (embeddings), não o texto de
+   `knowledge_documents`. Um `UPDATE` salva o texto novo e deixa a Jade respondendo o antigo, em
+   silêncio. Foi o caminho mais fácil e teria falhado sem aviso.
+3. **O token OAuth do MCP é SUPER_ADMIN sem tenant fixo.** Toda chamada exige `tenant`; um
+   esquecimento acerta `serra-telhas`. Passar `companychat-ia` sempre.
+
+**Sobre o OAuth:** o fluxo falhou três vezes seguidas e o diagnóstico só apareceu ao consultar
+`mcp_oauth_authorization_codes` — o código era emitido (o dono autorizava de verdade) mas ficava
+com `consumed_at` nulo até expirar. Ele ficava preso na barra de endereços da página de callback,
+que dá erro de conexão porque nada escuta em `localhost:<porta>`. **O passo que destrava é colar
+essa URL de erro**, não clicar em autorizar.
+
+**Verificação:** `knowledge_search` com "quanto custa por mês?" devolve o texto novo; busca literal
+por "R$ 497" não retorna o valor; `select count(*) from knowledge_chunks ... like '%497%'` = **0**;
+`chunk_count` bate com os chunks reais nos 5 documentos. O único "assistente" que sobrou (1 chunk) é
+o parágrafo que ensina a Jade a explicar a diferença para quem usar o termo antigo.
+
+---
+
 ### 2026-08-29 — "Assistente de IA" vira "Agente de IA" em todo o site
 
 - **Por quê:** o produto não responde mensagem, ele executa. Agenda, remarca, monta
@@ -1594,9 +1638,8 @@ quase transparente é a segunda metade dela.
 
 ### Nomenclatura "Agente de IA" (2026-08-29)
 
-- [ ] **Atualizar a base da Jade** — os documentos 6, 7, 9 e 13 ainda dizem "assistente".
-      O documento 7 passa a se chamar **Agente de IA**. Site e base divergentes já
-      causaram problema real antes
+- [x] ~~**Atualizar a base da Jade**~~ → feito em 2026-08-30. Além da nomenclatura, saiu o
+      R$ 497 que a base informava havia 34 dias, e o documento da Company AI foi criado antes
 - [ ] **Revisar os criativos do Meta Ads da `/10-empresas`** — o anúncio em veiculação
       fala em "10 Assistentes de IA" e a página agora diz "10 Agentes de IA". A UTM não
       mudou, então a atribuição segue intacta; o que fica desalinhado é a mensagem

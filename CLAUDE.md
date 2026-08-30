@@ -62,17 +62,37 @@ mesmo: prometer conta liberada na conversa é vender uma coisa e entregar outra.
 
 Como atualizar (ferramentas MCP `fazer-ai`, tenant `companychat-ia`):
 
+Base de conhecimento id **1** ("Base CompanyChat IA"). Os ids abaixo são os de **2026-08-30** —
+confirme com `knowledge_documents_list` antes de mexer, porque **eles mudam**: não existe update de
+documento, e cada substituição cria um id novo. Esta tabela já esteve errada (listava 6, 7, 8, 9 e
+13, que nunca existiram), e seguir a lista velha cria documento duplicado em vez de substituir.
+
 | Documento | id | Conteúdo |
 |---|---|---|
-| Planos e preços | 6 | o que inclui, sob medida, regras comerciais. **Desde 2026-08-26 o site não publica valor nenhum:** preço sai no diagnóstico, caso a caso |
-| Agente de IA | 7 | capacidades e dúvidas comuns |
-| API Oficial e custo por mensagem | 8 | janela de 24h, categorias, preços da Meta |
-| Disparo em massa e CRM Kanban | 9 | campanhas, templates, relatórios |
-| Company AI | 13 | consultoria em IA e projetos sob medida, e a diferença para o plano Sob medida |
+| Planos e preços | 8 | o que inclui, sob medida, regras comerciais. **Desde 2026-08-26 o site não publica valor nenhum:** preço sai no diagnóstico, caso a caso, e o documento manda a Jade não citar valor de memória |
+| Agente de IA: o que faz e dúvidas comuns | 9 | capacidades, dúvidas comuns e por que "agente" e não "assistente" |
+| API Oficial e custo por mensagem | 3 | janela de 24h, categorias, preços da Meta |
+| Disparo em massa e CRM Kanban | 4 | campanhas, templates, relatórios |
+| Company AI | 10 | consultoria em IA e projetos sob medida, e a diferença para o plano Sob medida |
 
-Use `knowledge_document_create` para substituir o conteúdo e confirme que os documentos voltam ao
-estado `READY` com `knowledge_documents_list`. Divergência entre site e base já causou problema real:
-a Jade dizia que a implantação era cobrada enquanto o site prometia inclusa.
+**Como substituir um documento** (não há update):
+1. `knowledge_document_create` com o conteúdo novo → nasce `PENDING`, indexa em segundos
+2. `knowledge_documents_list` até o novo virar `READY` com `chunkCount > 0`
+3. `knowledge_document_delete` no antigo
+
+Nessa ordem a Jade nunca fica sem base. O inverso deixa um buraco, e criar sem deletar deixa os
+dois valendo ao mesmo tempo — foi assim que o R$ 497 e a versão sem preço coexistiram por um minuto.
+
+**Nunca escreva direto no Postgres.** O RAG consulta `knowledge_chunks` (embeddings), não o texto
+de `knowledge_documents`. Um `UPDATE` na tabela salva o texto novo e deixa a Jade respondendo o
+antigo, sem nenhum sinal de erro.
+
+O token OAuth do MCP é **SUPER_ADMIN sem tenant fixo**: toda chamada exige `tenant`, e um esquecimento
+acerta outro cliente (`serra-telhas`). Sempre passe `companychat-ia` explicitamente.
+
+Divergência entre site e base já causou problema real duas vezes: a Jade dizia que a implantação era
+cobrada enquanto o site prometia inclusa (jul/2026) e informava R$ 497/mês por 34 dias depois de o
+site tirar o preço do ar (26/07 a 30/08/2026).
 
 O contexto completo do agente está em
 `~/.claude/Projetos Claude/alessandro-lima/criar-atendimentov2/`.
