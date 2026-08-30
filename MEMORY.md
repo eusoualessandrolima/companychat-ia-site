@@ -1455,6 +1455,42 @@ Coolify), painel em `https://coolify.companychatia.com.br`, aplicação id 3, uu
 
 ---
 
+### 2026-08-30 — Auditoria da `/lp-seguros`: a LP estava certa, o que faltava era medição
+
+Auditoria da LP de seguros em produção (HTTP, metadados, console, Pixel, formulário e
+conteúdo). **A página não tinha defeito:** 200, `noindex` intencional como as outras três,
+canonical certo, zero erro de console, formulário idêntico ao das demais LPs (validação,
+trava de duplo envio, consentimento versionado, `entregue` conferido antes do sucesso) e
+nenhum preço publicado. O que apareceu foi o que faltava em volta dela.
+
+- **As quatro LPs contavam conversão no mesmo Pixel sem distinção.** `fbq('track','Lead')`
+  ia sem nenhum parâmetro, então a campanha de seguros aprendia com lead de advogado, de
+  clínica e de PME. Agora `ViewContent`, `Lead` e `Contact` levam `content_category` com o
+  nicho e `content_name` com o segmento que a pessoa escolheu. **Continua um Pixel só** —
+  é a mesma decisão de 2026-08-25 para `/10-empresas`, e as envs
+  `NEXT_PUBLIC_META_PIXEL_ID_{NICHO}` seguem sem existir no Coolify (o código já as
+  suporta se um dia forem criadas). Confirmado em produção:
+  `ev=ViewContent&…&cd[content_category]=seguros`
+- **Nenhuma LP tinha `og:image`.** Elas redefinem `openGraph` no `metadata`, e isso
+  **não herda** o card gerado em `app/opengraph-image.tsx` — link colado no WhatsApp saía
+  sem imagem, com `twitter:card` prometendo `summary_large_image` para uma imagem
+  inexistente. Resolvido com `images: ["/opengraph-image"]` nas quatro
+- **Duas objeções faltavam no FAQ de seguros:** integração com o sistema que a corretora já
+  usa (multicálculo, gestão) e onde ficam os dados do segurado. As duas respostas foram
+  escritas conservadoras de propósito — a de integração **não promete integração com
+  sistema nenhum**, diz que o escopo é avaliado no diagnóstico. Se houver integração real
+  já entregue, o texto pode (e deve) ficar mais específico
+- **O que ficou de fora, por escolha:** `eventID` para dedup/CAPI, prova social na seção
+  "provas" (hoje ela mostra método, não resultado) e os padrões da calculadora
+  (150 cotações/mês × R$ 400 gera "R$ 9.000/mês", que pode soar inflado para corretor solo)
+- **Sobre as UTMs:** o site captura e envia as cinco UTMs, `fbclid`, `referrer` e o path no
+  `origem` do lead. O corte para `utm_source` e `utm_campaign` acontece **no CRM**, não aqui
+- **Deploy:** manual de novo (`queue_application_deployment` via tinker, deployment
+  `d7vjuu27j9k`, ~90 s), publicando `8ca1a19` junto com o `9ff0c3c` que estava parado.
+  O webhook do GitHub continua não existindo
+
+---
+
 ### 2026-08-30 — A base da Jade estava informando um preço que o site tirou do ar
 
 Fui atualizar a nomenclatura na base de conhecimento e encontrei uma divergência maior que a
