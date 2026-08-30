@@ -21,9 +21,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     siteName: "CompanyChat",
+    /* Sem isto o link colado no WhatsApp sai sem imagem: as LPs redefinem
+       `openGraph` e não herdam o card gerado em `app/opengraph-image.tsx`. */
+    images: ["/opengraph-image"],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/opengraph-image"],
     title: "IA que atende e vende no WhatsApp da sua empresa | CompanyChat",
     description:
       "A IA responde em segundos, qualifica o cliente, agenda e acompanha cada conversa no WhatsApp, 24 horas por dia.",

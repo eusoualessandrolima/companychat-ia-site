@@ -245,6 +245,16 @@ export const seguros: LPConteudo = {
           "Sim. O cliente pode mandar foto do documento, da CNH ou da apólice atual e áudio explicando o que precisa. A IA entende e aproveita esses dados na cotação.",
       },
       {
+        pergunta: "Funciona junto com o sistema que a minha corretora já usa?",
+        resposta:
+          "A IA não substitui o seu multicálculo nem o seu sistema de gestão. Ela cuida da conversa: responde, coleta os dados da cotação e deixa tudo organizado num card do CRM, pronto para o corretor lançar. Quando o sistema que você usa permite integração, o escopo é avaliado no diagnóstico e entra na proposta.",
+      },
+      {
+        pergunta: "Onde ficam os dados dos meus segurados?",
+        resposta:
+          "Na plataforma da CompanyChat, com acesso restrito a quem atende. Os dados são usados só para o atendimento que você contratou: não vendemos nem repassamos para terceiros fora da operação. Cada conversa fica registrada e o segurado pode pedir a exclusão a qualquer momento, como manda a LGPD.",
+      },
+      {
         pergunta: "Quanto custa?",
         resposta:
           "O projeto é montado sob medida, então o valor sai depois do diagnóstico da sua operação. A proposta vem com escopo e valor fechados antes de começar, com implantação e treinamento inclusos, sem taxa de setup.",

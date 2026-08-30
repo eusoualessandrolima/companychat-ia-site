@@ -135,7 +135,8 @@ function Fundo() {
 
 export default function Landing({ nicho }: { nicho: Nicho }) {
   const conteudo = CONTEUDOS[nicho];
-  const aoClicarCTA = () => window.fbq?.("track", "ViewContent");
+  const aoClicarCTA = () =>
+    window.fbq?.("track", "ViewContent", { content_category: nicho });
   const metadeNichos = Math.ceil(conteudo.nichos.itens.length / 2);
 
   return (
@@ -511,6 +512,7 @@ export default function Landing({ nicho }: { nicho: Nicho }) {
                 <FormularioLead
                   config={conteudo.form}
                   segmentos={conteudo.nichos.itens}
+                  nicho={nicho}
                 />
               </Revelar>
             </div>

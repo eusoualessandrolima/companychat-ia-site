@@ -52,9 +52,13 @@ function montarLink(campos: Campos, config: Config) {
 export default function FormularioLead({
   config,
   segmentos,
+  nicho,
 }: {
   config: Config;
   segmentos: string[];
+  /* Sem isto as quatro LPs contam `Lead` no mesmo Pixel sem distinção, e a
+     campanha de um nicho aprende com a conversão do outro. */
+  nicho: string;
 }) {
   const [campos, setCampos] = useState<Campos>({
     nome: "",
@@ -206,7 +210,12 @@ export default function FormularioLead({
       return;
     }
 
-    window.fbq?.("track", "Lead");
+    /* `content_category` separa a conversão por LP dentro do mesmo Pixel:
+       é o que permite otimizar a campanha de seguros pelo lead de seguros. */
+    window.fbq?.("track", "Lead", {
+      content_category: nicho,
+      content_name: campos.segmento,
+    });
     setEnviado(true);
   }
 
@@ -263,7 +272,10 @@ export default function FormularioLead({
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => {
-            window.fbq?.("track", "Contact");
+            window.fbq?.("track", "Contact", {
+              content_category: nicho,
+              content_name: campos.segmento,
+            });
             registrar({ clicouWhatsapp: true });
           }}
           className="animate-breath-glow mt-8 flex w-full items-center justify-center gap-2.5 rounded-full bg-[#25D366] px-8 py-4 text-lg font-semibold text-on-primary transition-transform hover:scale-[1.02]"
