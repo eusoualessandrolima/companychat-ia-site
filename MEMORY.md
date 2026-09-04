@@ -44,7 +44,8 @@
 | Sobre | `Sobre.tsx` | Sobre a empresa |
 | FAQ | `FAQ.tsx` | Perguntas frequentes |
 | Contato | `Contato.tsx` | Formulário/CTA de contato |
-| Footer | `Footer.tsx` | Rodapé |
+| Footer | `Footer.tsx` | Rodapé. A linha dos três documentos jurídicos (`/privacidade`, `/termos`, `/exclusao-de-dados`) fica em `<nav>` próprio com `py-3.5` — a revisão de apps da Meta procura esses links no rodapé, e o alvo de toque precisa dar 44px |
+| PaginaLegal | `legal/PaginaLegal.tsx` | Casca comum das três páginas jurídicas: cabeçalho claro, `<main id="conteudo">`, `Footer` e os auxiliares `Secao`, `Termo`, `LinkExterno` e `LinkInterno`. Textos e datas em `src/lib/legal.ts` |
 | Logo | `Logo.tsx` | Assinatura oficial v3 em SVG (`public/brand/`): símbolo do balão + wordmark, 165px no mobile e 182px no desktop. Exporta também `Simbolo` (símbolo isolado, para avatar e selo). Não montar a marca com texto — ver `docs/marca/MANUAL-DA-MARCA.md` |
 | WhatsAppButton | `WhatsAppButton.tsx` | Botão flutuante do WhatsApp (`"use client"`). No desktop mostra Comercial e Suporte; no celular vira um botão só que abre os dois rotulados. Números e links moram em `src/lib/whatsapp.ts` |
 | CountUp | `CountUp.tsx` | Contador animado compartilhado (usado em Hero e Sobre) |
@@ -1677,6 +1678,69 @@ quase transparente é a segunda metade dela.
 **A branch `redesign/10-empresas` está obsoleta:** o PR #1 foi mergeado por rebase, e
 `main` já tem todo o conteúdo dela com hashes diferentes. Trabalho novo sai de
 `origin/main`, não dela.
+
+---
+
+### 2026-09-04 — Três páginas jurídicas para a nova submissão do app na Meta
+
+**A reprovação não foi de conteúdo, foi de URL.** A Meta recusou o envio do aplicativo
+"CompanyChat IA Ltda" porque a URL da Política de Privacidade cadastrada apontava para a
+home. O texto que existia era bom para o que ele cobria — as LPs de captura —, mas não
+mencionava nenhum dos produtos que o app usa: Embedded Signup, Coexistência, Cloud API,
+Facebook Login for Business e as permissões `whatsapp_business_management`,
+`whatsapp_business_messaging` e `public_profile`.
+
+**O que foi publicado:**
+
+| Rota | Estado | Papel na revisão |
+|---|---|---|
+| `/privacidade` | reescrita, 18 seções | Privacy Policy URL |
+| `/termos` | nova | Terms of Service URL |
+| `/exclusao-de-dados` | nova | Data Deletion Instructions URL |
+
+**A distinção que sustenta o documento inteiro:** a CompanyChat é **controladora** dos
+dados de cadastro, do site e da configuração da conta, e **operadora** dos dados que
+trafegam nas conversas do cliente. Sem separar os dois papéis não dá para escrever base
+legal nem prazo de retenção que se sustente — e é a pergunta que um titular faz quando
+recebe mensagem de uma empresa que usa a plataforma.
+
+**`facebook.com` não pode ser o canal de exclusão.** O link do Gerenciador de Negócios
+existe na página, mas só na seção de *revogação da integração*, que é assunto diferente de
+exclusão de dados. Se ele virar o canal principal, a revisão reprova.
+
+**Arquivos novos:** `components/legal/PaginaLegal.tsx` (casca comum: cabeçalho, `<main>`,
+rodapé, `Secao`, `Termo`, `LinkExterno`, `LinkInterno`) e `lib/legal.ts` (razão social,
+CNPJ, e-mail, datas e prazos). O segundo existe porque a revisão confere se razão social e
+contato batem entre os três documentos: divergir em um deles é motivo de reprovação, e três
+cópias da mesma string divergem cedo ou tarde. Cada documento tem a **sua** data de
+atualização — mexer nos Termos não pode reescrever a data da política.
+
+**Dois defeitos encontrados na verificação, nenhum visível a olho:**
+1. `py-2` em link `text-xs` dá alvo de toque de **32px**, não 44. Com fonte de 12px a caixa
+   de linha é 16px, então 8+16+8 = 32. `py-3.5` fecha os 44. Este projeto já tinha caído
+   nisso antes, no link de privacidade dentro do consentimento do quiz
+2. Separador `|` renderizado antes de cada item, em `flex-wrap`, deixa a barra órfã no
+   começo da segunda linha quando os três links quebram em 390px. Removido: `gap-x-3`
+   separa sozinho
+
+**Verificação que importava (a que reconstitui o teste do revisor):** 200 direto com
+`num_redirects=0`, sem `Set-Cookie`, sem `X-Robots-Tag`, sem `noindex` no HTML, `<title>` e
+`<h1>` presentes com **JavaScript desligado**, contraste do corpo de texto em 6,56:1, zero
+overflow em 360/390/768/1280 e os três links no rodapé de todas as páginas. O projeto não
+tem middleware, e os `redirects()` do `next.config.ts` são só apex→www e três 301 de páginas
+antigas — nenhum atinge as três rotas.
+
+**Atenção ao cadastrar na Meta:** as três URLs precisam ir com **www**. O apex redireciona
+301 para o www, e um revisor que teste sem www vê um redirect.
+
+**O que ficou pendente de confirmação humana** (escrito com valor defensável, mas não
+verificado no código, porque a plataforma `app.companychatia.com.br` não está neste
+repositório): endereço completo da sede, nome do encarregado (DPO) exigido pelo art. 41 da
+LGPD, os prazos de retenção de 90 dias (integração, mensagens após o contrato e rotação de
+backup), o teto de responsabilidade de 12 meses, o foro de Goiânia, o aviso prévio de
+cancelamento, os compromissos de segurança que vêm da plataforma (controle de acesso por
+perfil, backups, monitoramento), quais são os provedores de nuvem e de modelo de IA, a
+localização dos servidores e a janela exata de histórico que a Coexistência sincroniza.
 
 ---
 
