@@ -149,6 +149,15 @@ Página-irmã da `/api-oficial`, mesmo padrão visual (dark + aurora + tokens). 
 
 ### Página `/company-ai` (`src/app/company-ai/page.tsx`)
 
+> **Desde 2026-09-04 esta página é só uma ponte.** A Company AI tem site próprio em
+> https://ai.companychatia.com.br (repositório `eusoualessandrolima/company-ai-site`),
+> e o conteúdo completo — consultoria, capacidades de IA, o que entregamos, método,
+> perguntas, eventos e o guia de instalação do Claude Code — vive lá. A página aqui
+> mantém só `CompanyAiHero` + `PonteCompanyAi`, preservando a relevância de busca já
+> conquistada e encaminhando o visitante. **`Origem`, `OqueConstruimos`,
+> `ComoTrabalhamos` e `CompanyAiCta` ficaram sem uso** e são candidatos a remoção —
+> decisão pendente do dono. O endereço do site novo está em `src/lib/company-ai.ts`.
+
 Frente de projetos sob medida (desenvolvimento personalizado), separada dos produtos prontos.
 Mesmo padrão visual das outras páginas internas e reaproveita `ApiHeader`, `NossasSolucoes`,
 `Footer` e `WhatsAppButton`. Componentes em `src/components/company-ai/`:
@@ -161,6 +170,7 @@ Mesmo padrão visual das outras páginas internas e reaproveita `ApiHeader`, `No
 | ComoTrabalhamos | `ComoTrabalhamos.tsx` | Conversa, desenho, construção, entrega e ajuste |
 | CompanyAiCta | `CompanyAiCta.tsx` | CTA final (WhatsApp + cross-link para `/agente-ia`) |
 | company-ai-data | `company-ai-data.ts` | Fonte única das quatro frentes (home e página) |
+| PonteCompanyAi | `PonteCompanyAi.tsx` | Fecha a `/company-ai` encaminhando para o site próprio (2026-09-04) |
 
 ### Calculadora de impacto — `components/calculadora/` (rota `/calculadora`)
 

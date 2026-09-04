@@ -1,4 +1,15 @@
-import { Bot, Compass, KanbanSquare, MonitorCog, Workflow, type LucideIcon } from "lucide-react";
+import {
+  Bot,
+  ChartColumn,
+  Compass,
+  KanbanSquare,
+  MonitorCog,
+  ScanText,
+  TrendingUp,
+  Workflow,
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
 
 /** Frente em destaque: vem antes de qualquer construção. */
 export const consultoria = {
@@ -85,5 +96,67 @@ export const construcoes: Construcao[] = [
     text: "text-accent-purple",
     bg: "bg-accent-purple/10",
     bar: "from-accent-purple to-[#d480ff]",
+  },
+];
+
+export type CapacidadeIa = {
+  icon: LucideIcon;
+  nome: string;
+  desc: string;
+  exemplos: string[];
+  text: string;
+  bg: string;
+};
+
+/** Capacidades técnicas que entram nos projetos da Company AI.
+    Usadas na seção "O que dá para fazer com IA" da página /company-ai. */
+export const capacidadesIa: CapacidadeIa[] = [
+  {
+    icon: Zap,
+    nome: "Automação inteligente (RPA + IA)",
+    desc: "A IA executa as tarefas repetitivas que hoje consomem o dia do seu time — e o time fica livre para o que precisa de gente pensando.",
+    exemplos: [
+      "Dados que circulam entre sistemas sem digitação",
+      "Cobrança e follow-up na hora certa",
+      "Rotinas diárias que rodam sozinhas",
+    ],
+    text: "text-primary",
+    bg: "bg-primary/10",
+  },
+  {
+    icon: ChartColumn,
+    nome: "Análise de dados e relatórios",
+    desc: "Os dados que a sua operação já gera viram leitura clara: painéis e relatórios que se montam sozinhos e mostram onde o resultado está vindo — e onde está vazando.",
+    exemplos: [
+      "Painel com os números do dia, sem planilha manual",
+      "Relatório entregue no ritmo que você definir",
+      "Comparativos por período, equipe ou produto",
+    ],
+    text: "text-accent-blue",
+    bg: "bg-accent-blue/10",
+  },
+  {
+    icon: TrendingUp,
+    nome: "Modelos preditivos (Machine Learning)",
+    desc: "A IA aprende com o seu histórico para antecipar o que vem: quem tende a comprar, quem está prestes a sumir e quanto a demanda deve crescer.",
+    exemplos: [
+      "Previsão de demanda e de faturamento",
+      "Alerta de cliente com risco de abandono",
+      "Leads com mais chance de fechar primeiro",
+    ],
+    text: "text-accent-amber",
+    bg: "bg-accent-amber/10",
+  },
+  {
+    icon: ScanText,
+    nome: "Visão computacional e linguagem natural",
+    desc: "A IA lê o que chega na sua empresa: documento, nota, foto, áudio e mensagem viram informação organizada, sem ninguém digitar.",
+    exemplos: [
+      "Leitura automática de notas, contratos e formulários",
+      "Áudio e conversa transcritos e resumidos",
+      "Triagem do que chega antes de alguém abrir",
+    ],
+    text: "text-accent-purple",
+    bg: "bg-accent-purple/10",
   },
 ];

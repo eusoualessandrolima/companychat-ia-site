@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import ApiHeader from "@/components/api-oficial/ApiHeader";
 import CompanyAiHero from "@/components/company-ai/CompanyAiHero";
-import Origem from "@/components/company-ai/Origem";
-import OqueConstruimos from "@/components/company-ai/OqueConstruimos";
-import ComoTrabalhamos from "@/components/company-ai/ComoTrabalhamos";
-import NossasSolucoes from "@/components/NossasSolucoes";
-import CompanyAiCta from "@/components/company-ai/CompanyAiCta";
+import PonteCompanyAi from "@/components/company-ai/PonteCompanyAi";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
+/* Desde 2026-09-04 a Company AI tem site próprio (ai.companychatia.com.br).
+   Esta página deixou de ser o destino e virou ponte: mantém o hero, que é o
+   que dá a ela relevância de busca, e encaminha para o site novo. O conteúdo
+   completo (consultoria, capacidades, o que entregamos, método, perguntas)
+   vive lá. */
 export const metadata: Metadata = {
   title: "Company AI: soluções de IA sob medida | CompanyChat",
   description:
@@ -41,11 +42,7 @@ export default function CompanyAiPage() {
       <ApiHeader />
       <main id="conteudo" tabIndex={-1}>
         <CompanyAiHero />
-        <Origem />
-        <OqueConstruimos />
-        <ComoTrabalhamos />
-        <NossasSolucoes variant="dark" />
-        <CompanyAiCta />
+        <PonteCompanyAi />
       </main>
       <Footer />
       <WhatsAppButton />
