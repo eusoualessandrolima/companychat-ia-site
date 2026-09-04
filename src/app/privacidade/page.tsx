@@ -10,6 +10,7 @@ import {
   ATUALIZADO_PRIVACIDADE,
   CIDADE_SEDE,
   CNPJ,
+  DPO_NOME,
   EMAIL_PRIVACIDADE,
   PRAZO_ATENDIMENTO,
   PRAZO_CONFIRMACAO,
@@ -803,6 +804,12 @@ export default function PrivacidadePage() {
           incidentes.
         </p>
         <ul className="list-disc space-y-2 pl-5">
+          <li>
+            <Termo>
+              Encarregado pelo tratamento de dados pessoais (DPO):
+            </Termo>{" "}
+            {DPO_NOME}
+          </li>
           <li>
             <Termo>E-mail:</Termo>{" "}
             <a

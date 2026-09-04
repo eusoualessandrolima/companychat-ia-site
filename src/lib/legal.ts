@@ -16,6 +16,13 @@ export const CIDADE_SEDE = "Goiânia, Goiás, Brasil";
 export const EMAIL_CONTATO = "contato@companychatia.com.br";
 export const EMAIL_PRIVACIDADE = EMAIL_CONTATO;
 
+/** Encarregado pelo tratamento de dados pessoais (DPO).
+ *
+ *  O art. 41 da LGPD exige indicar a **identidade** do encarregado, não só um
+ *  canal. A primeira versão publicada trazia apenas o e-mail, e a análise do
+ *  aplicativo na Meta apontou isso como a única correção pendente. */
+export const DPO_NOME = "Alessandro Lima";
+
 export const ATUALIZADO_PRIVACIDADE = "4 de setembro de 2026";
 export const ATUALIZADO_TERMOS = "4 de setembro de 2026";
 export const ATUALIZADO_EXCLUSAO = "4 de setembro de 2026";
