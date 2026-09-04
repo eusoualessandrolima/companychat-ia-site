@@ -40,8 +40,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    /* Os três documentos jurídicos ficam no sitemap e fora do `disallow` do
+       robots: a revisão do aplicativo da Meta abre essas URLs direto, e uma
+       delas (a política de privacidade) já foi reprovada por apontar para a
+       home. Nenhuma pode ganhar `noindex`. */
     {
       url: `${BASE_URL}/privacidade`,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${BASE_URL}/termos`,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${BASE_URL}/exclusao-de-dados`,
       changeFrequency: "yearly",
       priority: 0.3,
     },

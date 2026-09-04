@@ -47,6 +47,15 @@ const links = {
   ],
 };
 
+/* Fora do objeto `links` de propósito: estes três não são navegação de
+   produto, aparecem numa linha própria da barra inferior e a revisão de apps
+   da Meta exige que estejam visíveis em todas as páginas. */
+const legais = [
+  { href: "/privacidade", label: "Política de Privacidade" },
+  { href: "/termos", label: "Termos de Serviço" },
+  { href: "/exclusao-de-dados", label: "Exclusão de Dados" },
+];
+
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-dark-base">
@@ -143,14 +152,35 @@ export default function Footer() {
             Goiânia, GO · Atendimento 100% online para todo o Brasil
           </p>
 
+          {/* Os três documentos jurídicos em linha própria, e não espremidos no
+              fim da linha de copyright: a revisão do aplicativo da Meta procura
+              os links de Política de Privacidade, Termos e Exclusão de Dados no
+              rodapé, e o alvo de toque precisa dar os 44px no celular. Com
+              `text-xs` a caixa de linha tem 16px, então são 14px de
+              preenchimento vertical (`py-3.5`) para fechar os 44 — com `py-2` o
+              alvo media 32px. */}
+          <nav aria-label="Documentos legais">
+            {/* Sem separador "|" entre os itens: os três não cabem numa linha a
+                partir de 390px, e a barra sobrava no começo da linha de baixo.
+                O espaçamento sozinho já separa. */}
+            <ul className="flex flex-wrap items-center justify-center gap-x-3 text-xs">
+              {legais.map((l) => (
+                <li key={l.href}>
+                  <a
+                    href={l.href}
+                    className="inline-block px-1 py-3.5 text-dark-muted underline underline-offset-4 transition-colors hover:text-primary"
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
           <p className="text-center text-xs text-dark-muted">
             &copy; {new Date().getFullYear()} CompanyChat IA Ltda. Todos os direitos reservados
             <span className="mx-3 opacity-40">|</span>
             CNPJ 36.076.441/0001-14
-            <span className="mx-3 opacity-40">|</span>
-            <a href="/privacidade" className="underline underline-offset-4 transition-colors hover:text-primary">
-              Política de Privacidade
-            </a>
           </p>
         </div>
       </div>
